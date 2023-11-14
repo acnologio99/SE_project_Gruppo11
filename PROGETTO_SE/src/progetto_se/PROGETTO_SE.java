@@ -15,7 +15,7 @@ public class PROGETTO_SE {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        System.out.println("Modificato1");
+        System.out.println("Goku");
         
     }
     
