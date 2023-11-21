@@ -1,20 +1,26 @@
+package SE_project2023;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXML2.java to edit this template
  */
-package SE_project2023;
+
 
 import java.net.URL;
 import java.util.HashSet;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.AnchorPane;
@@ -69,12 +75,29 @@ public class FXMLDocumentController implements Initializable {
     
     
     ObservableList<Rule> ruleList;
+    ObservableList<Action> actionList;
+    
+    
+    @FXML
+    private Button doneActionButton;
+    @FXML
+    private TextArea TextMessage;
+    @FXML
+    private Button SendMessage;
+    @FXML
+    private AnchorPane TextPane;
+    
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         HashSet<Rule> rules=new HashSet();
+        HashSet<Action> actions=new HashSet();
+        
         ruleList=FXCollections.observableArrayList(rules);
+        actionList=FXCollections.observableArrayList(actions);
+        
+        
         listView.getSelectionModel().setSelectionMode(javafx.scene.control.SelectionMode.MULTIPLE);
         Rule r=new Rule("giorgio");
         ruleList.add(r);
@@ -109,6 +132,8 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private void addAction(ActionEvent event) {
         actionPane.setVisible(true);
+        //lo metti in una variabile
+        //metti messaggio azione selezionata
     }
 
     @FXML
@@ -143,5 +168,48 @@ public class FXMLDocumentController implements Initializable {
     private void CancelTrigger(ActionEvent event) {
         triggerPane.setVisible(false);
     }
+
+    @FXML
+    private void doneAction(ActionEvent event) {
+        
+     
+        if(actionList.isEmpty()){ //Se non ho selezionato nessuna azione appare un warning.
+            alertShow("Attenzione","Non hai inserito nessuna azione","Inserisci almeno un'azione per proseguire");
+        }else{
+            actionTxt.setText("Azione aggiunta");
+            rulesWindow.setVisible(true);
+            actionPane.setVisible(false);
+        }
+    }
+
+    @FXML
+    private void makeAction(ActionEvent event) {
+        //Questo è collegato alla casella di testo
+        String mess = TextMessage.getText();
+        if(mess.isEmpty()){ //si potrebbe aggiungere il controllo per vedere se sono solo spazi
+            alertShow("Attenzione","Hai inserito un messaggio vuoto","L'azione non verrà salvata");
+        }else{
+        Action a = new ActionMessageBox(mess);
+        TextPane.setVisible(false);
+        actionList.add(a);
+        }
+        TextMessage.clear();
+        TextPane.setVisible(false);    
+    }
+
+    @FXML
+    private void textAction(ActionEvent event) {
+        TextPane.setVisible(true); //quando clicco sul pulsante TextAction mi esce la casella di testo.
+    }
+    
+    private void alertShow(String title, String header, String content){
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle(title);
+            alert.setHeaderText(header);
+            alert.setContentText(content);
+            alert.show(); 
+    }
+
+   
     
 }
