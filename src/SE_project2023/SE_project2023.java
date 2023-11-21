@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXML.java to edit this template
  */
-package progettose;
+package SE_project2023;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -12,9 +12,9 @@ import javafx.stage.Stage;
 
 /**
  *
- * @author chris
+ * @author giova
  */
-public class ProgettoSE extends Application {
+public class SE_project2023 extends Application {
     
     @Override
     public void start(Stage stage) throws Exception {
