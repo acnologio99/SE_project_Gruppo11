@@ -4,8 +4,7 @@ package SE_project2023;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXML2.java to edit this template
  */
-
-
+import java.io.File;
 import java.net.URL;
 import java.util.HashSet;
 import java.util.ResourceBundle;
@@ -25,13 +24,15 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 /**
  *
  * @author giova
  */
 public class FXMLDocumentController implements Initializable {
-    
+
     private Label label;
     @FXML
     private Button saveButton;
@@ -71,13 +72,10 @@ public class FXMLDocumentController implements Initializable {
     private TitledPane rulesPane;
     @FXML
     private TextField ruleName;
-    
-    
-    
+
     ObservableList<Rule> ruleList;
     ObservableList<Action> actionList;
-    
-    
+
     @FXML
     private Button doneActionButton;
     @FXML
@@ -86,24 +84,30 @@ public class FXMLDocumentController implements Initializable {
     private Button SendMessage;
     @FXML
     private AnchorPane TextPane;
-    
-    
+    @FXML
+    private AnchorPane AudioFilePane;
+    @FXML
+    private Button chooseFileAudio;
+    @FXML
+    private Button sendFileAudio;
+    @FXML
+    private TextField textFieldAudioFile;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        HashSet<Rule> rules=new HashSet();
-        HashSet<Action> actions=new HashSet();
-        
-        ruleList=FXCollections.observableArrayList(rules);
-        actionList=FXCollections.observableArrayList(actions);
-        
-        
+        HashSet<Rule> rules = new HashSet();
+        HashSet<Action> actions = new HashSet();
+
+        ruleList = FXCollections.observableArrayList(rules);
+        actionList = FXCollections.observableArrayList(actions);
+
         listView.getSelectionModel().setSelectionMode(javafx.scene.control.SelectionMode.MULTIPLE);
-        Rule r=new Rule("giorgio");
+        Rule r = new Rule("giorgio");
         ruleList.add(r);
         listView.setItems(ruleList);
-        
-    }    
+
+    }
 
     @FXML
     private void saveRules(ActionEvent event) {
@@ -116,17 +120,15 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private void addRule(ActionEvent event) {
         //Viene resa visibile la Window dell'aggiunta regole
-        rulesWindow.setVisible(true);    
-        
-        
-        
+        rulesWindow.setVisible(true);
+
     }
 
     @FXML
     private void removeRules(ActionEvent event) {
-        
+
         ruleList.removeAll(listView.getSelectionModel().getSelectedItems());
-        
+
     }
 
     @FXML
@@ -143,10 +145,10 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     private void confirmRule(ActionEvent event) {
-        
-        Rule regola= new Rule(ruleName.getText());
+
+        Rule regola = new Rule(ruleName.getText());
         ruleList.add(regola);
-        
+        alertShow("Inserimento", "", "Regola correttamente inserita", Alert.AlertType.INFORMATION);
         rulesWindow.setVisible(false);
     }
 
@@ -171,11 +173,10 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     private void doneAction(ActionEvent event) {
-        
-     
-        if(actionList.isEmpty()){ //Se non ho selezionato nessuna azione appare un warning.
-            alertShow("Attenzione","Non hai inserito nessuna azione","Inserisci almeno un'azione per proseguire");
-        }else{
+
+        if (actionList.isEmpty()) { //Se non ho selezionato nessuna azione appare un warning.
+            alertShow("Attenzione", "Non hai inserito nessuna azione", "Inserisci almeno un'azione per proseguire", Alert.AlertType.WARNING);
+        } else {
             actionTxt.setText("Azione aggiunta");
             rulesWindow.setVisible(true);
             actionPane.setVisible(false);
@@ -186,30 +187,58 @@ public class FXMLDocumentController implements Initializable {
     private void makeAction(ActionEvent event) {
         //Questo è collegato alla casella di testo
         String mess = TextMessage.getText();
-        if(mess.isEmpty()){ //si potrebbe aggiungere il controllo per vedere se sono solo spazi
-            alertShow("Attenzione","Hai inserito un messaggio vuoto","L'azione non verrà salvata");
-        }else{
-        Action a = new ActionMessageBox(mess);
-        TextPane.setVisible(false);
-        actionList.add(a);
+        if (mess.isEmpty()) { //si potrebbe aggiungere il controllo per vedere se sono solo spazi
+            alertShow("Attenzione", "Hai inserito un messaggio vuoto", "L'azione non verrà salvata", Alert.AlertType.WARNING);
+        } else {
+            Action a = new ActionMessageBox(mess);
+            TextPane.setVisible(false);
+            actionList.add(a);
         }
         TextMessage.clear();
-        TextPane.setVisible(false);    
+        TextPane.setVisible(false);
     }
 
     @FXML
     private void textAction(ActionEvent event) {
         TextPane.setVisible(true); //quando clicco sul pulsante TextAction mi esce la casella di testo.
-    }
-    
-    private void alertShow(String title, String header, String content){
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle(title);
-            alert.setHeaderText(header);
-            alert.setContentText(content);
-            alert.show(); 
+        if(AudioFilePane.isVisible()){
+            AudioFilePane.setVisible(false);
+        }
     }
 
-   
-    
+    @FXML
+    private void audioAction(ActionEvent event) {
+        // get the file selected
+        // create a File chooser
+        FileChooser fil_chooser = new FileChooser();
+        File path = fil_chooser.showOpenDialog(new Stage());
+        if(TextPane.isVisible()){
+            TextPane.setVisible(false);
+        }
+        AudioFilePane.setVisible(true);
+        textFieldAudioFile.setText(path.getPath());
+    }
+
+    @FXML
+    private void createActionAudio(ActionEvent event) {
+        String path = textFieldAudioFile.getText();
+        if (path.isEmpty()) {
+            alertShow("Attenzione", "Non hai scelto un file", "L'azione non verrà salvata", Alert.AlertType.WARNING);
+        } else {
+            Action a = new ActionAudio(path);
+            actionList.add(a);
+        }
+        textFieldAudioFile.clear();
+        AudioFilePane.setVisible(false);
+        alertShow("Inserimento", "", "Suono Aggiunto", Alert.AlertType.INFORMATION);
+    }
+
+    private void alertShow(String title, String header, String content, Alert.AlertType type) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+        alert.show();
+    }
+
 }
