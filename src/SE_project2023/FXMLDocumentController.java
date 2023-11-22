@@ -19,6 +19,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
@@ -84,14 +85,12 @@ public class FXMLDocumentController implements Initializable {
     private Button SendMessage;
     @FXML
     private AnchorPane TextPane;
-    @FXML
     private AnchorPane AudioFilePane;
-    @FXML
-    private Button chooseFileAudio;
-    @FXML
-    private Button sendFileAudio;
-    @FXML
     private TextField textFieldAudioFile;
+    @FXML
+    private ListView<Action> actionView; //lista che mostra le azioni scelte
+    @FXML
+    private Button RemoveBtn;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -101,11 +100,13 @@ public class FXMLDocumentController implements Initializable {
 
         ruleList = FXCollections.observableArrayList(rules);
         actionList = FXCollections.observableArrayList(actions);
-
+        
+        actionView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         listView.getSelectionModel().setSelectionMode(javafx.scene.control.SelectionMode.MULTIPLE);
         Rule r = new Rule("giorgio");
         ruleList.add(r);
         listView.setItems(ruleList);
+        actionView.setItems(actionList);
 
     }
 
@@ -175,9 +176,14 @@ public class FXMLDocumentController implements Initializable {
     private void doneAction(ActionEvent event) {
 
         if (actionList.isEmpty()) { //Se non ho selezionato nessuna azione appare un warning.
-            alertShow("Attenzione", "Non hai inserito nessuna azione", "Inserisci almeno un'azione per proseguire", Alert.AlertType.WARNING);
+            alertShow("Attenzione", "Non hai inserito nessuna azione", "Vuoi tornare indietro?", Alert.AlertType.WARNING);
+            
         } else {
             actionTxt.setText("Azione aggiunta");
+            //io qua ho una singola azione oppure una lista di azioni, per capire quale oggetto creare potrei fare un proxy.
+            //if(ruleList.size() > 1)...{  
+            Rule r = ruleList.get(ruleList.size()-1); //prendo l'ultima regola aggiunta
+            r.setAction(actionList.remove(0)); //rimuovo l'unica azione dalla lista e l'assegno alla regola
             rulesWindow.setVisible(true);
             actionPane.setVisible(false);
         }
@@ -219,7 +225,6 @@ public class FXMLDocumentController implements Initializable {
         textFieldAudioFile.setText(path.getPath());
     }
 
-    @FXML
     private void createActionAudio(ActionEvent event) {
         String path = textFieldAudioFile.getText();
         if (path.isEmpty()) {
@@ -239,6 +244,12 @@ public class FXMLDocumentController implements Initializable {
         alert.setHeaderText(header);
         alert.setContentText(content);
         alert.show();
+    }
+
+    @FXML
+    private void RemoveItem(ActionEvent event) {
+        
+        actionList.remove(actionView.getSelectionModel().getSelectedItem());
     }
 
 }
