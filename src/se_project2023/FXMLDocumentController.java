@@ -84,7 +84,9 @@ public class FXMLDocumentController implements Initializable {
     private Button SendMessage;
     @FXML
     private AnchorPane TextPane;
+    @FXML
     private AnchorPane AudioFilePane;
+    @FXML
     private TextField textFieldAudioFile;
     @FXML
     private ListView<Action> actionView; //lista che mostra le azioni scelte
@@ -96,10 +98,10 @@ public class FXMLDocumentController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        HashSet<Rule> rules = new HashSet();
+        RuleList rules = RuleList.getRuleList();
         HashSet<Action> actions = new HashSet();
 
-        ruleList = FXCollections.observableArrayList(rules);
+        ruleList = FXCollections.observableArrayList(rules.getHashRules());
         actionList = FXCollections.observableArrayList(actions);
         
         actionView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
@@ -200,7 +202,7 @@ public class FXMLDocumentController implements Initializable {
         if (mess.isEmpty()) { //si potrebbe aggiungere il controllo per vedere se sono solo spazi
             alertShow("Attenzione", "Hai inserito un messaggio vuoto", "L'azione non verrà salvata", Alert.AlertType.WARNING);
         } else {
-            alertShow("", "Azione aggiunta!", "", Alert.AlertType.WARNING);
+            alertShow("", "Azione aggiunta!", "", Alert.AlertType.INFORMATION);
             Action a = new ActionMessageBox(mess);
             TextPane.setVisible(false);
             chooseAction.setDisable(false);
