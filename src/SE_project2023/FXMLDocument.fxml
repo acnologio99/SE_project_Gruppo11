@@ -11,25 +11,21 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SE_project2023.FXMLDocumentController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="391.0" prefWidth="528.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SE_project2023.FXMLDocumentController">
    <children>
-      <TitledPane fx:id="rulesPane" animated="false" prefHeight="400.0" prefWidth="600.0">
-        <content>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-               <children>
-                  <ToolBar layoutX="1.0" prefHeight="45.0" prefWidth="608.0">
-                    <items>
-                      <Button fx:id="saveButton" mnemonicParsing="false" onAction="#saveRules" text="Save" />
-                        <Button fx:id="loadButton" mnemonicParsing="false" onAction="#loadButton" text="Load" />
-                        <Button fx:id="addButton" mnemonicParsing="false" onAction="#addRule" text="Add" />
-                        <Button fx:id="removeButton" mnemonicParsing="false" onAction="#removeRules" text="Remove" />
-                    </items>
-                  </ToolBar>
-                  <ListView fx:id="listView" layoutX="-2.0" layoutY="45.0" prefHeight="323.0" prefWidth="600.0" />
-               </children>
-            </AnchorPane>
-        </content>
-      </TitledPane>
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="391.0" prefWidth="528.0">
+         <children>
+            <ListView fx:id="listView" layoutX="-2.0" layoutY="45.0" prefHeight="346.0" prefWidth="528.0" />
+            <ToolBar layoutY="6.0" prefHeight="38.0" prefWidth="528.0">
+              <items>
+                <Button fx:id="saveButton" mnemonicParsing="false" onAction="#saveRules" text="Save" />
+                  <Button fx:id="loadButton" mnemonicParsing="false" onAction="#loadButton" text="Load" />
+                  <Button fx:id="addButton" mnemonicParsing="false" onAction="#addRule" text="Add" />
+                  <Button fx:id="removeButton" mnemonicParsing="false" onAction="#removeRules" text="Remove" />
+              </items>
+            </ToolBar>
+         </children>
+      </AnchorPane>
       <AnchorPane fx:id="rulesWindow" layoutX="150.0" layoutY="50.0" prefHeight="300.0" prefWidth="300.0" visible="false">
          <children>
             <TitledPane animated="false" prefHeight="300.0" prefWidth="300.0" text="RuleAdder" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -63,28 +59,29 @@
             </TitledPane>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="actionPane" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane fx:id="actionPane" layoutY="131.2" prefHeight="391.0" prefWidth="528.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <TitledPane animated="false" prefHeight="400.0" prefWidth="600.0" text="Action" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <Button fx:id="cancelBtnAction" layoutX="14.0" layoutY="323.0" mnemonicParsing="false" onAction="#cancelAction" text="Cancel" />
-                        <Button fx:id="doneActionButton" layoutX="539.0" layoutY="323.0" mnemonicParsing="false" onAction="#doneAction" text="Done" />
-                        <AnchorPane fx:id="TextPane" layoutX="343.0" layoutY="74.0" prefHeight="156.0" prefWidth="217.0">
+                        <Button fx:id="doneActionButton" layoutX="467.0" layoutY="323.0" mnemonicParsing="false" onAction="#doneAction" text="Done" />
+                        <AnchorPane fx:id="TextPane" layoutX="300.0" layoutY="74.0" prefHeight="156.0" prefWidth="217.0" visible="false">
                            <children>
                               <TextArea fx:id="TextMessage" prefHeight="156.0" prefWidth="217.0" promptText="Inserisci il messaggio" />
-                              <Button fx:id="SendMessage" layoutX="87.0" layoutY="116.0" mnemonicParsing="false" onAction="#makeAction" text="Send" />
+                              <Button fx:id="SendMessage" layoutX="135.0" layoutY="116.0" mnemonicParsing="false" onAction="#makeAction" text="Send" />
+                              <Button fx:id="cancelBtnAction" layoutX="38.0" layoutY="116.0" mnemonicParsing="false" onAction="#cancelAction" text="Cancel" />
                            </children>
                         </AnchorPane>
-                        <MenuButton layoutX="32.0" layoutY="74.0" mnemonicParsing="false" text="Action">
+                        <MenuButton fx:id="chooseAction" layoutX="14.0" layoutY="74.0" mnemonicParsing="false" text="Action">
                           <items>
                             <MenuItem mnemonicParsing="false" onAction="#textAction" text="Text Action" />
                             <MenuItem mnemonicParsing="false" onAction="#audioAction" text="Audio Action" />
+                              <MenuItem mnemonicParsing="false" text="Test Action" />
                           </items>
                         </MenuButton>
-                        <ListView fx:id="actionView" editable="true" layoutX="130.0" layoutY="74.0" prefHeight="200.0" prefWidth="200.0" />
-                        <Button fx:id="RemoveBtn" layoutX="182.0" layoutY="248.0" mnemonicParsing="false" onAction="#RemoveItem" text="RimuoviAzione" />
+                        <ListView fx:id="actionView" editable="true" layoutX="100.0" layoutY="74.0" prefHeight="200.0" prefWidth="200.0" />
+                        <Button fx:id="RemoveBtn" layoutX="152.0" layoutY="238.0" mnemonicParsing="false" onAction="#RemoveItem" text="Remove Action" />
                      </children>
                   </AnchorPane>
               </content>

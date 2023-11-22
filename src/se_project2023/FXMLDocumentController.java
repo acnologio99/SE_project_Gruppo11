@@ -19,6 +19,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.MenuButton;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -70,8 +71,6 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private Button cancelBtnTrigger;
     @FXML
-    private TitledPane rulesPane;
-    @FXML
     private TextField ruleName;
 
     ObservableList<Rule> ruleList;
@@ -91,6 +90,8 @@ public class FXMLDocumentController implements Initializable {
     private ListView<Action> actionView; //lista che mostra le azioni scelte
     @FXML
     private Button RemoveBtn;
+    @FXML
+    private MenuButton chooseAction;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -137,6 +138,8 @@ public class FXMLDocumentController implements Initializable {
         actionPane.setVisible(true);
         //lo metti in una variabile
         //metti messaggio azione selezionata
+        
+        //DEVO TROVARE UN MODO PER FAR VEDERE LE AZIONE SELEZIONATE QUANDO CLICCO DI NUOVO SU AZIONI
     }
 
     @FXML
@@ -160,7 +163,8 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     private void cancelAction(ActionEvent event) {
-        actionPane.setVisible(false);
+        TextMessage.setVisible(false);
+        chooseAction.setDisable(false);
     }
 
     @FXML
@@ -176,10 +180,10 @@ public class FXMLDocumentController implements Initializable {
     private void doneAction(ActionEvent event) {
 
         if (actionList.isEmpty()) { //Se non ho selezionato nessuna azione appare un warning.
-            alertShow("Attenzione", "Non hai inserito nessuna azione", "Vuoi tornare indietro?", Alert.AlertType.WARNING);
+            alertShow("Attenzione", "Non hai inserito nessuna azione", "Stai tornando indietro", Alert.AlertType.WARNING);
+            actionPane.setVisible(false);
             
         } else {
-            actionTxt.setText("Azione aggiunta");
             //io qua ho una singola azione oppure una lista di azioni, per capire quale oggetto creare potrei fare un proxy.
             //if(ruleList.size() > 1)...{  
             Rule r = ruleList.get(ruleList.size()-1); //prendo l'ultima regola aggiunta
@@ -196,8 +200,10 @@ public class FXMLDocumentController implements Initializable {
         if (mess.isEmpty()) { //si potrebbe aggiungere il controllo per vedere se sono solo spazi
             alertShow("Attenzione", "Hai inserito un messaggio vuoto", "L'azione non verrà salvata", Alert.AlertType.WARNING);
         } else {
+            alertShow("", "Azione aggiunta!", "", Alert.AlertType.WARNING);
             Action a = new ActionMessageBox(mess);
             TextPane.setVisible(false);
+            chooseAction.setDisable(false);
             actionList.add(a);
         }
         TextMessage.clear();
@@ -207,9 +213,8 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private void textAction(ActionEvent event) {
         TextPane.setVisible(true); //quando clicco sul pulsante TextAction mi esce la casella di testo.
-        if(AudioFilePane.isVisible()){
-            AudioFilePane.setVisible(false);
-        }
+        chooseAction.setDisable(true); //quando scelgo l'azione si disabilita il menù.
+       
     }
 
     @FXML
@@ -218,9 +223,6 @@ public class FXMLDocumentController implements Initializable {
         // create a File chooser
         FileChooser fil_chooser = new FileChooser();
         File path = fil_chooser.showOpenDialog(new Stage());
-        if(TextPane.isVisible()){
-            TextPane.setVisible(false);
-        }
         AudioFilePane.setVisible(true);
         textFieldAudioFile.setText(path.getPath());
     }
@@ -246,10 +248,12 @@ public class FXMLDocumentController implements Initializable {
         alert.show();
     }
 
+   
+
     @FXML
     private void RemoveItem(ActionEvent event) {
-        
         actionList.remove(actionView.getSelectionModel().getSelectedItem());
     }
-
+    
+   
 }
