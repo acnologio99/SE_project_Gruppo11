@@ -1,38 +1,63 @@
 package SE_project2023;
 
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-
-
 /**
  *
- * @author giova
+ * @author emanu
  */
-class Rule {
-    String Name;
+public class Rule {
+    String name;
+    Action action;
+    Trigger trigger;
 
-    public Rule(String Name) {
-        this.Name = Name;
+    //Costruttori
+    public Rule() {}
+
+    public Rule(String name) {
+        this.name = name;
     }
 
-    Rule() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public Rule(String name, Action action, Trigger trigger) {
+        this.name = name;
+        this.action = action;
+        this.trigger = trigger;
     }
 
-    @Override
-    public String toString() {
-        return "Regola "+ Name+" :";
+    //Getter
+    public Action getAction() {
+        return action;
+    }
+
+    public Trigger getTrigger() {
+        return trigger;
+    }
+    
+    public String getName() {
+        return name;
+    }
+    
+    //Setter
+    public void setAction(Action action) {
+        this.action = action;
+    }
+
+    public void setTrigger(Trigger trigger) {
+        this.trigger = trigger;
     }
 
     public void setName(String Name) {
-        this.Name = Name;
+        this.name = Name;
     }
 
-    public String getName() {
-        return Name;
+    @Override
+        public String toString() {
+            return "Regola : " + name;
+        }
+        
+    public boolean isVerifiedRule(){
+        if(this.trigger.isVerified()){
+            this.action.fire();
+            return true;
+        }
+        return false;
     }
-
-    
 }
