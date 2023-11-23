@@ -1,13 +1,14 @@
 package SE_project2023;
 
 import java.util.HashSet;
+import java.util.Iterator;
 
 
 /**
  *
  * @author emanu
  */
-public class RuleList {
+public class RuleList { 
 
     private static RuleList ruleList = null;
     
@@ -27,6 +28,8 @@ public class RuleList {
     public HashSet<Rule> getHashRules() {
         return hashRules;
     }
+
+    
 
     
 }

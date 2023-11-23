@@ -100,16 +100,21 @@ public class FXMLDocumentController implements Initializable {
         // TODO
         RuleList rules = RuleList.getRuleList();
         HashSet<Action> actions = new HashSet();
-
+        //inizializzazione Liste
         ruleList = FXCollections.observableArrayList(rules.getHashRules());
         actionList = FXCollections.observableArrayList(actions);
         
+        //setting selezione multipla
         actionView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         listView.getSelectionModel().setSelectionMode(javafx.scene.control.SelectionMode.MULTIPLE);
-        Rule r = new Rule("giorgio");
-        ruleList.add(r);
+        //aggiunta regola di testing
+        //setting View
         listView.setItems(ruleList);
         actionView.setItems(actionList);
+        //inizializzazione thread
+        /*TriggerControlThread t=new TriggerControlThread();
+        t.setDaemon(true);
+        t.start();*/
 
     }
 
@@ -130,7 +135,7 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     private void removeRules(ActionEvent event) {
-
+        
         ruleList.removeAll(listView.getSelectionModel().getSelectedItems());
 
     }
