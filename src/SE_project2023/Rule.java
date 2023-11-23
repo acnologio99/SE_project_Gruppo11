@@ -50,14 +50,10 @@ public class Rule {
 
     @Override
         public String toString() {
-            return "Regola : " + name;
+            return "Regola : " + name + " azioni " + action;
         }
         
     public boolean isVerifiedRule(){
-        if(this.trigger.isVerified()){
-            this.action.fire();
-            return true;
-        }
-        return false;
+        return this.trigger.isVerified();
     }
 }

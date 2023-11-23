@@ -4,6 +4,9 @@
  */
 package SE_project2023;
 
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+
 /**
  *
  * @author chris
@@ -11,7 +14,7 @@ package SE_project2023;
 public class ActionMessageBox implements Action {
     
     private String msg;
-
+    private Boolean fired=false;
     public ActionMessageBox(String msg) {
         this.msg = msg;
     }
@@ -33,8 +36,11 @@ public class ActionMessageBox implements Action {
 
     @Override
     public void fire() {
-        //in questo caso fire sarebbe solo prendere il messaggio
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setTitle("Information Dialogì");
+        alert.setHeaderText(null);
+        alert.setContentText(msg);
+        alert.showAndWait();
     }
 
     @Override
@@ -54,7 +60,7 @@ public class ActionMessageBox implements Action {
 
     @Override
     public String toString() {
-        return "ActionMessageBox";
+        return "ActionMessageBox: "+ msg;
     }
     
     

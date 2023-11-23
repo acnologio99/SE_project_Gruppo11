@@ -14,7 +14,7 @@ import java.util.logging.Logger;
  * @author giova
  */
 public class TriggerControlThread extends Thread{
-
+    
     @Override
     public void run() {
         RuleList ruleList = RuleList.getRuleList();

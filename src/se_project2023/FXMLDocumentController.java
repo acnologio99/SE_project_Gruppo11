@@ -4,14 +4,19 @@ package SE_project2023;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXML2.java to edit this template
  */
+import com.jfoenix.controls.JFXTimePicker;
 import java.io.File;
 import java.net.URL;
+import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.ScheduledService;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -28,6 +33,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 /**
  *
@@ -75,6 +81,7 @@ public class FXMLDocumentController implements Initializable {
 
     ObservableList<Rule> ruleList;
     ObservableList<Action> actionList;
+    RuleList rules = RuleList.getRuleList();
 
     @FXML
     private Button doneActionButton;
@@ -85,20 +92,18 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private AnchorPane TextPane;
     @FXML
-    private AnchorPane AudioFilePane;
-    @FXML
-    private TextField textFieldAudioFile;
-    @FXML
     private ListView<Action> actionView; //lista che mostra le azioni scelte
     @FXML
     private Button RemoveBtn;
     @FXML
     private MenuButton chooseAction;
-
+    @FXML
+    private JFXTimePicker timePicker;
+    Rule r;
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        RuleList rules = RuleList.getRuleList();
+        
         HashSet<Action> actions = new HashSet();
         //inizializzazione Liste
         ruleList = FXCollections.observableArrayList(rules.getHashRules());
@@ -111,13 +116,35 @@ public class FXMLDocumentController implements Initializable {
         //setting View
         listView.setItems(ruleList);
         actionView.setItems(actionList);
-        //inizializzazione thread
-        /*TriggerControlThread t=new TriggerControlThread();
-        t.setDaemon(true);
-        t.start();*/
+        // Creazione del servizio per controllare la lista ogni 10 secondi
+        ScheduledService<Void> service = new ScheduledService<Void>() {
+            @Override
+            protected Task<Void> createTask() {
+                return new Task<Void>() {
+                    @Override
+                    protected Void call() {
+                        // Codice per controllare la lista
+                        System.out.println("Controllo lista...");
+                        
+                        for(Rule r: ruleList){
+                            System.out.println(r);
+                            Platform.runLater(() -> {
+                            if(r.isVerifiedRule()) {r.action.fire();}});
+                            
+                        }
+                            
+                        // Esempio: Aggiungi un nuovo elemento alla lista ogni 10 secondi
+                        return null;
+                    }
+                };
+            }
+        };
 
+        // Imposta l'intervallo di esecuzione del servizio a 10 secondi
+        service.setPeriod(Duration.seconds(10));
+        // Avvia il servizio
+        service.start();
     }
-
     @FXML
     private void saveRules(ActionEvent event) {
     }
@@ -129,6 +156,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private void addRule(ActionEvent event) {
         //Viene resa visibile la Window dell'aggiunta regole
+        r=new Rule();
         rulesWindow.setVisible(true);
 
     }
@@ -156,11 +184,13 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     private void confirmRule(ActionEvent event) {
-
-        Rule regola = new Rule(ruleName.getText());
-        ruleList.add(regola);
+        
+        ruleList.add(r);
         alertShow("Inserimento", "", "Regola correttamente inserita", Alert.AlertType.INFORMATION);
         rulesWindow.setVisible(false);
+        RuleList rules=RuleList.getRuleList();
+        System.out.println(rules.getHashRules());
+       
     }
 
     @FXML
@@ -176,6 +206,8 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     private void timeTrigger(ActionEvent event) {
+        TimeTrigger timer=new TimeTrigger(timePicker.getValue());
+        r.setTrigger(timer);
     }
 
     @FXML
@@ -193,7 +225,7 @@ public class FXMLDocumentController implements Initializable {
         } else {
             //io qua ho una singola azione oppure una lista di azioni, per capire quale oggetto creare potrei fare un proxy.
             //if(ruleList.size() > 1)...{  
-            Rule r = ruleList.get(ruleList.size()-1); //prendo l'ultima regola aggiunta
+            //Rule r = ruleList.get(ruleList.size()-1); //prendo l'ultima regola aggiunta
             r.setAction(actionList.remove(0)); //rimuovo l'unica azione dalla lista e l'assegno alla regola
             rulesWindow.setVisible(true);
             actionPane.setVisible(false);
@@ -228,14 +260,14 @@ public class FXMLDocumentController implements Initializable {
     private void audioAction(ActionEvent event) {
         // get the file selected
         // create a File chooser
-        FileChooser fil_chooser = new FileChooser();
+        /*FileChooser fil_chooser = new FileChooser();
         File path = fil_chooser.showOpenDialog(new Stage());
         AudioFilePane.setVisible(true);
-        textFieldAudioFile.setText(path.getPath());
+        textFieldAudioFile.setText(path.getPath());*/
     }
 
     private void createActionAudio(ActionEvent event) {
-        String path = textFieldAudioFile.getText();
+        /*String path = textFieldAudioFile.getText();
         if (path.isEmpty()) {
             alertShow("Attenzione", "Non hai scelto un file", "L'azione non verrà salvata", Alert.AlertType.WARNING);
         } else {
@@ -244,7 +276,7 @@ public class FXMLDocumentController implements Initializable {
         }
         textFieldAudioFile.clear();
         AudioFilePane.setVisible(false);
-        alertShow("Inserimento", "", "Suono Aggiunto", Alert.AlertType.INFORMATION);
+        alertShow("Inserimento", "", "Suono Aggiunto", Alert.AlertType.INFORMATION);*/
     }
 
     private void alertShow(String title, String header, String content, Alert.AlertType type) {
@@ -260,6 +292,13 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private void RemoveItem(ActionEvent event) {
         actionList.remove(actionView.getSelectionModel().getSelectedItem());
+    }
+
+    @FXML
+    private void timePick(ActionEvent event) {
+       
+        
+        
     }
     
    
