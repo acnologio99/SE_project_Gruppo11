@@ -5,6 +5,7 @@
 package SE_project2023.Trigger;
 
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  *
@@ -28,8 +29,10 @@ public class TimeTrigger implements Trigger{
 
     @Override
     public boolean isVerified() {
-    LocalTime ld = LocalTime.now();
-        return ld.equals(this.timeOfDay);
+    LocalTime now = LocalTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        String formattedTime = now.format(formatter);
+        return formattedTime.equals(this.timeOfDay.toString());
     }
 
   

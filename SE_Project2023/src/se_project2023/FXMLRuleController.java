@@ -41,6 +41,8 @@ public class FXMLRuleController implements Initializable {
     private Button cancelBtn;
     @FXML
     private TextField ruleName;
+    
+    
 
     /**
      * Initializes the controller class.
@@ -70,6 +72,19 @@ public class FXMLRuleController implements Initializable {
     @FXML
     private void addTrigger(ActionEvent event) {
         
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("FXMLTrigger.fxml"));
+            
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Trigger");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
     }
 
     @FXML
@@ -90,7 +105,7 @@ public class FXMLRuleController implements Initializable {
 
     @FXML
     private void cancel(ActionEvent event) {
-         Node sourceNode = (Node) event.getSource();
+        Node sourceNode = (Node) event.getSource();
         Stage stage = (Stage) sourceNode.getScene().getWindow();
 
         // Chiudi la finestra corrente

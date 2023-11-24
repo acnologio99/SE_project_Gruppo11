@@ -30,24 +30,24 @@ import javafx.stage.Stage;
  */
 public class FXMLActionController implements Initializable {
 
-    @FXML
-    private Button doneActionButton;
-    @FXML
     private AnchorPane TextPane;
     @FXML
     private TextArea TextMessage;
-    @FXML
-    private Button SendMessage;
-    @FXML
-    private Button cancelBtnAction;
-    @FXML
     private MenuButton chooseAction;
-    @FXML
-    private ListView<Action> actionView;
-    @FXML
-    private Button RemoveBtn;
+
     ObservableList<Action> actionList;
     RuleSingleton r;
+
+    private int flagAction;
+    @FXML
+    private ListView<String> actionListView;
+    @FXML
+    private Button Done;
+    @FXML
+    private Button Cancel;
+    @FXML
+    private Button audioButton;
+
     /**
      * Initializes the controller class.
      */
@@ -56,23 +56,44 @@ public class FXMLActionController implements Initializable {
         // TODO
         HashSet<Action> actions = new HashSet();
         actionList = FXCollections.observableArrayList(actions);
-        actionView.setItems(actionList);
-        r=RuleSingleton.getInstance();
-    }    
+        r = RuleSingleton.getInstance();
+
+        actionListView.getItems().addAll(
+                "TextBox Action",
+                "Audio Action"
+        );
+
+        // Aggiungi un listener per gestire la selezione della ListView
+        actionListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                handleTriggerSelection(newValue); // Gestisci la selezione dell'opzione
+            }
+        });
+
+    }
+
+    private void handleTriggerSelection(String selectedTrigger) {
+        if ("TextBox Action".equals(selectedTrigger)) {
+            flagAction = 1;
+            TextMessage.setVisible(true);
+            audioButton.setVisible(false);
+        } else if ("Audio Action".equals(selectedTrigger)) {
+            flagAction = 2;
+            TextMessage.setVisible(false);
+            audioButton.setVisible(true);
+        }
+    }
 
     @FXML
     private void doneAction(ActionEvent event) {
-        if (actionList.isEmpty()) { //Se non ho selezionato nessuna azione appare un warning.
-            alertShow("Attenzione", "Non hai inserito nessuna azione", "Stai tornando indietro", Alert.AlertType.WARNING);
-            
-            
-        } else {
-            //io qua ho una singola azione oppure una lista di azioni, per capire quale oggetto creare potrei fare un proxy.
-            //if(ruleList.size() > 1)...{  
-            //Rule r = ruleList.get(ruleList.size()-1); //prendo l'ultima regola aggiunta
-            r.setAction(actionList.remove(0)); //rimuovo l'unica azione dalla lista e l'assegno alla regola
-            
+
+        if (flagAction == 1) {
+            String mess = TextMessage.getText();
+            Action a = new ActionMessageBox(mess);
+            r.setAction(a);
         }
+        alertShow("", "Azione aggiunta!", "", Alert.AlertType.INFORMATION);
+
         Node sourceNode = (Node) event.getSource();
         Stage stage = (Stage) sourceNode.getScene().getWindow();
 
@@ -81,40 +102,17 @@ public class FXMLActionController implements Initializable {
     }
 
     @FXML
-    private void makeAction(ActionEvent event) {
-        String mess = TextMessage.getText();
-        if (mess.isEmpty()) { //si potrebbe aggiungere il controllo per vedere se sono solo spazi
-            alertShow("Attenzione", "Hai inserito un messaggio vuoto", "L'azione non verrà salvata", Alert.AlertType.WARNING);
-        } else {
-            alertShow("", "Azione aggiunta!", "", Alert.AlertType.INFORMATION);
-            Action a = new ActionMessageBox(mess);
-            TextPane.setVisible(false);
-            chooseAction.setDisable(false);
-            actionList.add(a);
-        }
-        TextMessage.clear();
-        TextPane.setVisible(false);
-    }
-
-    @FXML
     private void cancelAction(ActionEvent event) {
+        Node sourceNode = (Node) event.getSource();
+        Stage stage = (Stage) sourceNode.getScene().getWindow();
+        stage.close();
     }
 
-    @FXML
     private void textAction(ActionEvent event) {
         TextPane.setVisible(true); //quando clicco sul pulsante TextAction mi esce la casella di testo.
         chooseAction.setDisable(true);
     }
 
-    @FXML
-    private void audioAction(ActionEvent event) {
-        // get the file selected
-        // create a File chooser
-        /*FileChooser fil_chooser = new FileChooser();
-        File path = fil_chooser.showOpenDialog(new Stage());
-        AudioFilePane.setVisible(true);
-        textFieldAudioFile.setText(path.getPath());*/
-    }
     private void createActionAudio(ActionEvent event) {
         /*String path = textFieldAudioFile.getText();
         if (path.isEmpty()) {
@@ -128,11 +126,7 @@ public class FXMLActionController implements Initializable {
         alertShow("Inserimento", "", "Suono Aggiunto", Alert.AlertType.INFORMATION);*/
     }
 
-    @FXML
-    private void RemoveItem(ActionEvent event) {
-        actionList.remove(actionView.getSelectionModel().getSelectedItem());
-    }
-     private void alertShow(String title, String header, String content, Alert.AlertType type) {
+    private void alertShow(String title, String header, String content, Alert.AlertType type) {
         Alert alert = new Alert(type);
         alert.setTitle(title);
         alert.setHeaderText(header);

@@ -32,9 +32,11 @@ public class RuleSingleton {
         clearRule();
         return temp;
     }
+    
     public void clearRule(){
         r=new Rule();
     }
+    
     public static RuleSingleton getInstance() {
          if(ruleSing==null)
              ruleSing=new RuleSingleton();
