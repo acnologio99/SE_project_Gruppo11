@@ -5,6 +5,7 @@ package SE_project2023;
  * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXML2.java to edit this template
  */
 
+import SE_project2023.Regole.Rule;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;

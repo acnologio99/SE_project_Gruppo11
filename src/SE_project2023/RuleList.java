@@ -1,5 +1,6 @@
 package SE_project2023;
 
+import SE_project2023.Regole.Rule;
 import java.util.HashSet;
 import java.util.Iterator;
 

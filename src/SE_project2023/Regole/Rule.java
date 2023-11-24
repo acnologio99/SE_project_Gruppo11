@@ -1,14 +1,14 @@
 package SE_project2023.Regole;
-import SE_proect2023.Action;
-import SE_proect2023.Trigger;
+import SE_project2023.Action.Action;
+import SE_project2023.Trigger.Trigger;
 /**
  *
  * @author emanu
  */
 public class Rule {
-    String name;
-    Action action;
-    Trigger trigger;
+    public String name;
+    public Action action;
+    public Trigger trigger;
 
     //Costruttori
     public Rule() {}
