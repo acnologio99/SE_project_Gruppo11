@@ -1,5 +1,6 @@
-package SE_project2023.Rule;
-
+package SE_project2023.Regole;
+import SE_proect2023.Action;
+import SE_proect2023.Trigger;
 /**
  *
  * @author emanu
