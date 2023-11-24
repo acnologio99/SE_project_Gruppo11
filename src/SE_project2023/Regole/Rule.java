@@ -1,4 +1,4 @@
-package SE_project2023;
+package SE_project2023.Rule;
 
 /**
  *
