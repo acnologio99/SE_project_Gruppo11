@@ -29,6 +29,10 @@ public class RuleList {
         return hashRules;
     }
 
+    void add(Rule r) {
+        hashRules.add(r);
+    }
+
     
 
     

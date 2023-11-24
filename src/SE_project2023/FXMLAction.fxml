@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SE_project2023.FXMLActionController">
+   <children>
+      <AnchorPane layoutX="10.0" layoutY="10.0" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+         <children>
+            <Button fx:id="doneActionButton" layoutX="467.0" layoutY="323.0" mnemonicParsing="false" onAction="#doneAction" text="Done" />
+            <AnchorPane fx:id="TextPane" layoutX="300.0" layoutY="74.0" prefHeight="156.0" prefWidth="217.0" visible="false">
+               <children>
+                  <TextArea fx:id="TextMessage" prefHeight="156.0" prefWidth="217.0" promptText="Inserisci il messaggio" />
+                  <Button fx:id="SendMessage" layoutX="135.0" layoutY="116.0" mnemonicParsing="false" onAction="#makeAction" text="Send" />
+                  <Button fx:id="cancelBtnAction" layoutX="38.0" layoutY="116.0" mnemonicParsing="false" onAction="#cancelAction" text="Cancel" />
+               </children>
+            </AnchorPane>
+            <MenuButton fx:id="chooseAction" layoutX="14.0" layoutY="74.0" mnemonicParsing="false" text="Action">
+               <items>
+                  <MenuItem mnemonicParsing="false" onAction="#textAction" text="Text Action" />
+                  <MenuItem mnemonicParsing="false" onAction="#audioAction" text="Audio Action" />
+                  <MenuItem mnemonicParsing="false" text="Test Action" />
+               </items>
+            </MenuButton>
+            <ListView fx:id="actionView" editable="true" layoutX="100.0" layoutY="74.0" prefHeight="200.0" prefWidth="200.0" />
+            <Button fx:id="RemoveBtn" layoutX="152.0" layoutY="238.0" mnemonicParsing="false" onAction="#RemoveItem" text="Remove Action" />
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>
