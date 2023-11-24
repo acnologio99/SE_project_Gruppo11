@@ -27,6 +27,20 @@ public class RuleSingleton {
     public void setTrigger(Trigger t){
         r.setTrigger(t);
     }
+    public boolean getTrigger(){
+        if(r.getTrigger() != null){
+            return true;
+        }else return false;
+        
+    }
+    
+    public boolean getAction(){
+        if(r.getAction() != null){
+            return true;
+        }else return false;
+        
+    }
+    
     public Rule getRule(){
         Rule temp=r;
         clearRule();

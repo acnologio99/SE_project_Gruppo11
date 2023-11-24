@@ -5,7 +5,9 @@
 package SE_project2023;
 
 import SE_project2023.Action.Action;
+import SE_project2023.Action.ActionAudio;
 import SE_project2023.Action.ActionMessageBox;
+import java.io.File;
 import java.net.URL;
 import java.util.HashSet;
 import java.util.ResourceBundle;
@@ -20,7 +22,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 /**
@@ -47,6 +51,8 @@ public class FXMLActionController implements Initializable {
     private Button Cancel;
     @FXML
     private Button audioButton;
+    @FXML
+    private TextField audioText;
 
     /**
      * Initializes the controller class.
@@ -87,13 +93,21 @@ public class FXMLActionController implements Initializable {
     @FXML
     private void doneAction(ActionEvent event) {
 
+       
         if (flagAction == 1) {
             String mess = TextMessage.getText();
             Action a = new ActionMessageBox(mess);
             r.setAction(a);
-        }
-        alertShow("", "Azione aggiunta!", "", Alert.AlertType.INFORMATION);
+            
+        } else if (flagAction == 2) {
+            Action a = new ActionAudio(audioText.getText());
+            r.setAction(a);
 
+        }
+       
+
+        alertShow("", "Azione aggiunta!", "", Alert.AlertType.INFORMATION);
+        
         Node sourceNode = (Node) event.getSource();
         Stage stage = (Stage) sourceNode.getScene().getWindow();
 
@@ -124,6 +138,16 @@ public class FXMLActionController implements Initializable {
         textFieldAudioFile.clear();
         AudioFilePane.setVisible(false);
         alertShow("Inserimento", "", "Suono Aggiunto", Alert.AlertType.INFORMATION);*/
+    }
+
+    @FXML
+    private void audioAction(ActionEvent event) {
+        // get the file selected
+        // create a File chooser
+        FileChooser fil_chooser = new FileChooser();
+        File path = fil_chooser.showOpenDialog(new Stage());
+        audioText.setText(path.toString());
+
     }
 
     private void alertShow(String title, String header, String content, Alert.AlertType type) {

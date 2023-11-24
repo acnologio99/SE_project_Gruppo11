@@ -3,6 +3,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
 <AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SE_project2023.FXMLActionController">
@@ -11,6 +12,7 @@
       <Button fx:id="Done" layoutX="430.0" layoutY="350.0" mnemonicParsing="false" onAction="#doneAction" text="Done!" />
       <Button fx:id="Cancel" layoutX="521.0" layoutY="350.0" mnemonicParsing="false" onAction="#cancelAction" text="Cancel" />
       <TextArea fx:id="TextMessage" layoutX="290.0" layoutY="83.0" prefHeight="157.0" prefWidth="200.0" visible="false" />
-      <Button fx:id="audioButton" layoutX="365.0" layoutY="149.0" mnemonicParsing="false" text="audioButton" visible="false" />
+      <TextField fx:id="audioText" layoutX="290.0" layoutY="149.0" prefHeight="26.0" prefWidth="251.0" />
+      <Button fx:id="audioButton" layoutX="370.0" layoutY="187.0" mnemonicParsing="false" onAction="#audioAction" text="Choose Audio" visible="false" />
    </children>
 </AnchorPane>
