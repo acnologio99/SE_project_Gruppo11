@@ -59,8 +59,8 @@ public class ActionMessageBoxTest {
     @Test
     public void testFire() {
         System.out.println("fire");
-        
         instance.fire();
+        assertTrue(instance.isFired());
         
     }
 
@@ -115,7 +115,7 @@ public class ActionMessageBoxTest {
     /**
      * Test of isFired method, of class ActionMessageBox.
      */
-    @Test(expected=UnsupportedOperationException.class)
+   
     public void testIsFired() {
         System.out.println("isFired");
        

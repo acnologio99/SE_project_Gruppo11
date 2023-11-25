@@ -15,6 +15,7 @@ public class ActionMessageBox implements Action {
     
     private String msg;
     private Boolean fired=false;
+    
     public ActionMessageBox(String msg) {
         if(this.msg==null)
         this.msg = "";
@@ -40,6 +41,7 @@ public class ActionMessageBox implements Action {
         alert.setHeaderText("Message");
         alert.setContentText(msg);
         alert.showAndWait();
+        this.fired=true;
         
         
     }
@@ -66,7 +68,7 @@ public class ActionMessageBox implements Action {
 
     @Override
     public boolean isFired() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.fired;
     }
     
     
