@@ -30,14 +30,8 @@ public class TimeTriggerTest {
      */
     @Test(expected=DateTimeException.class)
     public void testGetTimeOfDay() {
-<<<<<<< HEAD
-        System.out.println("getTimeOfDay");
-        TimeTrigger instance = null;
-        LocalTime expResult = null;
-        LocalTime result = instance.getTimeOfDay();
-        assertEquals(expResult, result);
-        
-=======
+
+
 
         //Impostazione di un valore di LocalTime (ad esempio, 10:30) tramite setTimeOfDay()
         LocalTime expectedTime = LocalTime.of(25, 30);
@@ -69,38 +63,23 @@ public class TimeTriggerTest {
         instance.setTimeOfDay(actualTime);
         actualTime=instance.getTimeOfDay();
         assertEquals(expectedTime, actualTime);
->>>>>>> origin/main
+
     }
 
     /**
      *
      */
-<<<<<<< HEAD
-    @Test
-    public void testSetTimeOfDay() {
-        System.out.println("setTimeOfDay");
-        LocalTime timeOfDay = null;
-        TimeTrigger instance = null;
-        instance.setTimeOfDay(timeOfDay);
-        
-    }
+
 
     /**
      * Test of isVerified method, of class TimeTrigger.
      */
-    @Test
-=======
+
     @Test//(expected=AssertionError.class)
->>>>>>> origin/main
     public void testIsVerified() {
-<<<<<<< HEAD
-        System.out.println("isVerified");
-        TimeTrigger instance = null;
-        boolean expResult = false;
-        boolean result = instance.isVerified();
-        assertEquals(expResult, result);
+
        
-=======
+
         /*Orario impostato a null*/
         assertTrue(!instance.isVerified());
 
@@ -129,8 +108,7 @@ public class TimeTriggerTest {
         instance.setTimeOfDay(time7);
         assertTrue(!instance.isVerified());
         
-        
->>>>>>> origin/main
+
     }
     
     
