@@ -13,8 +13,7 @@ public class ActionAudio implements Action {
 
     private String path;
     private boolean isFired = false;
-    private int flagAlert = 0;
-
+    private int flagAlert =0;
     public ActionAudio(String path) {
         this.path = path;
     }
@@ -37,24 +36,21 @@ public class ActionAudio implements Action {
 
     @Override
     public void fire() {
-        // Crea un oggetto File con il percorso memorizzato nel campo path
+        
+        
         File file = new File(this.path);
-        // Crea un oggetto Media dal file 
         Media media = new Media(file.toURI().toString());
-        // Crea un oggetto MediaPlayer con l'oggetto Media ed inizia a riprodurre l'audio
         final MediaPlayer mediaPlayer = new MediaPlayer(media);
         mediaPlayer.play();
-        // Se flagAlert è 0, imposta flagAlert a 1 e crea un oggetto Alert
-        if (flagAlert == 0) {
-            flagAlert = 1;
+        if(flagAlert==0){
+            flagAlert=1;
             Alert alert;
-            alert = new Alert(Alert.AlertType.INFORMATION);
+            alert = new Alert(Alert.AlertType.INFORMATION, "Reminder");
             alert.setTitle("Reminder");
             alert.setHeaderText(null);
             alert.setContentText("Playing choosen audio...");
             alert.showAndWait();
         }
-        //Ferma la riproduzione e setta isFired a true
         mediaPlayer.stop();
         this.isFired = true;
     }
@@ -76,7 +72,7 @@ public class ActionAudio implements Action {
 
     @Override
     public String toString() {
-        return "ActionAudio : " + this.path;
+        return "ActionAudio";
     }
 
 }

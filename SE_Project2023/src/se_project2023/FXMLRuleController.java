@@ -32,15 +32,13 @@ public class FXMLRuleController implements Initializable {
     @FXML
     private Button triggerBtn;
     @FXML
-    private Text actionTxt;
-    @FXML
-    private Text triggerTxt;
-    @FXML
     private Button confirmBtn;
     @FXML
     private Button cancelBtn;
     @FXML
     private TextField ruleName;
+
+
 
     /**
      * Initializes the controller class.
@@ -48,7 +46,16 @@ public class FXMLRuleController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        RuleSingleton r=RuleSingleton.getInstance();
+        if(r.getRule().getAction() == null || r.getRule().getTrigger()== null){
+            confirmBtn.disableProperty().set(true);
+        }else{
+            confirmBtn.disableProperty().set(false);
+        }
+        
+        
 
+        
     }
 
     @FXML
@@ -89,9 +96,10 @@ public class FXMLRuleController implements Initializable {
     private void confirmRule(ActionEvent event) {
         //ruleList.add(r);
 
-        //alertShow("Inserimento", "", "Regola correttamente inserita", Alert.AlertType.INFORMATION);
-        RuleSingleton r = RuleSingleton.getInstance();
+        alertShow("Inserimento", "", "Regola correttamente inserita", Alert.AlertType.INFORMATION);
+        RuleSingleton r=RuleSingleton.getInstance();
         r.setName(ruleName.getText());
+
 
         Node sourceNode = (Node) event.getSource();
         Stage stage = (Stage) sourceNode.getScene().getWindow();
@@ -108,7 +116,6 @@ public class FXMLRuleController implements Initializable {
         // Chiudi la finestra corrente
         stage.close();
     }
-
     private void alertShow(String title, String header, String content, Alert.AlertType type) {
         Alert alert = new Alert(type);
         alert.setTitle(title);
@@ -116,8 +123,7 @@ public class FXMLRuleController implements Initializable {
         alert.setContentText(content);
         alert.show();
     }
-
-    public void close() {
+    public void close(){
 
     }
 }

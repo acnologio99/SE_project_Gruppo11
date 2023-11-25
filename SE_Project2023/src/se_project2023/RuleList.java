@@ -2,6 +2,8 @@ package SE_project2023;
 
 import SE_project2023.Regole.Rule;
 import java.util.HashSet;
+import java.util.Iterator;
+
 
 /**
  *
@@ -10,7 +12,7 @@ import java.util.HashSet;
 public class RuleList {
 
     private static RuleList ruleList = null;
-
+    
     private HashSet<Rule> hashRules;
 
     private RuleList() {
@@ -32,4 +34,7 @@ public class RuleList {
         hashRules.add(r);
     }
 
+    
+
+    
 }

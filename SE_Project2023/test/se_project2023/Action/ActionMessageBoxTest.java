@@ -2,8 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/UnitTests/JUnit4TestClass.java to edit this template
  */
-package SE_project2023.Action;
+package se_project2023.Action;
 
+import SE_project2023.Action.Action;
+import SE_project2023.Action.ActionMessageBox;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import org.junit.Before;
@@ -71,7 +73,7 @@ public class ActionMessageBoxTest {
 
         });
         try {
-            Thread.sleep(5000); //devo aspettare che il metodo viene richiamato sul thread e che abbia il tempo di eseguire il test
+            Thread.sleep(500); //devo aspettare che il metodo viene richiamato sul thread e che abbia il tempo di eseguire il test
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

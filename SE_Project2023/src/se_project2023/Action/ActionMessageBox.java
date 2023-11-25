@@ -12,36 +12,39 @@ import javafx.scene.control.Alert.AlertType;
  * @author chris
  */
 public class ActionMessageBox implements Action {
-
+    
     private String msg;
 
-    private Boolean isFired = false;
+    
+
+    private Boolean isFired=false;
 
     public ActionMessageBox(String msg) {
-        if (msg == null) {
-            this.msg = "";
-        } else {
-            this.msg = msg;
-        }
+        if(this.msg==null)
+        this.msg = "";
+        else
+        this.msg=msg;
     }
 
     public String getMsg() {
         return msg;
     }
 
-    public void setMsg(String msg) {
-        if (msg == null) {
-            this.msg = "";
-        } else {
-            this.msg = msg;
-        }
+    public void setMsg(String msg){
+        if(msg == null){
+        this.msg="";
+        }else
+        this.msg = msg;
     }
+    
+
 
     @Override
     public boolean isFired() {
         //deve controllare fire
         return this.isFired;
     }
+
 
     @Override
     public void fire() {
@@ -51,7 +54,9 @@ public class ActionMessageBox implements Action {
         alert.setHeaderText(null);
         alert.setContentText(msg);
         alert.showAndWait();
-
+       
+        
+        
     }
 
     @Override
@@ -71,7 +76,14 @@ public class ActionMessageBox implements Action {
 
     @Override
     public String toString() {
-        return "ActionMessageBox: " + msg;
+        return "ActionMessageBox: "+ msg;
     }
 
+
+ 
+   
+
+    
+    
+    
 }

@@ -6,9 +6,10 @@ package SE_project2023.Trigger;
 
 import java.time.DateTimeException;
 import java.time.LocalTime;
+import static junit.framework.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 /**
  *
@@ -29,6 +30,8 @@ public class TimeTriggerTest {
      */
     @Test(expected=DateTimeException.class)
     public void testGetTimeOfDay() {
+
+
 
         //Impostazione di un valore di LocalTime (ad esempio, 10:30) tramite setTimeOfDay()
         LocalTime expectedTime = LocalTime.of(25, 30);
@@ -60,13 +63,23 @@ public class TimeTriggerTest {
         instance.setTimeOfDay(actualTime);
         actualTime=instance.getTimeOfDay();
         assertEquals(expectedTime, actualTime);
+
     }
 
     /**
      *
      */
+
+
+    /**
+     * Test of isVerified method, of class TimeTrigger.
+     */
+
     @Test//(expected=AssertionError.class)
     public void testIsVerified() {
+
+       
+
         /*Orario impostato a null*/
         assertTrue(!instance.isVerified());
 
@@ -95,7 +108,7 @@ public class TimeTriggerTest {
         instance.setTimeOfDay(time7);
         assertTrue(!instance.isVerified());
         
-        
+
     }
     
     

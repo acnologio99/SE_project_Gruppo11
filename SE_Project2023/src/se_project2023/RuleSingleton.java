@@ -34,16 +34,17 @@ public class RuleSingleton {
     }
 
     public Rule getRule() {
-
+        
         Rule temp = r;
         clearRule();
         return temp;
-
+        
     }
 
     public void clearRule() {
         r = new Rule();
     }
+    
 
     public static RuleSingleton getInstance() {
         if (ruleSing == null) {
