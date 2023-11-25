@@ -4,9 +4,7 @@
  */
 package SE_project2023;
 
-import SE_project2023.Action.Action;
-import SE_project2023.Action.ActionAudio;
-import SE_project2023.Action.ActionMessageBox;
+import SE_project2023.Action.*;
 import java.io.File;
 import java.net.URL;
 import java.util.HashSet;
@@ -94,18 +92,20 @@ public class FXMLActionController implements Initializable {
 
     @FXML
     private void doneAction(ActionEvent event) {
-
-        if (flagAction == 1) {
-            String mess = TextMessage.getText();
-            Action a = new ActionMessageBox(mess);
-            r.setAction(a);
-
-        } else if (flagAction == 2) {
-            Action a = new ActionAudio(audioText.getText());
-            r.setAction(a);
+        
+        if ((TextMessage.getText().equals("") && audioText.getText().equals(""))|| flagAction == 0) {
+            alertShow("Attenzione", "", "Azione non aggiunta", Alert.AlertType.WARNING);
+        } else {
+            if (flagAction == 1) {
+                String mess = TextMessage.getText();
+                Action a = new ActionMessageBox(mess);
+                r.setAction(a);
+            } else if (flagAction == 2) {
+                Action a = new ActionAudio(audioText.getText());
+                r.setAction(a);
+            }
+            alertShow("Inserimento", "", "Azione aggiunta!", Alert.AlertType.INFORMATION);
         }
-
-        alertShow("", "Azione aggiunta!", "", Alert.AlertType.INFORMATION);
 
         Node sourceNode = (Node) event.getSource();
         Stage stage = (Stage) sourceNode.getScene().getWindow();
@@ -135,8 +135,9 @@ public class FXMLActionController implements Initializable {
                 .add(new FileChooser.ExtensionFilter("Audio Files",
                         "*.mp3", "*.wav", "*.flac", "*.aac"));
         File file = fil_chooser.showOpenDialog(new Stage());
-        if(file!=null)
+        if (file != null) {
             audioText.setText(file.toString());
+        }
 
     }
 
