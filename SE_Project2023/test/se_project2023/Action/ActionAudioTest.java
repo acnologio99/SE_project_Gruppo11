@@ -71,7 +71,7 @@ public class ActionAudioTest {
         String result = instance.toString();
         assertEquals(expResult, result);
     }
-
+    
     /**
      * Test of add method, of class ActionAudio.
      */

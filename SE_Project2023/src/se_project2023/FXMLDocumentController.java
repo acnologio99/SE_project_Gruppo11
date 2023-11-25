@@ -149,9 +149,10 @@ public class FXMLDocumentController implements Initializable {
             stage.showAndWait();
 
             RuleSingleton r = RuleSingleton.getInstance();
-            if (r.getRule().getName() != null) {
+            
+            if (r.isValid()) {
                 ruleList.add(r.getRule());
-            }
+            }else r.clearRule();
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -14,7 +14,7 @@ import javafx.scene.control.Alert.AlertType;
 public class ActionMessageBox implements Action {
     
     private String msg;
-    private Boolean fired=false;
+    private Boolean isFired=false;
     public ActionMessageBox(String msg) {
         this.msg = msg;
     }
@@ -31,11 +31,12 @@ public class ActionMessageBox implements Action {
     @Override
     public boolean isFired() {
         //deve controllare fire
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.isFired;
     }
 
     @Override
     public void fire() {
+        this.isFired = true;
         Alert alert = new Alert(AlertType.INFORMATION);
         alert.setTitle("Information Dialog");
         alert.setHeaderText(null);

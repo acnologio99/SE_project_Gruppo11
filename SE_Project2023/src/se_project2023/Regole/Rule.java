@@ -48,6 +48,9 @@ public class Rule {
     public void setName(String Name) {
         this.name = Name;
     }
+    public boolean ruleIsValid(){
+        return this.getTrigger()!=null && this.getAction()!=null;
+    }
 
     @Override
         public String toString() {
