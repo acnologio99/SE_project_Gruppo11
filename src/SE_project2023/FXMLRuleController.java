@@ -41,6 +41,11 @@ public class FXMLRuleController implements Initializable {
     private Button cancelBtn;
     @FXML
     private TextField ruleName;
+<<<<<<< Updated upstream
+=======
+    
+    
+>>>>>>> Stashed changes
 
     /**
      * Initializes the controller class.
@@ -49,6 +54,11 @@ public class FXMLRuleController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         
+<<<<<<< Updated upstream
+=======
+        
+        
+>>>>>>> Stashed changes
     }    
 
     @FXML
@@ -70,6 +80,22 @@ public class FXMLRuleController implements Initializable {
     @FXML
     private void addTrigger(ActionEvent event) {
         
+<<<<<<< Updated upstream
+=======
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("FXMLTrigger.fxml"));
+            
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Trigger");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+>>>>>>> Stashed changes
     }
 
     @FXML
@@ -90,7 +116,11 @@ public class FXMLRuleController implements Initializable {
 
     @FXML
     private void cancel(ActionEvent event) {
+<<<<<<< Updated upstream
          Node sourceNode = (Node) event.getSource();
+=======
+        Node sourceNode = (Node) event.getSource();
+>>>>>>> Stashed changes
         Stage stage = (Stage) sourceNode.getScene().getWindow();
 
         // Chiudi la finestra corrente

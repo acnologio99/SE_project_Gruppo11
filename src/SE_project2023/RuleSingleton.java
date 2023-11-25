@@ -27,14 +27,39 @@ public class RuleSingleton {
     public void setTrigger(Trigger t){
         r.setTrigger(t);
     }
+<<<<<<< Updated upstream
+=======
+    public boolean getTrigger(){
+        if(r.getTrigger() != null){
+            return true;
+        }else return false;
+        
+    }
+    
+    public boolean getAction(){
+        if(r.getAction() != null){
+            return true;
+        }else return false;
+        
+    }
+    
+>>>>>>> Stashed changes
     public Rule getRule(){
         Rule temp=r;
         clearRule();
         return temp;
     }
+<<<<<<< Updated upstream
     public void clearRule(){
         r=new Rule();
     }
+=======
+    
+    public void clearRule(){
+        r=new Rule();
+    }
+    
+>>>>>>> Stashed changes
     public static RuleSingleton getInstance() {
          if(ruleSing==null)
              ruleSing=new RuleSingleton();
