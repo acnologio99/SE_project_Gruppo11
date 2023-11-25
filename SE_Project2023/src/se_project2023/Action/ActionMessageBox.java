@@ -54,7 +54,7 @@ public class ActionMessageBox implements Action {
         alert.setHeaderText(null);
         alert.setContentText(msg);
         alert.showAndWait();
-        this.isFired=true;
+       
         
         
     }

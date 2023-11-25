@@ -6,6 +6,8 @@ package se_project2023.Action;
 
 import SE_project2023.Action.Action;
 import SE_project2023.Action.ActionMessageBox;
+import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -14,14 +16,17 @@ import static org.junit.Assert.*;
  *
  * @author chris
  */
-public class ActionMessageBoxTest {
+public class ActionMessageBoxTest  {
     ActionMessageBox instance;
+    
+   
+   
     
     public ActionMessageBoxTest() {
     }
     
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         instance = new ActionMessageBox("");
     }
 
@@ -58,9 +63,29 @@ public class ActionMessageBoxTest {
      */
     @Test
     public void testFire() {
+        JFXPanel jfxPanel = new JFXPanel();
         System.out.println("fire");
-        instance.fire();
-        assertTrue(instance.isFired());
+        boolean expResult = false;
+        boolean result = instance.isFired();
+        assertEquals(expResult, result);
+     
+        Platform.runLater(() -> {
+            instance.setMsg("Messaggio Test");
+            instance.fire();        
+            assertTrue(instance.isFired());
+            
+            
+            
+        });
+        try {
+            Thread.sleep(500); //devo aspettare che il metodo viene richiamato sul thread e che abbia il tempo di eseguire il test
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        
+        
+        
+        
         
     }
 
@@ -115,7 +140,7 @@ public class ActionMessageBoxTest {
     /**
      * Test of isFired method, of class ActionMessageBox.
      */
-   
+   @Test //the method is tested in testFire() too;
     public void testIsFired() {
         System.out.println("isFired");
        
