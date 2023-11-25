@@ -4,7 +4,6 @@
  */
 package SE_project2023.Regole;
 
-import SE_project2023.Regole.Rule;
 import SE_project2023.Action.*;
 import SE_project2023.Trigger.TimeTrigger;
 import SE_project2023.Trigger.Trigger;
