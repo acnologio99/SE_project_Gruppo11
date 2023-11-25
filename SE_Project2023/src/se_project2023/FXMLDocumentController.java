@@ -94,7 +94,7 @@ public class FXMLDocumentController implements Initializable {
                             Platform.runLater(() -> {
                                 System.out.println(r.isVerifiedRule());
                                 //if (r.isVerifiedRule()) {
-                                if (r.isVerifiedRule() && !r.getAction().isFired()) { 
+                                if (r.isVerifiedRule() && !r.getAction().isFired()) {
                                     r.getAction().fire();
                                 }
                             });
@@ -149,7 +149,9 @@ public class FXMLDocumentController implements Initializable {
             stage.showAndWait();
 
             RuleSingleton r = RuleSingleton.getInstance();
-            ruleList.add(r.getRule());
+            if (r.getRule().getName() != null) {
+                ruleList.add(r.getRule());
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

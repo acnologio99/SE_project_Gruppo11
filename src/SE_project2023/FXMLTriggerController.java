@@ -4,17 +4,8 @@
  */
 package SE_project2023;
 
-<<<<<<< Updated upstream
-import java.net.URL;
-import java.util.ResourceBundle;
-import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-=======
-import SE_project2023.Action.Action;
 import SE_project2023.Trigger.TimeTrigger;
 import SE_project2023.Trigger.Trigger;
-import com.jfoenix.controls.JFXTimePicker;
-import java.io.File;
 import java.net.URL;
 import java.time.LocalTime;
 import java.util.HashSet;
@@ -29,11 +20,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
-import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
->>>>>>> Stashed changes
 
 /**
  * FXML Controller class
@@ -42,18 +30,12 @@ import javafx.stage.Stage;
  */
 public class FXMLTriggerController implements Initializable {
 
-<<<<<<< Updated upstream
-=======
     @FXML
     private ListView<String> triggerListView;
-    private ComboBox<String> timeComboBox;
     @FXML
     private Button Done;
     @FXML
     private Button Cancel;
-    
-    ObservableList<Trigger> triggerList;
-    RuleSingleton r;
     @FXML
     private Button fileTriggerButton;
     @FXML
@@ -64,63 +46,70 @@ public class FXMLTriggerController implements Initializable {
     private AnchorPane comboBoxPane;
     
     private LocalTime temp;
->>>>>>> Stashed changes
+    ObservableList<Trigger> triggerList;
+    RuleSingleton r;
+    
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-<<<<<<< Updated upstream
-        // TODO
-    }    
-    private void alertShow(String title, String header, String content, Alert.AlertType type) {
-=======
+        /*Inizializzazione di un observable list*/
         HashSet<Trigger> triggers = new HashSet();
         triggerList = FXCollections.observableArrayList(triggers);
+        
+        /*Prendiamo una regola temporanea a cui aggiungere il trigger*/
         r=RuleSingleton.getInstance();
+        
+        /*Popola le timebox con i valori delle ore e dei minuti*/
         populateTimeComboBox(timeComboBox1,24);
         populateTimeComboBox(timeComboBox2,60);
+        
+        /*Aggiungiamo alla ListView dei trigger i nomi dei vari tipi di trigger*/
         triggerListView.getItems().addAll(
-                "Time Trigger"
-                      
+                "Time Trigger"                    
         );
         
+        /*La variabile temp per l'inizializzazione del trigger viene impostata di default all'orario attuale*/
         temp = LocalTime.of(LocalTime.now().getHour(), LocalTime.now().getMinute());
+        
+        /*Settiamo i valori delle due timeComboBox all'orario attuale*/
         timeComboBox1.setPromptText(Integer.toString(LocalTime.now().getHour()));
         timeComboBox2.setPromptText(Integer.toString(LocalTime.now().getMinute()));
 
-        // Imposta l'iniziale visibilità del timePicker e del fileTriggerButton su false
-        comboBoxPane.setVisible(false);
-        fileTriggerButton.setVisible(false);
-
-        // Aggiungi un listener per gestire la selezione della ListView
+        
+        /*Listener aggiunto per la gestione della visibilità degli elementi dell'interfaccia,
+        chiama una funzione che setta la visibilità a TRUE*/
         triggerListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 handleTriggerSelection(newValue); // Gestisci la selezione dell'opzione
             }
         });
 
+
        
             
       
     }
 
-   /* private void checkSelectedTime(LocalTime selectedTime) {
-        // Qui puoi eseguire le azioni desiderate in base all'orario selezionato
-        System.out.println("Orario selezionato: " + selectedTime);
-        // Esegui la tua logica qui con l'orario selezionato
-    }*/
+
 
     private void handleTriggerSelection(String selectedTrigger) {
-        if ("Time Trigger".equals(selectedTrigger)) {
-            comboBoxPane.setVisible(true);
-            fileTriggerButton.setVisible(false);
-        } else if ("Program Trigger".equals(selectedTrigger)) {
-            comboBoxPane.setVisible(false);
-            fileTriggerButton.setVisible(false);
-        } else if ("File Trigger".equals(selectedTrigger)) {
-            comboBoxPane.setVisible(false);
-            fileTriggerButton.setVisible(true);
+        if (null != selectedTrigger) switch (selectedTrigger) {
+            case "Time Trigger":
+                comboBoxPane.setVisible(true);
+                fileTriggerButton.setVisible(false);
+                break;
+            case "Program Trigger":
+                comboBoxPane.setVisible(false);
+                fileTriggerButton.setVisible(false);
+                break;
+            case "File Trigger":
+                comboBoxPane.setVisible(false);
+                fileTriggerButton.setVisible(true);
+                break;
+            default:
+                break;
         }
     }
    
@@ -131,14 +120,13 @@ public class FXMLTriggerController implements Initializable {
         TimeTrigger t = new TimeTrigger(temp);
         triggerList.add(t);
         alertShow("","L'orario scelto è: " + temp.toString(),"",Alert.AlertType.INFORMATION);
-        System.out.println("ORARIO SELEZIONATO:"+temp);
+        //System.out.println("ORARIO SELEZIONATO:"+temp);
         r.setTrigger(t);
+        
+        
         Node sourceNode = (Node) event.getSource();
         Stage stage = (Stage) sourceNode.getScene().getWindow();
-
-        // Chiudi la finestra corrente
-        stage.close();
-        // Chiudi la finestra corrente        
+        stage.close();// Chiudi la finestra corrente             
     }
 
     @FXML
@@ -148,9 +136,12 @@ public class FXMLTriggerController implements Initializable {
         stage.close();
     }
 
+    
+    
+  /*metodo per selezionare le cartelle del sistema, ci servirà con i programTrigger*/
     @FXML
     private void selectFolder(ActionEvent event) {
-        DirectoryChooser directoryChooser = new DirectoryChooser();
+    /*    DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setTitle("Seleziona una cartella");
         File selectedDirectory = directoryChooser.showDialog(fileTriggerButton.getScene().getWindow());
 
@@ -158,19 +149,17 @@ public class FXMLTriggerController implements Initializable {
             // Fa qualcosa con la cartella selezionata
             System.out.println("Cartella selezionata: " + selectedDirectory.getAbsolutePath());
         }
+    */
     }
+    
 
      private void alertShow(String title, String header, String content, Alert.AlertType type) {
->>>>>>> Stashed changes
         Alert alert = new Alert(type);
         alert.setTitle(title);
         alert.setHeaderText(header);
         alert.setContentText(content);
         alert.show();
     }
-<<<<<<< Updated upstream
-}
-=======
 
     private void populateTimeComboBox(ComboBox<String> comboBox,int pop) {
         for (int hm = 0; hm < pop; hm++){
@@ -180,22 +169,19 @@ public class FXMLTriggerController implements Initializable {
 }
 
     @FXML
-    private void timePick1(ActionEvent event) {   
+    private void timePick1(ActionEvent event) {
+    /*Gestito negli if per evitare il lancio di eccezioni al "primo click" di selezione.
+        Scegliendo l'orario da una sola delle due ComboBox disponibili, il valore dell'altra ComboBox
+        è impostato al valore dell'orario corrente*/
     if(timeComboBox1.getValue()==null){
     temp= LocalTime.of((LocalTime.now().getHour()),Integer.parseInt(timeComboBox2.getValue()));
-
-    } else if (timeComboBox2.getValue()==null){
-    
+    } else if (timeComboBox2.getValue()==null){    
         temp= LocalTime.of(Integer.parseInt(timeComboBox1.getValue()),LocalTime.now().getMinute());
-    
     } else {
-    
-        temp= LocalTime.of(Integer.parseInt(timeComboBox1.getValue()),Integer.parseInt(timeComboBox1.getValue()));
-
+        temp= LocalTime.of(Integer.parseInt(timeComboBox1.getValue()),Integer.parseInt(timeComboBox2.getValue()));
     }
 }
 }
 
     
 
->>>>>>> Stashed changes

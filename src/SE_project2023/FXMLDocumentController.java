@@ -96,9 +96,10 @@ public class FXMLDocumentController implements Initializable {
                         for(Rule r: ruleList){
                             System.out.println(r);
                             Platform.runLater(() -> {
-                            //if(r.isVerifiedRule()) {
+                                System.out.println(r.isVerifiedRule());
+                            if(r.isVerifiedRule()) {
                                 r.action.fire();
-                            //}
+                            }
                             });
                             
                         }
@@ -127,19 +128,7 @@ public class FXMLDocumentController implements Initializable {
 
     }
 
-
-    private void addTrigger(ActionEvent event) {
-        triggerPane.setVisible(true);
-    }
-
-    @FXML
-    private void timeTrigger(ActionEvent event) {
-        
-    }
-    @FXML
-    private void CancelTrigger(ActionEvent event) {
-        triggerPane.setVisible(false);
-    }
+   
     private void alertShow(String title, String header, String content, Alert.AlertType type) {
         Alert alert = new Alert(type);
         alert.setTitle(title);
@@ -147,13 +136,12 @@ public class FXMLDocumentController implements Initializable {
         alert.setContentText(content);
         alert.show();
     }
+    
     @FXML
     private void addRule(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("FXMLRule.fxml"));
-            
             Parent root = loader.load();
-
             Stage stage = new Stage();
             stage.setTitle("RuleCretor");
             stage.setScene(new Scene(root));

@@ -50,16 +50,16 @@ public class FXMLRuleController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        
+
 
         
-    }    
+    }
 
     @FXML
     private void addAction(ActionEvent event) {
-         try {
+        try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("FXMLAction.fxml"));
-            
+
             Parent root = loader.load();
 
             Stage stage = new Stage();
@@ -76,7 +76,7 @@ public class FXMLRuleController implements Initializable {
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("FXMLTrigger.fxml"));
-            
+
             Parent root = loader.load();
 
             Stage stage = new Stage();
@@ -86,18 +86,18 @@ public class FXMLRuleController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        
+
     }
 
     @FXML
     private void confirmRule(ActionEvent event) {
         //ruleList.add(r);
-        
+
         alertShow("Inserimento", "", "Regola correttamente inserita", Alert.AlertType.INFORMATION);
         RuleSingleton r=RuleSingleton.getInstance();
         r.setName(ruleName.getText());
-        
-        
+
+
         Node sourceNode = (Node) event.getSource();
         Stage stage = (Stage) sourceNode.getScene().getWindow();
 
@@ -107,7 +107,7 @@ public class FXMLRuleController implements Initializable {
 
     @FXML
     private void cancel(ActionEvent event) {
-         Node sourceNode = (Node) event.getSource();
+        Node sourceNode = (Node) event.getSource();
         Stage stage = (Stage) sourceNode.getScene().getWindow();
 
         // Chiudi la finestra corrente
@@ -121,6 +121,6 @@ public class FXMLRuleController implements Initializable {
         alert.show();
     }
     public void close(){
-        
+
     }
 }

@@ -5,10 +5,6 @@
 package SE_project2023.Trigger;
 
 import java.time.LocalTime;
-<<<<<<< Updated upstream
-=======
-import java.time.format.DateTimeFormatter;
->>>>>>> Stashed changes
 
 /**
  *
@@ -32,13 +28,8 @@ public class TimeTrigger implements Trigger{
 
     @Override
     public boolean isVerified() {
-<<<<<<< Updated upstream
-    LocalTime ld = LocalTime.now();
-        return ld.equals(this.timeOfDay);
-=======
     LocalTime now = LocalTime.of(LocalTime.now().getHour(), LocalTime.now().getMinute());
     return now.equals(this.timeOfDay);
->>>>>>> Stashed changes
     }
 
   
