@@ -16,24 +16,32 @@ public class ActionMessageBox implements Action {
     private String msg;
     private Boolean fired=false;
     public ActionMessageBox(String msg) {
-        this.msg = msg;
+        if(this.msg==null)
+        this.msg = "";
+        else
+        this.msg=msg;
     }
 
     public String getMsg() {
         return msg;
     }
 
-    public void setMsg(String msg) {
+    public void setMsg(String msg){
+        if(msg == null){
+        this.msg="";
+        }else
         this.msg = msg;
     }
     
     @Override
     public void fire() {
         Alert alert = new Alert(AlertType.INFORMATION);
-        alert.setTitle("Information Dialogì");
-        alert.setHeaderText(null);
+        alert.setTitle("Information Dialogue");
+        alert.setHeaderText("Message");
         alert.setContentText(msg);
         alert.showAndWait();
+        
+        
     }
 
     @Override

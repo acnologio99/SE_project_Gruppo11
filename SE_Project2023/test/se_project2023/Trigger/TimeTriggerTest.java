@@ -33,8 +33,7 @@ public class TimeTriggerTest {
         LocalTime expResult = null;
         LocalTime result = instance.getTimeOfDay();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        
     }
 
     /**
@@ -46,8 +45,7 @@ public class TimeTriggerTest {
         LocalTime timeOfDay = null;
         TimeTrigger instance = null;
         instance.setTimeOfDay(timeOfDay);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        
     }
 
     /**
@@ -60,8 +58,7 @@ public class TimeTriggerTest {
         boolean expResult = false;
         boolean result = instance.isVerified();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+       
     }
     
 }

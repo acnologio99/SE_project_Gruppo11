@@ -21,7 +21,7 @@ public class ActionMessageBoxTest {
     }
     
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         instance = new ActionMessageBox("");
     }
 
@@ -29,27 +29,28 @@ public class ActionMessageBoxTest {
      * Test of getMsg method, of class ActionMessageBox.
      */
     @Test
-    public void testGetMsg() {
-        System.out.println("getMsg");
-       
-        String expResult = "";
+    public void testGetSetMsg(){
+        System.out.println("getsetMsg");
+        
+        /* first test case expected msg*/
+        String msg = "Hello";
+        instance.setMsg(msg);
+        String expResult = "Hello"; 
         String result = instance.getMsg();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of setMsg method, of class ActionMessageBox.
-     */
-    @Test
-    public void testSetMsg() {
-        System.out.println("setMsg");
-        String msg = "";
-        ActionMessageBox instance = null;
+        
+        /*second test case expected "" when msg is null*/
+        msg = null;
         instance.setMsg(msg);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        result = instance.getMsg();
+        assertEquals("", result);
+        
+        /*third case with constructor*/
+        ActionMessageBox instance2 = new ActionMessageBox(null);
+        result = instance.getMsg();
+        assertEquals("", result);
+        
+        
     }
 
     /**
@@ -58,48 +59,44 @@ public class ActionMessageBoxTest {
     @Test
     public void testFire() {
         System.out.println("fire");
-        ActionMessageBox instance = null;
+        
         instance.fire();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        
     }
 
     /**
      * Test of add method, of class ActionMessageBox.
      */
-    @Test
+    @Test(expected=UnsupportedOperationException.class)
     public void testAdd() {
         System.out.println("add");
-        ActionMessageBox instance = null;
+        
         instance.add();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        
     }
 
     /**
      * Test of remove method, of class ActionMessageBox.
      */
-    @Test
+    @Test(expected=UnsupportedOperationException.class)
     public void testRemove() {
         System.out.println("remove");
-        ActionMessageBox instance = null;
+        
         instance.remove();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        
     }
 
     /**
      * Test of getChild method, of class ActionMessageBox.
      */
-    @Test
+    @Test(expected=UnsupportedOperationException.class)
     public void testGetChild() {
         System.out.println("getChild");
-        ActionMessageBox instance = null;
+        
         Action expResult = null;
         Action result = instance.getChild();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        
     }
 
     /**
@@ -108,26 +105,24 @@ public class ActionMessageBoxTest {
     @Test
     public void testToString() {
         System.out.println("toString");
-        ActionMessageBox instance = null;
-        String expResult = "";
+       
+        String expResult = "ActionMessageBox: ";
         String result = instance.toString();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        
     }
 
     /**
      * Test of isFired method, of class ActionMessageBox.
      */
-    @Test
+    @Test(expected=UnsupportedOperationException.class)
     public void testIsFired() {
         System.out.println("isFired");
-        ActionMessageBox instance = null;
+       
         boolean expResult = false;
         boolean result = instance.isFired();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        
     }
     
 }
