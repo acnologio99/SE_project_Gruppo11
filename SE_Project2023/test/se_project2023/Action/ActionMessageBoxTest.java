@@ -36,9 +36,9 @@ public class ActionMessageBoxTest {
         System.out.println("getsetMsg");
 
         /* first test case expected msg*/
-        String msg = "Hello";
+        String msg = "Helloo";
         instance.setMsg(msg);
-        String expResult = "Hello";
+        String expResult = "Helloo";
         String result = instance.getMsg();
         assertEquals(expResult, result);
 
