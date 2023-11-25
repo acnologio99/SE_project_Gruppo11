@@ -13,49 +13,41 @@ import SE_project2023.Trigger.Trigger;
  * @author giova
  */
 public class RuleSingleton {
+
     private static RuleSingleton ruleSing;
     Rule r;
+
     private RuleSingleton() {
-        r=new Rule();
+        r = new Rule();
     }
-    public void setName(String Name){
+
+    public void setName(String Name) {
         r.setName(Name);
     }
-    public void setAction(Action a){
+
+    public void setAction(Action a) {
         r.setAction(a);
     }
-    public void setTrigger(Trigger t){
+
+    public void setTrigger(Trigger t) {
         r.setTrigger(t);
     }
-public boolean getTrigger(){
-        if(r.getTrigger() != null){
-            return true;
-        }else return false;
-        
-    }
-    
-    public boolean getAction(){
-        if(r.getAction() != null){
-            return true;
-        }else return false;
-        
-    }
-    
-    public Rule getRule(){
-        Rule temp=r;
+
+    public Rule getRule() {
+        Rule temp = r;
         clearRule();
         return temp;
     }
 
-    public void clearRule(){
-        r=new Rule();
+    public void clearRule() {
+        r = new Rule();
     }
 
     public static RuleSingleton getInstance() {
-         if(ruleSing==null)
-             ruleSing=new RuleSingleton();
-         return ruleSing;
+        if (ruleSing == null) {
+            ruleSing = new RuleSingleton();
+        }
+        return ruleSing;
     }
-    
-  
+
 }
