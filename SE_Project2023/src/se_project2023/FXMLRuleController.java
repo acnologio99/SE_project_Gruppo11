@@ -32,10 +32,6 @@ public class FXMLRuleController implements Initializable {
     @FXML
     private Button triggerBtn;
     @FXML
-    private Text actionTxt;
-    @FXML
-    private Text triggerTxt;
-    @FXML
     private Button confirmBtn;
     @FXML
     private Button cancelBtn;
@@ -50,7 +46,14 @@ public class FXMLRuleController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-
+        RuleSingleton r=RuleSingleton.getInstance();
+        if(r.getRule().getAction() == null || r.getRule().getTrigger()== null){
+            confirmBtn.disableProperty().set(true);
+        }else{
+            confirmBtn.disableProperty().set(false);
+        }
+        
+        
 
         
     }
