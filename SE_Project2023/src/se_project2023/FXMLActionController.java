@@ -135,7 +135,8 @@ public class FXMLActionController implements Initializable {
                 .add(new FileChooser.ExtensionFilter("Audio Files",
                         "*.mp3", "*.wav", "*.flac", "*.aac"));
         File file = fil_chooser.showOpenDialog(new Stage());
-        audioText.setText(file.toString());
+        if(file!=null)
+            audioText.setText(file.toString());
 
     }
 

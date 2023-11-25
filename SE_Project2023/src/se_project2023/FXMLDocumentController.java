@@ -150,8 +150,13 @@ public class FXMLDocumentController implements Initializable {
 
             RuleSingleton r = RuleSingleton.getInstance();
             
+
+            if (r.isValid()) {
+
                 ruleList.add(r.getRule());
-            
+
+            }else r.clearRule();
+
         } catch (IOException e) {
             e.printStackTrace();
         }

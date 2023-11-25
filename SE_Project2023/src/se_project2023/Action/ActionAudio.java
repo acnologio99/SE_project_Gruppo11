@@ -13,7 +13,7 @@ public class ActionAudio implements Action {
 
     private String path;
     private boolean isFired = false;
-
+    private int flagAlert =0;
     public ActionAudio(String path) {
         this.path = path;
     }
@@ -36,18 +36,23 @@ public class ActionAudio implements Action {
 
     @Override
     public void fire() {
-        this.isFired = true;
+        
+        
         File file = new File(this.path);
         Media media = new Media(file.toURI().toString());
         final MediaPlayer mediaPlayer = new MediaPlayer(media);
         mediaPlayer.play();
-        Alert alert;
-        alert = new Alert(Alert.AlertType.INFORMATION, "Reminder");
-        alert.setTitle("Reminder");
-        alert.setHeaderText(null);
-        alert.setContentText("Playing choosen audio...");
-        alert.showAndWait();
+        if(flagAlert==0){
+            flagAlert=1;
+            Alert alert;
+            alert = new Alert(Alert.AlertType.INFORMATION, "Reminder");
+            alert.setTitle("Reminder");
+            alert.setHeaderText(null);
+            alert.setContentText("Playing choosen audio...");
+            alert.showAndWait();
+        }
         mediaPlayer.stop();
+        this.isFired = true;
     }
 
     @Override
