@@ -4,7 +4,6 @@ package SE_project2023;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXML2.java to edit this template
  */
-
 import SE_project2023.Regole.Rule;
 import java.io.File;
 import java.io.IOException;
@@ -57,19 +56,16 @@ public class FXMLDocumentController implements Initializable {
     private Button removeButton;
     @FXML
     private ListView<Rule> listView;
-    
-    
-    
+
     @FXML
     private AnchorPane triggerPane;
     @FXML
     private Button timeTriggerBtn;
     @FXML
     private Button cancelBtnTrigger;
-   
 
     ObservableList<Rule> ruleList;
-    
+
     RuleList rules = RuleList.getRuleList();
 
     //lista che mostra le azioni scelte
@@ -82,7 +78,7 @@ public class FXMLDocumentController implements Initializable {
         //aggiunta regola di testing
         //setting View
         listView.setItems(ruleList);
-        
+
         // Creazione del servizio per controllare la lista ogni 10 secondi
         ScheduledService<Void> service = new ScheduledService<Void>() {
             @Override
@@ -92,18 +88,19 @@ public class FXMLDocumentController implements Initializable {
                     protected Void call() {
                         // Codice per controllare la lista
                         System.out.println("Controllo lista...");
-                        
-                        for(Rule r: ruleList){
+
+                        for (Rule r : ruleList) {
                             System.out.println(r);
                             Platform.runLater(() -> {
                                 System.out.println(r.isVerifiedRule());
-                            if(r.isVerifiedRule()) {
-                                r.action.fire();
-                            }
+                                //if (r.isVerifiedRule()) {
+                                if (r.isVerifiedRule() && !r.getAction().isFired()) { 
+                                    r.getAction().fire();
+                                }
                             });
-                            
+
                         }
-                            
+
                         // Esempio: Aggiungi un nuovo elemento alla lista ogni 10 secondi
                         return null;
                     }
@@ -116,19 +113,21 @@ public class FXMLDocumentController implements Initializable {
         // Avvia il servizio
         service.start();
     }
+
     @FXML
     private void saveRules(ActionEvent event) {
     }
+
     @FXML
     private void loadButton(ActionEvent event) {
     }
+
     @FXML
     private void removeRules(ActionEvent event) {
         ruleList.removeAll(listView.getSelectionModel().getSelectedItems());
 
     }
 
-   
     private void alertShow(String title, String header, String content, Alert.AlertType type) {
         Alert alert = new Alert(type);
         alert.setTitle(title);
@@ -136,27 +135,25 @@ public class FXMLDocumentController implements Initializable {
         alert.setContentText(content);
         alert.show();
     }
-    
+
     @FXML
     private void addRule(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("FXMLRule.fxml"));
-            
+
             Parent root = loader.load();
 
             Stage stage = new Stage();
             stage.setTitle("RuleCretor");
             stage.setScene(new Scene(root));
             stage.showAndWait();
-            
-            RuleSingleton r=RuleSingleton.getInstance();
+
+            RuleSingleton r = RuleSingleton.getInstance();
             ruleList.add(r.getRule());
         } catch (IOException e) {
             e.printStackTrace();
         }
-        
-        
+
     }
-    
-   
+
 }

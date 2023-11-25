@@ -34,11 +34,14 @@ public class ActionMessageBox implements Action {
         this.msg = msg;
     }
     
+
+ 
+
     @Override
     public void fire() {
         Alert alert = new Alert(AlertType.INFORMATION);
-        alert.setTitle("Information Dialogue");
-        alert.setHeaderText("Message");
+        alert.setTitle("Information Dialog");
+        alert.setHeaderText(null);
         alert.setContentText(msg);
         alert.showAndWait();
         this.fired=true;
@@ -66,10 +69,12 @@ public class ActionMessageBox implements Action {
         return "ActionMessageBox: "+ msg;
     }
 
+
     @Override
     public boolean isFired() {
         return this.fired;
     }
+
     
     
     

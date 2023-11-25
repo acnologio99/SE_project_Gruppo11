@@ -27,7 +27,7 @@ public class RuleSingleton {
     public void setTrigger(Trigger t){
         r.setTrigger(t);
     }
-    public boolean getTrigger(){
+public boolean getTrigger(){
         if(r.getTrigger() != null){
             return true;
         }else return false;
@@ -46,11 +46,11 @@ public class RuleSingleton {
         clearRule();
         return temp;
     }
-    
+
     public void clearRule(){
         r=new Rule();
     }
-    
+
     public static RuleSingleton getInstance() {
          if(ruleSing==null)
              ruleSing=new RuleSingleton();

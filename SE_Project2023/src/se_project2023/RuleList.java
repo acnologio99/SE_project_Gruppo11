@@ -9,7 +9,7 @@ import java.util.Iterator;
  *
  * @author emanu
  */
-public class RuleList { 
+public class RuleList {
 
     private static RuleList ruleList = null;
     

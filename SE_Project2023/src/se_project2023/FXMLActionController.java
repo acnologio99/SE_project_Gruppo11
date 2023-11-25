@@ -53,6 +53,8 @@ public class FXMLActionController implements Initializable {
     private Button audioButton;
     @FXML
     private TextField audioText;
+    @FXML
+    private AnchorPane audioPane;
 
     /**
      * Initializes the controller class.
@@ -72,42 +74,39 @@ public class FXMLActionController implements Initializable {
         // Aggiungi un listener per gestire la selezione della ListView
         actionListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
-                handleTriggerSelection(newValue); // Gestisci la selezione dell'opzione
+                handleActionSelection(newValue); // Gestisci la selezione dell'opzione
             }
         });
 
     }
 
-    private void handleTriggerSelection(String selectedTrigger) {
-        if ("TextBox Action".equals(selectedTrigger)) {
+    private void handleActionSelection(String selectedAction) {
+        if ("TextBox Action".equals(selectedAction)) {
             flagAction = 1;
             TextMessage.setVisible(true);
-            audioButton.setVisible(false);
-        } else if ("Audio Action".equals(selectedTrigger)) {
+            audioPane.setVisible(false);
+        } else if ("Audio Action".equals(selectedAction)) {
             flagAction = 2;
             TextMessage.setVisible(false);
-            audioButton.setVisible(true);
+            audioPane.setVisible(true);
         }
     }
 
     @FXML
     private void doneAction(ActionEvent event) {
 
-       
         if (flagAction == 1) {
             String mess = TextMessage.getText();
             Action a = new ActionMessageBox(mess);
             r.setAction(a);
-            
+
         } else if (flagAction == 2) {
             Action a = new ActionAudio(audioText.getText());
             r.setAction(a);
-
         }
-       
 
         alertShow("", "Azione aggiunta!", "", Alert.AlertType.INFORMATION);
-        
+
         Node sourceNode = (Node) event.getSource();
         Stage stage = (Stage) sourceNode.getScene().getWindow();
 
@@ -127,26 +126,16 @@ public class FXMLActionController implements Initializable {
         chooseAction.setDisable(true);
     }
 
-    private void createActionAudio(ActionEvent event) {
-        /*String path = textFieldAudioFile.getText();
-        if (path.isEmpty()) {
-            alertShow("Attenzione", "Non hai scelto un file", "L'azione non verrà salvata", Alert.AlertType.WARNING);
-        } else {
-            Action a = new ActionAudio(path);
-            actionList.add(a);
-        }
-        textFieldAudioFile.clear();
-        AudioFilePane.setVisible(false);
-        alertShow("Inserimento", "", "Suono Aggiunto", Alert.AlertType.INFORMATION);*/
-    }
-
     @FXML
     private void audioAction(ActionEvent event) {
         // get the file selected
         // create a File chooser
         FileChooser fil_chooser = new FileChooser();
-        File path = fil_chooser.showOpenDialog(new Stage());
-        audioText.setText(path.toString());
+        fil_chooser.getExtensionFilters()
+                .add(new FileChooser.ExtensionFilter("Audio Files",
+                        "*.mp3", "*.wav", "*.flac", "*.aac"));
+        File file = fil_chooser.showOpenDialog(new Stage());
+        audioText.setText(file.toString());
 
     }
 

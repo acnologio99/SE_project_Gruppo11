@@ -6,9 +6,9 @@ import SE_project2023.Trigger.Trigger;
  * @author emanu
  */
 public class Rule {
-    public String name;
-    public Action action;
-    public Trigger trigger;
+    private String name;
+    private Action action;
+    private Trigger trigger;
 
     //Costruttori
     public Rule() {}
@@ -51,7 +51,7 @@ public class Rule {
 
     @Override
         public String toString() {
-            return "Regola : " + name + " azioni " + action;
+            return "Rule : " + name + "; Action : " + action + "; Trigger : " + trigger;
         }
         
     public boolean isVerifiedRule(){
