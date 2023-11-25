@@ -27,10 +27,17 @@ public class ActionMessageBox implements Action {
         this.msg = msg;
     }
     
+
+    @Override
+    public boolean isFired() {
+        //deve controllare fire
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     @Override
     public void fire() {
         Alert alert = new Alert(AlertType.INFORMATION);
-        alert.setTitle("Information Dialogì");
+        alert.setTitle("Information Dialog");
         alert.setHeaderText(null);
         alert.setContentText(msg);
         alert.showAndWait();
@@ -54,11 +61,6 @@ public class ActionMessageBox implements Action {
     @Override
     public String toString() {
         return "ActionMessageBox: "+ msg;
-    }
-
-    @Override
-    public boolean isFired() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
     
