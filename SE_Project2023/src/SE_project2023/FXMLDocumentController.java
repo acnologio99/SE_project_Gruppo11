@@ -35,22 +35,12 @@ public class FXMLDocumentController implements Initializable {
 
     private Label label;
     @FXML
-    private Button saveButton;
-    @FXML
-    private Button loadButton;
-    @FXML
     private Button addButton;
     @FXML
     private Button removeButton;
     @FXML
     private ListView<Rule> listView;
 
-    @FXML
-    private AnchorPane triggerPane;
-    @FXML
-    private Button timeTriggerBtn;
-    @FXML
-    private Button cancelBtnTrigger;
 
     ObservableList<Rule> ruleList;
 
@@ -80,8 +70,6 @@ public class FXMLDocumentController implements Initializable {
                         for (Rule r : ruleList) {
                             System.out.println(r);
                             Platform.runLater(() -> {
-                                System.out.println(r.isVerifiedRule());
-                                //if (r.isVerifiedRule()) {
                                 if (r.isVerifiedRule() && !r.getAction().isFired()) {
                                     r.getAction().fire();
                                 }
@@ -89,26 +77,16 @@ public class FXMLDocumentController implements Initializable {
 
                         }
 
-                        // Esempio: Aggiungi un nuovo elemento alla lista ogni 10 secondi
                         return null;
                     }
                 };
             }
         };
-
-        // Imposta l'intervallo di esecuzione del servizio a 10 secondi
+        
         service.setPeriod(Duration.seconds(10));
-        // Avvia il servizio
         service.start();
     }
 
-    @FXML
-    private void saveRules(ActionEvent event) {
-    }
-
-    @FXML
-    private void loadButton(ActionEvent event) {
-    }
 
     @FXML
     private void removeRules(ActionEvent event) {
@@ -140,6 +118,9 @@ public class FXMLDocumentController implements Initializable {
             if (r.isValid()) {
                 ruleList.add(r.getRule());
                 alertShow("Inserimento", "", "Regola correttamente inserita", Alert.AlertType.INFORMATION);
+            }else{
+                alertShow("Errore!", "", "Regola non inserita", Alert.AlertType.ERROR);
+                r.clearRule();
             }
 
         } catch (IOException e) {

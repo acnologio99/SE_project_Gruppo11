@@ -12,8 +12,6 @@
             <ListView fx:id="listView" layoutX="-2.0" layoutY="45.0" prefHeight="346.0" prefWidth="528.0" />
             <ToolBar layoutY="6.0" prefHeight="38.0" prefWidth="528.0">
               <items>
-                <Button fx:id="saveButton" mnemonicParsing="false" onAction="#saveRules" text="Save" />
-                  <Button fx:id="loadButton" mnemonicParsing="false" onAction="#loadButton" text="Load" />
                   <Button fx:id="addButton" mnemonicParsing="false" onAction="#addRule" text="Add" />
                   <Button fx:id="removeButton" mnemonicParsing="false" onAction="#removeRules" text="Remove" />
               </items>

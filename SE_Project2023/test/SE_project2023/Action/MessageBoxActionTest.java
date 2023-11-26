@@ -51,7 +51,7 @@ public class MessageBoxActionTest {
         /*third case with constructor*/
         MessageBoxAction instance2 = new MessageBoxAction(null);
         result = instance.getMsg();
-        assertEquals("", result);
+        assertEquals("",result);
 
     }
 
@@ -141,31 +141,7 @@ public class MessageBoxActionTest {
 
     }
 
-    /**
-     * Test of getMsg method, of class MessageBoxAction.
-     */
-    @Test
-    public void testGetMsg() {
-        System.out.println("getMsg");
-        MessageBoxAction instance = null;
-        String expResult = "";
-        String result = instance.getMsg();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of setMsg method, of class MessageBoxAction.
-     */
-    @Test
-    public void testSetMsg() {
-        System.out.println("setMsg");
-        String msg = "";
-        MessageBoxAction instance = null;
-        instance.setMsg(msg);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
+  
+  
 
 }

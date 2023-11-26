@@ -95,6 +95,7 @@ public class FXMLRuleController implements Initializable {
 
         Node sourceNode = (Node) event.getSource();
         Stage stage = (Stage) sourceNode.getScene().getWindow();
+        
         r.setFlag(true);
 
         // Chiudi la finestra corrente
