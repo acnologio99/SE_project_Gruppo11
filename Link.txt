@@ -3,5 +3,8 @@ Product Backlog: https://docs.google.com/spreadsheets/d/1hXQPgqXH1F474CoZjZbzwMQ
 Trello:
 https://trello.com/b/inXB6xuJ/projectse
 
-Docs:
+Pre-Game:
 https://docs.google.com/document/d/1CUgb3YYMymQxF7gDyxWt8TRKDPe98bJXoHmLW1anttw/edit?usp=sharing
+
+First Sprint:
+https://docs.google.com/document/d/18AvOeu4WfDchwKMh0iky62jXbc1B57dUME2aQyIRCXU/edit?hl=it
