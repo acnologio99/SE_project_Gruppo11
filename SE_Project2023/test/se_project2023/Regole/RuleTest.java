@@ -100,6 +100,13 @@ public class RuleTest {
         testSetGetTrigger();
         boolean result = r.isVerifiedRule();
         assertEquals(expResult, result);
+        
+        //Valid Rule
+        System.out.println("isVerifiedRule");
+        expResult = false;
+        testSetGetAction();
+        result = r.isVerifiedRule();
+        assertEquals(expResult, result);
     }
     
 }

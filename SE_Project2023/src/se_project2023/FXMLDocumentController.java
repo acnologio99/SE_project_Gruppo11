@@ -5,14 +5,9 @@ package SE_project2023;
  * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXML2.java to edit this template
  */
 import SE_project2023.Regole.Rule;
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.time.LocalTime;
-import java.util.HashSet;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -28,14 +23,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.MenuButton;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TitledPane;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.text.Text;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -149,14 +137,14 @@ public class FXMLDocumentController implements Initializable {
             stage.showAndWait();
 
             RuleSingleton r = RuleSingleton.getInstance();
-            
 
             if (r.isValid()) {
-
                 ruleList.add(r.getRule());
-
-            }else r.clearRule();
-
+                alertShow("Inserimento", "", "Regola correttamente inserita", Alert.AlertType.INFORMATION);
+            } else {
+                r.clearRule();
+                alertShow("Errore", "", "Sono presenti parametri non validi", Alert.AlertType.ERROR);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
