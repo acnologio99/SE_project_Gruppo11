@@ -32,4 +32,9 @@ public class TimeTrigger implements Trigger {
         return now.equals(this.timeOfDay);
     }
 
+    @Override
+    public String toString() {
+        return "TimeTrigger : " + this.timeOfDay;
+    }
+
 }

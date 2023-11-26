@@ -95,6 +95,7 @@ public class FXMLRuleController implements Initializable {
 
         Node sourceNode = (Node) event.getSource();
         Stage stage = (Stage) sourceNode.getScene().getWindow();
+        r.setFlag(true);
 
         // Chiudi la finestra corrente
         stage.close();
@@ -104,6 +105,10 @@ public class FXMLRuleController implements Initializable {
     private void cancel(ActionEvent event) {
         Node sourceNode = (Node) event.getSource();
         Stage stage = (Stage) sourceNode.getScene().getWindow();
+
+        RuleSingleton r = RuleSingleton.getInstance();
+        r.clearRule();
+        r.setFlag(false);
 
         // Chiudi la finestra corrente
         stage.close();

@@ -11,13 +11,13 @@ import javafx.scene.control.Alert.AlertType;
  *
  * @author chris
  */
-public class ActionMessageBox implements Action {
+public class MessageBoxAction implements Action {
 
     private String msg;
 
     private Boolean isFired = false;
 
-    public ActionMessageBox(String msg) {
+    public MessageBoxAction(String msg) {
         if (msg == null) {
             this.msg = "";
         } else {

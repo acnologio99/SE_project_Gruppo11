@@ -98,10 +98,10 @@ public class FXMLActionController implements Initializable {
         } else {
             if (flagAction == 1) {
                 String mess = TextMessage.getText();
-                Action a = new ActionMessageBox(mess);
+                Action a = new MessageBoxAction(mess);
                 r.setAction(a);
             } else if (flagAction == 2) {
-                Action a = new ActionAudio(audioText.getText());
+                Action a = new AudioAction(audioText.getText());
                 r.setAction(a);
             }
             alertShow("Inserimento", "", "Azione aggiunta!", Alert.AlertType.INFORMATION);

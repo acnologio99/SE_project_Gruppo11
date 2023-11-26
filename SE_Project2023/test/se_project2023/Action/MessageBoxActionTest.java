@@ -14,20 +14,20 @@ import static org.junit.Assert.*;
  *
  * @author chris
  */
-public class ActionMessageBoxTest {
+public class MessageBoxActionTest {
 
-    ActionMessageBox instance;
+    MessageBoxAction instance;
 
-    public ActionMessageBoxTest() {
+    public MessageBoxActionTest() {
     }
 
     @Before
     public void setUp() {
-        instance = new ActionMessageBox("");
+        instance = new MessageBoxAction("");
     }
 
     /**
-     * Test of getMsg method, of class ActionMessageBox.
+     * Test of getMsg method, of class MessageBoxAction.
      */
     @Test
     public void testGetSetMsg() {
@@ -47,14 +47,14 @@ public class ActionMessageBoxTest {
         assertEquals("", result);
 
         /*third case with constructor*/
-        ActionMessageBox instance2 = new ActionMessageBox(null);
+        MessageBoxAction instance2 = new MessageBoxAction(null);
         result = instance.getMsg();
         assertEquals("", result);
 
     }
 
     /**
-     * Test of fire method, of class ActionMessageBox.
+     * Test of fire method, of class MessageBoxAction.
      */
     @Test
     public void testFire() {
@@ -79,7 +79,7 @@ public class ActionMessageBoxTest {
     }
 
     /**
-     * Test of add method, of class ActionMessageBox.
+     * Test of add method, of class MessageBoxAction.
      */
     @Test(expected = UnsupportedOperationException.class)
     public void testAdd() {
@@ -90,7 +90,7 @@ public class ActionMessageBoxTest {
     }
 
     /**
-     * Test of remove method, of class ActionMessageBox.
+     * Test of remove method, of class MessageBoxAction.
      */
     @Test(expected = UnsupportedOperationException.class)
     public void testRemove() {
@@ -101,7 +101,7 @@ public class ActionMessageBoxTest {
     }
 
     /**
-     * Test of getChild method, of class ActionMessageBox.
+     * Test of getChild method, of class MessageBoxAction.
      */
     @Test(expected = UnsupportedOperationException.class)
     public void testGetChild() {
@@ -114,7 +114,7 @@ public class ActionMessageBoxTest {
     }
 
     /**
-     * Test of toString method, of class ActionMessageBox.
+     * Test of toString method, of class MessageBoxAction.
      */
     @Test
     public void testToString() {
@@ -127,7 +127,7 @@ public class ActionMessageBoxTest {
     }
 
     /**
-     * Test of isFired method, of class ActionMessageBox.
+     * Test of isFired method, of class MessageBoxAction.
      */
     @Test //the method is tested in testFire() too;
     public void testIsFired() {

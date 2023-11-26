@@ -137,14 +137,11 @@ public class FXMLDocumentController implements Initializable {
             stage.showAndWait();
 
             RuleSingleton r = RuleSingleton.getInstance();
-
             if (r.isValid()) {
                 ruleList.add(r.getRule());
                 alertShow("Inserimento", "", "Regola correttamente inserita", Alert.AlertType.INFORMATION);
-            } else {
-                r.clearRule();
-                alertShow("Errore", "", "Sono presenti parametri non validi", Alert.AlertType.ERROR);
             }
+
         } catch (IOException e) {
             e.printStackTrace();
         }

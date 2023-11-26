@@ -13,11 +13,11 @@ import static org.junit.Assert.*;
  *
  * @author emanu
  */
-public class ActionAudioTest {
+public class AudioActionTest {
 
-    ActionAudio a;
+    AudioAction a;
 
-    public ActionAudioTest() {
+    public AudioActionTest() {
     }
 
     @BeforeClass
@@ -30,7 +30,7 @@ public class ActionAudioTest {
 
     @Before
     public void setUp() {
-        a = new ActionAudio();
+        a = new AudioAction();
     }
 
     @After
@@ -38,7 +38,7 @@ public class ActionAudioTest {
     }
 
     /**
-     * Test of setPath and getPath method, of class ActionAudio.
+     * Test of setPath and getPath method, of class AudioAction.
      */
     @Test
     public void testSetGetPath() {
@@ -50,7 +50,7 @@ public class ActionAudioTest {
     }
 
     /**
-     * Test of isFired method, of class ActionAudio.
+     * Test of isFired method, of class AudioAction.
      */
     @Test
     public void testIsFired() {
@@ -62,7 +62,7 @@ public class ActionAudioTest {
     }
 
     /**
-     * Test of fire method, of class ActionAudio.
+     * Test of fire method, of class AudioAction.
      */
     @Test
     public void testFire() {
@@ -86,19 +86,19 @@ public class ActionAudioTest {
     }
 
     /**
-     * Test of toString method, of class ActionAudio.
+     * Test of toString method, of class AudioAction.
      */
     @Test
     public void testToString() {
         System.out.println("toString");
-        ActionAudio instance = new ActionAudio();
+        AudioAction instance = new AudioAction();
         String expResult = "ActionAudio : null";
         String result = instance.toString();
         assertEquals(expResult, result);
     }
 
     /**
-     * Test of add method, of class ActionAudio.
+     * Test of add method, of class AudioAction.
      */
     @Test(expected = UnsupportedOperationException.class)
     public void testAdd() {
@@ -107,7 +107,7 @@ public class ActionAudioTest {
     }
 
     /**
-     * Test of remove method, of class ActionAudio.
+     * Test of remove method, of class AudioAction.
      */
     @Test(expected = UnsupportedOperationException.class)
     public void testRemove() {
@@ -116,7 +116,7 @@ public class ActionAudioTest {
     }
 
     /**
-     * Test of getChild method, of class ActionAudio.
+     * Test of getChild method, of class AudioAction.
      */
     @Test(expected = UnsupportedOperationException.class)
     public void testGetChild() {

@@ -9,17 +9,17 @@ import javafx.scene.media.MediaPlayer;
  *
  * @author emanu
  */
-public class ActionAudio implements Action {
+public class AudioAction implements Action {
 
     private String path;
     private boolean isFired = false;
     private int flagAlert = 0;
 
-    public ActionAudio(String path) {
+    public AudioAction(String path) {
         this.path = path;
     }
 
-    public ActionAudio() {
+    public AudioAction() {
     }
 
     public String getPath() {

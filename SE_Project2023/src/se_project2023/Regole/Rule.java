@@ -9,6 +9,7 @@ public class Rule {
     private String name;
     private Action action;
     private Trigger trigger;
+    private boolean flag = false;
 
     //Costruttori
     public Rule() {}
@@ -35,6 +36,10 @@ public class Rule {
     public String getName() {
         return name;
     }
+
+    public boolean getFlag() {
+        return flag;
+    }
     
     //Setter
     public void setAction(Action action) {
@@ -48,8 +53,13 @@ public class Rule {
     public void setName(String Name) {
         this.name = Name;
     }
+
+    public void setFlag(boolean flag) {
+        this.flag = flag;
+    }
+    
     public boolean ruleIsValid(){
-        return this.getTrigger()!=null && this.getAction()!=null;
+        return this.getTrigger()!=null && this.getAction()!=null && this.flag;
     }
 
     @Override

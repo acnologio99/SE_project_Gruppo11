@@ -3,8 +3,7 @@ package SE_project2023;
 
 import SE_project2023.Action.*;
 import SE_project2023.Regole.Rule;
-import SE_project2023.Trigger.TimeTrigger;
-import SE_project2023.Trigger.Trigger;
+import SE_project2023.Trigger.*;
 import java.time.LocalTime;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -59,7 +58,7 @@ public class RuleSingletonTest {
     @Test
     public void testSetAction() {
         System.out.println("setAction and getAction");
-        Action expResult = new ActionAudio();
+        Action expResult = new AudioAction();
         r.setAction(expResult);
         Action result = r.getRule().getAction();
         assertEquals(expResult, result);
@@ -93,7 +92,7 @@ public class RuleSingletonTest {
     @Test
     public void testClearRule() {
         System.out.println("clearRule");
-        r.setAction(new ActionAudio("C:\\"));
+        r.setAction(new AudioAction("C:\\"));
         r.setTrigger(new TimeTrigger(LocalTime.now()));
         r.clearRule();
         assertNull(r.getRule().getAction());
@@ -117,10 +116,23 @@ public class RuleSingletonTest {
     @Test
     public void testIsValid() {
         System.out.println("isValid");
-        boolean expResult = true;
-        r.setAction(new ActionAudio("C:\\"));
+        r.setAction(new AudioAction("C:\\"));
         r.setTrigger(new TimeTrigger(LocalTime.now()));
+        r.setFlag(true);
         boolean result = r.isValid();
-        assertEquals(expResult, result);
+        assertTrue(result);
+        
+        System.out.println("Flag false");
+        r.setAction(new AudioAction("C:\\"));
+        r.setTrigger(new TimeTrigger(LocalTime.now()));
+        r.setFlag(false);
+        result = r.isValid();
+        assertFalse(result);
+        
+        System.out.println("Action and trigger null");
+        r.clearRule();
+        r.setFlag(true);
+        result = r.isValid();
+        assertFalse(result);
     }
 }

@@ -43,7 +43,8 @@ public class FXMLTriggerController implements Initializable {
     private ComboBox<String> timeComboBox2;
     @FXML
     private AnchorPane comboBoxPane;
-
+    
+    private int flagTrigger;
     private LocalTime temp;
     ObservableList<Trigger> triggerList;
     RuleSingleton r;
@@ -90,16 +91,9 @@ public class FXMLTriggerController implements Initializable {
         if (null != selectedTrigger) {
             switch (selectedTrigger) {
                 case "Time Trigger":
+                    flagTrigger = 1;
                     comboBoxPane.setVisible(true);
                     fileTriggerButton.setVisible(false);
-                    break;
-                case "Program Trigger":
-                    comboBoxPane.setVisible(false);
-                    fileTriggerButton.setVisible(false);
-                    break;
-                case "File Trigger":
-                    comboBoxPane.setVisible(false);
-                    fileTriggerButton.setVisible(true);
                     break;
                 default:
                     break;
@@ -110,7 +104,7 @@ public class FXMLTriggerController implements Initializable {
     @FXML
     private void doneTrigger(ActionEvent event) {
         
-        if (timeComboBox1.getValue() == null || timeComboBox2.getValue() == null) {
+        if (flagTrigger == 0) {
             alertShow("Attenzione", "", "Orario non selezionato", Alert.AlertType.WARNING);
         } else {
             TimeTrigger t = new TimeTrigger(temp);

@@ -48,7 +48,7 @@ public class RuleTest {
     @Test
     public void testSetGetAction() {
         System.out.println("setAction and getAction");
-        Action expResult = new ActionAudio();
+        Action expResult = new AudioAction();
         r.setAction(expResult);
         Action result = r.getAction();
         assertEquals(expResult, result);
