@@ -92,11 +92,11 @@ public class FXMLActionController implements Initializable {
     @FXML
     private void doneAction(ActionEvent event) {
 
-        if (flagAction == 1) {
+        if (flagAction == 1 && !"".equals(TextMessage.getText())) {
             String mess = TextMessage.getText();
             Action a = new MessageBoxAction(mess);
             r.setAction(a);
-        } else if (flagAction == 2) {
+        } else if (flagAction == 2 && !"".equals(audioText.getText())) {
             Action a = new AudioAction(audioText.getText());
             r.setAction(a);
         }
@@ -113,11 +113,6 @@ public class FXMLActionController implements Initializable {
         Node sourceNode = (Node) event.getSource();
         Stage stage = (Stage) sourceNode.getScene().getWindow();
         stage.close();
-    }
-
-    private void textAction(ActionEvent event) {
-        TextPane.setVisible(true); //quando clicco sul pulsante TextAction mi esce la casella di testo.
-        chooseAction.setDisable(true);
     }
 
     @FXML
