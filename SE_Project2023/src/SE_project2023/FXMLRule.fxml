@@ -16,6 +16,8 @@
             <Button fx:id="confirmBtn" layoutX="512.0" layoutY="355.0" mnemonicParsing="false" onAction="#confirmRule" text="Confirm" />
             <Button fx:id="cancelBtn" layoutX="14.0" layoutY="355.0" mnemonicParsing="false" onAction="#cancel" text="Cancel" />
             <TextField fx:id="ruleName" layoutX="14.0" layoutY="24.0" promptText="Set RuleName" />
+            <Text fx:id="actionTxt" layoutX="137.0" layoutY="103.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Azione non inserita" />
+            <Text fx:id="triggerTxt" layoutX="135.0" layoutY="155.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Trigger non inserito" />
          </children>
       </AnchorPane>
    </children>

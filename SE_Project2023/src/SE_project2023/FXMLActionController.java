@@ -92,19 +92,14 @@ public class FXMLActionController implements Initializable {
 
     @FXML
     private void doneAction(ActionEvent event) {
-        
-        if ((TextMessage.getText().equals("") && audioText.getText().equals(""))|| flagAction == 0) {
-            alertShow("Attenzione", "", "Azione non aggiunta", Alert.AlertType.WARNING);
-        } else {
-            if (flagAction == 1) {
-                String mess = TextMessage.getText();
-                Action a = new MessageBoxAction(mess);
-                r.setAction(a);
-            } else if (flagAction == 2) {
-                Action a = new AudioAction(audioText.getText());
-                r.setAction(a);
-            }
-            alertShow("Inserimento", "", "Azione aggiunta!", Alert.AlertType.INFORMATION);
+
+        if (flagAction == 1) {
+            String mess = TextMessage.getText();
+            Action a = new MessageBoxAction(mess);
+            r.setAction(a);
+        } else if (flagAction == 2) {
+            Action a = new AudioAction(audioText.getText());
+            r.setAction(a);
         }
 
         Node sourceNode = (Node) event.getSource();
@@ -141,11 +136,11 @@ public class FXMLActionController implements Initializable {
 
     }
 
-    private void alertShow(String title, String header, String content, Alert.AlertType type) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(header);
-        alert.setContentText(content);
-        alert.show();
-    }
+//    private void alertShow(String title, String header, String content, Alert.AlertType type) {
+//        Alert alert = new Alert(type);
+//        alert.setTitle(title);
+//        alert.setHeaderText(header);
+//        alert.setContentText(content);
+//        alert.show();
+//    }
 }

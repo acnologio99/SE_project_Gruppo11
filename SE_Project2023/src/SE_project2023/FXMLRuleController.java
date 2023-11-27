@@ -6,8 +6,11 @@ package SE_project2023;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -16,9 +19,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 /**
  * FXML Controller class
@@ -41,6 +47,8 @@ public class FXMLRuleController implements Initializable {
     private Button cancelBtn;
     @FXML
     private TextField ruleName;
+    
+    RuleSingleton r;
 
     /**
      * Initializes the controller class.
@@ -48,7 +56,7 @@ public class FXMLRuleController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-
+        r = RuleSingleton.getInstance();
     }
 
     @FXML
@@ -61,6 +69,15 @@ public class FXMLRuleController implements Initializable {
             Stage stage = new Stage();
             stage.setTitle("Action");
             stage.setScene(new Scene(root));
+            stage.addEventHandler(WindowEvent.ANY,
+                    new EventHandler<WindowEvent>() {
+                @Override
+                public void handle(WindowEvent event) {
+                    if (r.getRule().getAction() != null) {
+                        actionTxt.setText("Azione inserita");
+                    }
+                }
+            });
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
@@ -78,6 +95,15 @@ public class FXMLRuleController implements Initializable {
             Stage stage = new Stage();
             stage.setTitle("Trigger");
             stage.setScene(new Scene(root));
+            stage.addEventHandler(WindowEvent.ANY,
+                    new EventHandler<WindowEvent>() {
+                @Override
+                public void handle(WindowEvent event) {
+                    if (r.getRule().getTrigger() != null) {
+                        triggerTxt.setText("Trigger inserito");
+                    }
+                }
+            });
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
@@ -90,12 +116,12 @@ public class FXMLRuleController implements Initializable {
         //ruleList.add(r);
 
         //alertShow("Inserimento", "", "Regola correttamente inserita", Alert.AlertType.INFORMATION);
-        RuleSingleton r = RuleSingleton.getInstance();
+
         r.setName(ruleName.getText());
 
         Node sourceNode = (Node) event.getSource();
         Stage stage = (Stage) sourceNode.getScene().getWindow();
-        
+
         r.setFlag(true);
 
         // Chiudi la finestra corrente
@@ -107,7 +133,6 @@ public class FXMLRuleController implements Initializable {
         Node sourceNode = (Node) event.getSource();
         Stage stage = (Stage) sourceNode.getScene().getWindow();
 
-        RuleSingleton r = RuleSingleton.getInstance();
         r.clearRule();
         r.setFlag(false);
 

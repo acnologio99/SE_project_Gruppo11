@@ -43,7 +43,7 @@ public class FXMLTriggerController implements Initializable {
     private ComboBox<String> timeComboBox2;
     @FXML
     private AnchorPane comboBoxPane;
-    
+
     private int flagTrigger;
     private LocalTime temp;
     ObservableList<Trigger> triggerList;
@@ -103,16 +103,12 @@ public class FXMLTriggerController implements Initializable {
 
     @FXML
     private void doneTrigger(ActionEvent event) {
-        
-        if (flagTrigger == 0) {
-            alertShow("Attenzione", "", "Orario non selezionato", Alert.AlertType.WARNING);
-        } else {
-            TimeTrigger t = new TimeTrigger(temp);
-            triggerList.add(t);
-            alertShow("", "L'orario scelto è: " + temp.toString(), "", Alert.AlertType.INFORMATION);
-            //System.out.println("ORARIO SELEZIONATO:"+temp);
-            r.setTrigger(t);
-        }
+
+        TimeTrigger t = new TimeTrigger(temp);
+        triggerList.add(t);
+        alertShow("", "L'orario scelto è: " + temp.toString(), "", Alert.AlertType.INFORMATION);
+        //System.out.println("ORARIO SELEZIONATO:"+temp);
+        r.setTrigger(t);
 
         Node sourceNode = (Node) event.getSource();
         Stage stage = (Stage) sourceNode.getScene().getWindow();

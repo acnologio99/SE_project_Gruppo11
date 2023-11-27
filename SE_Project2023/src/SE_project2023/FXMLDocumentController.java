@@ -7,6 +7,7 @@ package SE_project2023;
 import SE_project2023.Regole.Rule;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -21,9 +22,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -40,7 +41,6 @@ public class FXMLDocumentController implements Initializable {
     private Button removeButton;
     @FXML
     private ListView<Rule> listView;
-
 
     ObservableList<Rule> ruleList;
 
@@ -82,16 +82,24 @@ public class FXMLDocumentController implements Initializable {
                 };
             }
         };
-        
+
         service.setPeriod(Duration.seconds(10));
         service.start();
     }
 
-
     @FXML
     private void removeRules(ActionEvent event) {
-        ruleList.removeAll(listView.getSelectionModel().getSelectedItems());
-
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Rimozione");
+        alert.setHeaderText("");
+        alert.setContentText("Sei sicuro di voler rimuovere?");
+        Optional<ButtonType> response = alert.showAndWait();
+        if (response.isPresent()) {
+            ButtonType b = response.get();
+            if (b == ButtonType.OK) {
+                ruleList.removeAll(listView.getSelectionModel().getSelectedItems());
+            }
+        }
     }
 
     private void alertShow(String title, String header, String content, Alert.AlertType type) {
@@ -117,8 +125,9 @@ public class FXMLDocumentController implements Initializable {
             RuleSingleton r = RuleSingleton.getInstance();
             if (r.isValid()) {
                 ruleList.add(r.getRule());
+                r.clearRule();
                 alertShow("Inserimento", "", "Regola correttamente inserita", Alert.AlertType.INFORMATION);
-            }else{
+            } else {
                 alertShow("Errore!", "", "Regola non inserita", Alert.AlertType.ERROR);
                 r.clearRule();
             }
