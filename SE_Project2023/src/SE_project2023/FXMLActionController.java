@@ -15,7 +15,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuButton;
@@ -135,12 +134,4 @@ public class FXMLActionController implements Initializable {
         }
 
     }
-
-//    private void alertShow(String title, String header, String content, Alert.AlertType type) {
-//        Alert alert = new Alert(type);
-//        alert.setTitle(title);
-//        alert.setHeaderText(header);
-//        alert.setContentText(content);
-//        alert.show();
-//    }
 }

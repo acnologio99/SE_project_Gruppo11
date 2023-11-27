@@ -15,7 +15,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
@@ -106,8 +105,7 @@ public class FXMLTriggerController implements Initializable {
 
         TimeTrigger t = new TimeTrigger(temp);
         triggerList.add(t);
-        alertShow("", "L'orario scelto è: " + temp.toString(), "", Alert.AlertType.INFORMATION);
-        //System.out.println("ORARIO SELEZIONATO:"+temp);
+
         r.setTrigger(t);
 
         Node sourceNode = (Node) event.getSource();
@@ -134,14 +132,6 @@ public class FXMLTriggerController implements Initializable {
             System.out.println("Cartella selezionata: " + selectedDirectory.getAbsolutePath());
         }
          */
-    }
-
-    private void alertShow(String title, String header, String content, Alert.AlertType type) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(header);
-        alert.setContentText(content);
-        alert.show();
     }
 
     private void populateTimeComboBox(ComboBox<String> comboBox, int pop) {
