@@ -15,6 +15,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuButton;
@@ -37,7 +38,7 @@ public class FXMLActionController implements Initializable {
     private MenuButton chooseAction;
 
     ObservableList<Action> actionList;
-    RuleSingleton r;
+    RuleList r;
 
     private int flagAction;
     @FXML
@@ -61,7 +62,7 @@ public class FXMLActionController implements Initializable {
         // TODO
         HashSet<Action> actions = new HashSet();
         actionList = FXCollections.observableArrayList(actions);
-        r = RuleSingleton.getInstance();
+        r = RuleList.getRuleList();
 
         actionListView.getItems().addAll(
                 "TextBox Action",
@@ -91,28 +92,32 @@ public class FXMLActionController implements Initializable {
 
     @FXML
     private void doneAction(ActionEvent event) {
-
-        if (flagAction == 1 && !"".equals(TextMessage.getText())) {
+        
+         if (flagAction == 1 && !"".equals(TextMessage.getText())) {
             String mess = TextMessage.getText();
             Action a = new MessageBoxAction(mess);
-            r.setAction(a);
+            r.getLast().setAction(a);
         } else if (flagAction == 2 && !"".equals(audioText.getText())) {
             Action a = new AudioAction(audioText.getText());
-            r.setAction(a);
+            r.getLast().setAction(a);
         }
-
         Node sourceNode = (Node) event.getSource();
         Stage stage = (Stage) sourceNode.getScene().getWindow();
 
         // Chiudi la finestra corrente
         stage.close();
     }
-
+    
     @FXML
     private void cancelAction(ActionEvent event) {
         Node sourceNode = (Node) event.getSource();
         Stage stage = (Stage) sourceNode.getScene().getWindow();
         stage.close();
+    }
+
+    private void textAction(ActionEvent event) {
+        TextPane.setVisible(true); //quando clicco sul pulsante TextAction mi esce la casella di testo.
+        chooseAction.setDisable(true);
     }
 
     @FXML

@@ -9,6 +9,7 @@ public class Rule {
     private String name;
     private Action action;
     private Trigger trigger;
+    private boolean status= true;
     private boolean flag = false;
 
     //Costruttori
@@ -22,6 +23,7 @@ public class Rule {
         this.name = name;
         this.action = action;
         this.trigger = trigger;
+        this.status= true;
     }
 
     //Getter
@@ -61,10 +63,18 @@ public class Rule {
     public boolean ruleIsValid(){
         return this.getTrigger()!=null && this.getAction()!=null && this.flag;
     }
-
+    public boolean getStatus(){
+        return this.status;
+    }
+    public void active(){
+        this.status=true;
+    }
+    public void deactive(){
+        this.status=false;
+    }
     @Override
         public String toString() {
-            return "Rule : " + name + "; Action : " + action + "; Trigger : " + trigger;
+            return "Rule : " + name + "; Action : " + action + "; Trigger : " + trigger + "; Status : " + status;
         }
         
     public boolean isVerifiedRule(){

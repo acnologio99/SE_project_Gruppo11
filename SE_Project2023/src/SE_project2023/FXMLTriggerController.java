@@ -42,11 +42,11 @@ public class FXMLTriggerController implements Initializable {
     private ComboBox<String> timeComboBox2;
     @FXML
     private AnchorPane comboBoxPane;
-
+    
     private int flagTrigger;
     private LocalTime temp;
     ObservableList<Trigger> triggerList;
-    RuleSingleton r;
+    RuleList r;
 
     /**
      * Initializes the controller class.
@@ -58,7 +58,7 @@ public class FXMLTriggerController implements Initializable {
         triggerList = FXCollections.observableArrayList(triggers);
 
         /*Prendiamo una regola temporanea a cui aggiungere il trigger*/
-        r = RuleSingleton.getInstance();
+        r = RuleList.getRuleList();
 
         /*Popola le timebox con i valori delle ore e dei minuti*/
         populateTimeComboBox(timeComboBox1, 24);
@@ -102,11 +102,12 @@ public class FXMLTriggerController implements Initializable {
 
     @FXML
     private void doneTrigger(ActionEvent event) {
-
+        
         TimeTrigger t = new TimeTrigger(temp);
         triggerList.add(t);
-
-        r.setTrigger(t);
+        
+        //System.out.println("ORARIO SELEZIONATO:"+temp);
+        r.getLast().setTrigger(t);
 
         Node sourceNode = (Node) event.getSource();
         Stage stage = (Stage) sourceNode.getScene().getWindow();

@@ -15,6 +15,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
@@ -42,16 +43,14 @@ public class FXMLRuleController implements Initializable {
     private Button cancelBtn;
     @FXML
     private TextField ruleName;
-    
-    RuleSingleton r;
-
     /**
      * Initializes the controller class.
      */
+    RuleList r = RuleList.getRuleList();
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        r = RuleSingleton.getInstance();
+
     }
 
     @FXML
@@ -68,7 +67,7 @@ public class FXMLRuleController implements Initializable {
                     new EventHandler<WindowEvent>() {
                 @Override
                 public void handle(WindowEvent event) {
-                    if (r.getRule().getAction() != null) {
+                    if (r.getLast().getAction() != null) {
                         actionTxt.setText("Azione inserita");
                     }
                 }
@@ -94,11 +93,12 @@ public class FXMLRuleController implements Initializable {
                     new EventHandler<WindowEvent>() {
                 @Override
                 public void handle(WindowEvent event) {
-                    if (r.getRule().getTrigger() != null) {
+                    if (r.getLast().getTrigger() != null) {
                         triggerTxt.setText("Trigger inserito");
                     }
                 }
             });
+
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
@@ -111,13 +111,13 @@ public class FXMLRuleController implements Initializable {
         //ruleList.add(r);
 
         //alertShow("Inserimento", "", "Regola correttamente inserita", Alert.AlertType.INFORMATION);
-
-        r.setName(ruleName.getText());
+        
+        r.getLast().setName(ruleName.getText());
 
         Node sourceNode = (Node) event.getSource();
         Stage stage = (Stage) sourceNode.getScene().getWindow();
-
-        r.setFlag(true);
+        
+        r.getLast().setFlag(true);
 
         // Chiudi la finestra corrente
         stage.close();
@@ -128,8 +128,9 @@ public class FXMLRuleController implements Initializable {
         Node sourceNode = (Node) event.getSource();
         Stage stage = (Stage) sourceNode.getScene().getWindow();
 
-        r.clearRule();
-        r.setFlag(false);
+        RuleList r= RuleList.getRuleList();
+        r.removeLast();
+        r.getLast().setFlag(false);
 
         // Chiudi la finestra corrente
         stage.close();

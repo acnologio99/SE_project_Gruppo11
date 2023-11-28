@@ -1,7 +1,9 @@
 package SE_project2023;
 
 import SE_project2023.Regole.Rule;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
+import javafx.application.Platform;
 
 /**
  *
@@ -11,10 +13,10 @@ public class RuleList {
 
     private static RuleList ruleList = null;
 
-    private HashSet<Rule> hashRules;
+    private ArrayList<Rule> rules;
 
     private RuleList() {
-        hashRules = new HashSet<Rule>();
+        rules = new ArrayList<Rule>();
     }
 
     public static RuleList getRuleList() {
@@ -24,12 +26,32 @@ public class RuleList {
         return ruleList;
     }
 
-    public HashSet<Rule> getHashRules() {
-        return hashRules;
+    public List<Rule> getArrayList() {
+        return rules;
     }
 
-    void add(Rule r) {
-        hashRules.add(r);
+    public void add(Rule r) {
+        rules.add(r);
+    }
+
+    public Rule getLast() {
+        return rules.get(rules.size()-1);
+    }
+
+    public void removeLast() {
+        rules.remove(rules.size()-1);
+    }
+
+    public void iterator() {
+        for (Rule r : rules) {
+            if(r.ruleIsValid()){
+                Platform.runLater(() -> {
+                        if (r.isVerifiedRule() && !r.getAction().isFired() && r.getStatus()) {
+                                        r.getAction().fire();
+                                    }
+                                });
+                            }
+        }
     }
 
 }
