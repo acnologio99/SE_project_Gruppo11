@@ -4,6 +4,8 @@ import SE_project2023.Regole.Rule;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 /**
  *
@@ -13,10 +15,10 @@ public class RuleList {
 
     private static RuleList ruleList = null;
 
-    private ArrayList<Rule> rules;
+    private ObservableList<Rule> rules;
 
     private RuleList() {
-        rules = new ArrayList<Rule>();
+        rules = FXCollections.observableArrayList();
     }
 
     public static RuleList getRuleList() {
@@ -26,7 +28,7 @@ public class RuleList {
         return ruleList;
     }
 
-    public List<Rule> getArrayList() {
+    public ObservableList<Rule> getArrayList() {
         return rules;
     }
 
@@ -46,8 +48,8 @@ public class RuleList {
         for (Rule r : rules) {
             if(r.ruleIsValid()){
                 Platform.runLater(() -> {
-                        if (r.isVerifiedRule() && !r.getAction().isFired() && r.getStatus()) {
-                                        r.getAction().fire();
+                        if (r.isVerifiedRule()) {
+                                        r.fire();
                                     }
                                 });
                             }

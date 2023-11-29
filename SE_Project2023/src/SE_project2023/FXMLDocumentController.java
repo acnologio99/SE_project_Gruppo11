@@ -71,7 +71,6 @@ public class FXMLDocumentController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         //inizializzazione Liste
         ruleList = FXCollections.observableArrayList(rules.getArrayList());
-        
         //setting selezione multipla 
         tableView.getSelectionModel().setSelectionMode(javafx.scene.control.SelectionMode.MULTIPLE);
         //aggiunta regola di testing
@@ -80,7 +79,7 @@ public class FXMLDocumentController implements Initializable {
         actionCln.setCellValueFactory(new PropertyValueFactory<>("Action"));
         triggerCln.setCellValueFactory(new PropertyValueFactory<>("Trigger"));
         statusCln.setCellValueFactory(new PropertyValueFactory<>("Status"));
-        tableView.setItems(ruleList);
+        tableView.setItems(rules.getArrayList());
         
         serviceControl();
 

@@ -17,10 +17,15 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import javafx.util.Duration;
 
 /**
  * FXML Controller class
@@ -47,9 +52,32 @@ public class FXMLRuleController implements Initializable {
      * Initializes the controller class.
      */
     RuleList r = RuleList.getRuleList();
+    @FXML
+    private AnchorPane sleepPicker;
+    @FXML
+    private RadioButton sleepRadio;
+    @FXML
+    private TextField daysPicker;
+    @FXML
+    private TextField minutesPicker;
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        sleepPicker.setVisible(false);
+        daysPicker.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                // Se il nuovo testo non contiene solo cifre, reimposta il testo con il vecchio valore
+                daysPicker.setText(oldValue);
+            }
+        });
+        minutesPicker.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                // Se il nuovo testo non contiene solo cifre, reimposta il testo con il vecchio valore
+                minutesPicker.setText(oldValue);
+            }
+        });
+       
+      
 
     }
 
@@ -118,7 +146,8 @@ public class FXMLRuleController implements Initializable {
         Stage stage = (Stage) sourceNode.getScene().getWindow();
         
         r.getLast().setFlag(true);
-
+        if(sleepRadio.isSelected())
+            r.getLast().setSleep(24*60*(Long.parseLong(daysPicker.getText()))+(Long.parseLong(minutesPicker.getText())));
         // Chiudi la finestra corrente
         stage.close();
     }
@@ -131,7 +160,7 @@ public class FXMLRuleController implements Initializable {
         RuleList r= RuleList.getRuleList();
         r.removeLast();
         r.getLast().setFlag(false);
-
+        
         // Chiudi la finestra corrente
         stage.close();
     }
@@ -139,4 +168,13 @@ public class FXMLRuleController implements Initializable {
     public void close() {
 
     }
+
+    @FXML
+    private void sleepPick(ActionEvent event) {
+        if(sleepRadio.isSelected())
+            sleepPicker.setVisible(true);
+        else sleepPicker.setVisible(false);
+    }
+
+    
 }

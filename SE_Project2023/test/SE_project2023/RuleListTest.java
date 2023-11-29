@@ -4,7 +4,7 @@
  */
 package SE_project2023;
 
-import SE_project2023.Action.ActionMessageBox;
+import SE_project2023.Action.MessageBoxAction;
 import SE_project2023.Regole.Rule;
 import SE_project2023.Trigger.TimeTrigger;
 import java.time.LocalTime;
