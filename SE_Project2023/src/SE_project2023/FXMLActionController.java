@@ -7,6 +7,7 @@ package SE_project2023;
 import SE_project2023.Action.*;
 import java.io.File;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
@@ -15,7 +16,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuButton;
@@ -32,13 +32,12 @@ import javafx.stage.Stage;
  */
 public class FXMLActionController implements Initializable {
 
-    private AnchorPane TextPane;
     @FXML
     private TextArea TextMessage;
-    private MenuButton chooseAction;
 
     ObservableList<Action> actionList;
     RuleList r;
+    HashMap<String, AnchorPane> anchorPanes = new HashMap<>();
 
     private int flagAction;
     @FXML
@@ -53,6 +52,8 @@ public class FXMLActionController implements Initializable {
     private TextField audioText;
     @FXML
     private AnchorPane audioPane;
+    @FXML
+    private AnchorPane textPane;
 
     /**
      * Initializes the controller class.
@@ -64,6 +65,9 @@ public class FXMLActionController implements Initializable {
         actionList = FXCollections.observableArrayList(actions);
         r = RuleList.getRuleList();
 
+        anchorPanes.put("TextBox Action", textPane);
+        anchorPanes.put("Audio Action", audioPane);
+
         actionListView.getItems().addAll(
                 "TextBox Action",
                 "Audio Action"
@@ -72,32 +76,27 @@ public class FXMLActionController implements Initializable {
         // Aggiungi un listener per gestire la selezione della ListView
         actionListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
-                handleActionSelection(newValue); // Gestisci la selezione dell'opzione
+                handleSelection(newValue); // Gestisci la selezione dell'opzione
             }
         });
-
     }
 
-    private void handleActionSelection(String selectedAction) {
-        if ("TextBox Action".equals(selectedAction)) {
-            flagAction = 1;
-            TextMessage.setVisible(true);
-            audioPane.setVisible(false);
-        } else if ("Audio Action".equals(selectedAction)) {
-            flagAction = 2;
-            TextMessage.setVisible(false);
-            audioPane.setVisible(true);
+    private void handleSelection(String selectedAction) {
+        for (AnchorPane pane : anchorPanes.values()) {
+            pane.setVisible(false);
+        }
+        if (anchorPanes.containsKey(selectedAction)) {
+            anchorPanes.get(selectedAction).setVisible(true);
         }
     }
 
     @FXML
     private void doneAction(ActionEvent event) {
-        
-         if (flagAction == 1 && !"".equals(TextMessage.getText())) {
+        if (anchorPanes.get("TextBox Action").isVisible() && !"".equals(TextMessage.getText())) {
             String mess = TextMessage.getText();
             Action a = new MessageBoxAction(mess);
             r.getLast().setAction(a);
-        } else if (flagAction == 2 && !"".equals(audioText.getText())) {
+        } else if (anchorPanes.get("Audio Action").isVisible() && !"".equals(audioText.getText())) {
             Action a = new AudioAction(audioText.getText());
             r.getLast().setAction(a);
         }
@@ -107,17 +106,12 @@ public class FXMLActionController implements Initializable {
         // Chiudi la finestra corrente
         stage.close();
     }
-    
+
     @FXML
     private void cancelAction(ActionEvent event) {
         Node sourceNode = (Node) event.getSource();
         Stage stage = (Stage) sourceNode.getScene().getWindow();
         stage.close();
-    }
-
-    private void textAction(ActionEvent event) {
-        TextPane.setVisible(true); //quando clicco sul pulsante TextAction mi esce la casella di testo.
-        chooseAction.setDisable(true);
     }
 
     @FXML
