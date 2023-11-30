@@ -54,6 +54,8 @@ public class FXMLActionController implements Initializable {
     private AnchorPane audioPane;
     @FXML
     private AnchorPane textPane;
+    
+    private MenuExecutor menuExec; //invoker for commands
 
     /**
      * Initializes the controller class.
@@ -79,15 +81,14 @@ public class FXMLActionController implements Initializable {
                 handleSelection(newValue); // Gestisci la selezione dell'opzione
             }
         });
+        
+        menuExec = new MenuExecutor(); //vedere se togliere e fare una classe interna****
+        
     }
 
     private void handleSelection(String selectedAction) {
-        for (AnchorPane pane : anchorPanes.values()) {
-            pane.setVisible(false);
-        }
-        if (anchorPanes.containsKey(selectedAction)) {
-            anchorPanes.get(selectedAction).setVisible(true);
-        }
+       menuExec.execute(new SwitchCommand(anchorPanes, selectedAction)); //vedere se posso fare classe innestata
+       
     }
 
     @FXML

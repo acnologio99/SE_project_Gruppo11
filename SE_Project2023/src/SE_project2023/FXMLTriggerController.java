@@ -7,6 +7,7 @@ package SE_project2023;
 import SE_project2023.Trigger.*;
 import java.net.URL;
 import java.time.LocalTime;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
@@ -47,6 +48,9 @@ public class FXMLTriggerController implements Initializable {
     private LocalTime temp;
     ObservableList<Trigger> triggerList;
     RuleList r;
+    
+    HashMap<String, AnchorPane> anchorPanes = new HashMap<>();
+    private MenuExecutor menuExec;
 
     /**
      * Initializes the controller class.
@@ -68,6 +72,10 @@ public class FXMLTriggerController implements Initializable {
         triggerListView.getItems().addAll(
                 "Time Trigger"
         );
+        
+        anchorPanes.put("Time Trigger", comboBoxPane);
+       
+
 
         /*La variabile temp per l'inizializzazione del trigger viene impostata di default all'orario attuale*/
         temp = LocalTime.of(LocalTime.now().getHour(), LocalTime.now().getMinute());
@@ -83,21 +91,13 @@ public class FXMLTriggerController implements Initializable {
                 handleTriggerSelection(newValue); // Gestisci la selezione dell'opzione
             }
         });
+        
+        menuExec = new MenuExecutor();
 
     }
 
     private void handleTriggerSelection(String selectedTrigger) {
-        if (null != selectedTrigger) {
-            switch (selectedTrigger) {
-                case "Time Trigger":
-                    flagTrigger = 1;
-                    comboBoxPane.setVisible(true);
-                    fileTriggerButton.setVisible(false);
-                    break;
-                default:
-                    break;
-            }
-        }
+        menuExec.execute(new SwitchCommand(anchorPanes, selectedTrigger));
     }
 
     @FXML
