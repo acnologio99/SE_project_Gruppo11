@@ -44,16 +44,6 @@ public class RuleList {
         rules.remove(rules.size()-1);
     }
 
-    public void iterator() {
-        for (Rule r : rules) {
-            if(r.ruleIsValid()){
-                Platform.runLater(() -> {
-                        if (r.isVerifiedRule()) {
-                                        r.fire();
-                                    }
-                                });
-                            }
-        }
-    }
+    
 
 }

@@ -61,16 +61,12 @@ public class FXMLDocumentController implements Initializable {
     private TableColumn<Rule, Boolean> statusCln;
     @FXML
     private TableView<Rule> tableView;
-    @FXML
-    private MenuItem setOnBtn;
-    @FXML
-    private MenuItem setOffBtn;
 
     //lista che mostra le azioni scelte
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         //inizializzazione Liste
-        ruleList = FXCollections.observableArrayList(rules.getArrayList());
+        ruleList = FXCollections.observableArrayList(rules.getArrayList());     
         //setting selezione multipla 
         tableView.getSelectionModel().setSelectionMode(javafx.scene.control.SelectionMode.MULTIPLE);
         //aggiunta regola di testing
@@ -79,7 +75,8 @@ public class FXMLDocumentController implements Initializable {
         actionCln.setCellValueFactory(new PropertyValueFactory<>("Action"));
         triggerCln.setCellValueFactory(new PropertyValueFactory<>("Trigger"));
         statusCln.setCellValueFactory(new PropertyValueFactory<>("Status"));
-        tableView.setItems(rules.getArrayList());
+        tableView.setItems(ruleList);
+        
         
         serviceControl();
 
@@ -97,7 +94,19 @@ public class FXMLDocumentController implements Initializable {
                         // Codice per controllare la lista
                         System.out.println("Controllo lista...");
 
-                        rules.iterator();
+                        
+        for (Rule r : rules.getArrayList()) {
+            if(r.ruleIsValid()){
+                Platform.runLater(() -> {
+                        if (r.isVerifiedRule()) {
+                                        r.fire();
+                                        r.deactive();
+                                        tableView.refresh();
+                                    }
+                                });
+                            }
+        }
+    
 
                         return null;
                     }
@@ -108,6 +117,7 @@ public class FXMLDocumentController implements Initializable {
         service.setPeriod(Duration.seconds(10));
         service.start();
     }
+    
     @FXML
     private void removeRules(ActionEvent event) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -163,15 +173,25 @@ public class FXMLDocumentController implements Initializable {
 
     }
 
-    @FXML
-    private void setOn(ActionEvent event) {
-    }
-
-    @FXML
-    private void setOff(ActionEvent event) {
-    }
     private void updateTableView() {
         ObservableList<Rule> observableRules = FXCollections.observableArrayList(rules.getArrayList());
         tableView.setItems(observableRules);
+        
+    }
+
+    @FXML
+    private void setOnRule(ActionEvent event) {
+        Rule r = tableView.getSelectionModel().getSelectedItem();
+        r.active();
+        tableView.refresh();
+        
+        
+    }
+
+    @FXML
+    private void set(ActionEvent event) {
+        Rule r = tableView.getSelectionModel().getSelectedItem();
+        r.deactive();
+        tableView.refresh();
     }
 }
