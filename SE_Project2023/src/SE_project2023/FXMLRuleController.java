@@ -8,17 +8,20 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 /**
  * FXML Controller class
@@ -41,13 +44,35 @@ public class FXMLRuleController implements Initializable {
     private Button cancelBtn;
     @FXML
     private TextField ruleName;
-
     /**
      * Initializes the controller class.
      */
+    RuleList r = RuleList.getRuleList();
+    @FXML
+    private AnchorPane sleepPicker;
+    @FXML
+    private RadioButton sleepRadio;
+    @FXML
+    private TextField daysPicker;
+    @FXML
+    private TextField minutesPicker;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        sleepPicker.setVisible(false);
+        daysPicker.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                // Se il nuovo testo non contiene solo cifre, reimposta il testo con il vecchio valore
+                daysPicker.setText(oldValue);
+            }
+        });
+        minutesPicker.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                // Se il nuovo testo non contiene solo cifre, reimposta il testo con il vecchio valore
+                minutesPicker.setText(oldValue);
+            }
+        });
 
     }
 
@@ -61,6 +86,15 @@ public class FXMLRuleController implements Initializable {
             Stage stage = new Stage();
             stage.setTitle("Action");
             stage.setScene(new Scene(root));
+            stage.addEventHandler(WindowEvent.ANY,
+                    new EventHandler<WindowEvent>() {
+                @Override
+                public void handle(WindowEvent event) {
+                    if (r.getLast().getAction() != null) {
+                        actionTxt.setText("Azione inserita");
+                    }
+                }
+            });
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
@@ -78,6 +112,16 @@ public class FXMLRuleController implements Initializable {
             Stage stage = new Stage();
             stage.setTitle("Trigger");
             stage.setScene(new Scene(root));
+            stage.addEventHandler(WindowEvent.ANY,
+                    new EventHandler<WindowEvent>() {
+                @Override
+                public void handle(WindowEvent event) {
+                    if (r.getLast().getTrigger() != null) {
+                        triggerTxt.setText("Trigger inserito");
+                    }
+                }
+            });
+
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
@@ -90,14 +134,15 @@ public class FXMLRuleController implements Initializable {
         //ruleList.add(r);
 
         //alertShow("Inserimento", "", "Regola correttamente inserita", Alert.AlertType.INFORMATION);
-        RuleSingleton r = RuleSingleton.getInstance();
-        r.setName(ruleName.getText());
+        r.getLast().setName(ruleName.getText());
 
         Node sourceNode = (Node) event.getSource();
         Stage stage = (Stage) sourceNode.getScene().getWindow();
-        
-        r.setFlag(true);
 
+        r.getLast().setFlag(true);
+        if (sleepRadio.isSelected()) {
+            r.getLast().setSleep(24 * 60 * (Long.parseLong(daysPicker.getText())) + (Long.parseLong(minutesPicker.getText())));
+        }
         // Chiudi la finestra corrente
         stage.close();
     }
@@ -107,23 +152,25 @@ public class FXMLRuleController implements Initializable {
         Node sourceNode = (Node) event.getSource();
         Stage stage = (Stage) sourceNode.getScene().getWindow();
 
-        RuleSingleton r = RuleSingleton.getInstance();
-        r.clearRule();
-        r.setFlag(false);
+        RuleList r = RuleList.getRuleList();
+        r.removeLast();
+        r.getLast().setFlag(false);
 
         // Chiudi la finestra corrente
         stage.close();
     }
 
-    private void alertShow(String title, String header, String content, Alert.AlertType type) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(header);
-        alert.setContentText(content);
-        alert.show();
-    }
-
     public void close() {
 
     }
+
+    @FXML
+    private void sleepPick(ActionEvent event) {
+        if (sleepRadio.isSelected()) {
+            sleepPicker.setVisible(true);
+        } else {
+            sleepPicker.setVisible(false);
+        }
+    }
+
 }

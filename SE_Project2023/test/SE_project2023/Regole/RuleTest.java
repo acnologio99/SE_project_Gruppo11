@@ -73,7 +73,7 @@ public class RuleTest {
     public void testToString() {
         System.out.println("toString");
         r.setName("Nome");
-        String expResult = "Rule : Nome; Action : null; Trigger : null";
+        String expResult = "Rule : Nome; Action : null; Trigger : null; Status : true";
         String result = r.toString();
         assertEquals(expResult, result);
     }

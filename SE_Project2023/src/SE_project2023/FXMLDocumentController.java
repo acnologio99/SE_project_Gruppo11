@@ -4,9 +4,12 @@ package SE_project2023;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXML2.java to edit this template
  */
+import SE_project2023.Action.Action;
 import SE_project2023.Regole.Rule;
+import SE_project2023.Trigger.Trigger;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -21,9 +24,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -38,26 +43,42 @@ public class FXMLDocumentController implements Initializable {
     private Button addButton;
     @FXML
     private Button removeButton;
-    @FXML
-    private ListView<Rule> listView;
-
 
     ObservableList<Rule> ruleList;
 
     RuleList rules = RuleList.getRuleList();
+    @FXML
+    private TableColumn<Rule, String> nameCln;
+    @FXML
+    private TableColumn<Rule, Action> actionCln;
+    @FXML
+    private TableColumn<Rule, Trigger> triggerCln;
+    @FXML
+    private TableColumn<Rule, Boolean> statusCln;
+    @FXML
+    private TableView<Rule> tableView;
 
     //lista che mostra le azioni scelte
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         //inizializzazione Liste
-        ruleList = FXCollections.observableArrayList(rules.getHashRules());
+        ruleList = FXCollections.observableArrayList(rules.getArrayList());
         //setting selezione multipla 
-        listView.getSelectionModel().setSelectionMode(javafx.scene.control.SelectionMode.MULTIPLE);
+        tableView.getSelectionModel().setSelectionMode(javafx.scene.control.SelectionMode.MULTIPLE);
         //aggiunta regola di testing
         //setting View
-        listView.setItems(ruleList);
+        nameCln.setCellValueFactory(new PropertyValueFactory<>("Name"));
+        actionCln.setCellValueFactory(new PropertyValueFactory<>("Action"));
+        triggerCln.setCellValueFactory(new PropertyValueFactory<>("Trigger"));
+        statusCln.setCellValueFactory(new PropertyValueFactory<>("Status"));
+        tableView.setItems(ruleList);
+
+        serviceControl();
 
         // Creazione del servizio per controllare la lista ogni 10 secondi
+    }
+
+    private void serviceControl() {
         ScheduledService<Void> service = new ScheduledService<Void>() {
             @Override
             protected Task<Void> createTask() {
@@ -67,14 +88,16 @@ public class FXMLDocumentController implements Initializable {
                         // Codice per controllare la lista
                         System.out.println("Controllo lista...");
 
-                        for (Rule r : ruleList) {
-                            System.out.println(r);
-                            Platform.runLater(() -> {
-                                if (r.isVerifiedRule() && !r.getAction().isFired()) {
-                                    r.getAction().fire();
-                                }
-                            });
-
+                        for (Rule r : rules.getArrayList()) {
+                            if (r.ruleIsValid()) {
+                                Platform.runLater(() -> {
+                                    if (r.isVerifiedRule()) {
+                                        r.fire();
+                                        r.deactive();
+                                        tableView.refresh();
+                                    }
+                                });
+                            }
                         }
 
                         return null;
@@ -82,15 +105,25 @@ public class FXMLDocumentController implements Initializable {
                 };
             }
         };
-        
+
         service.setPeriod(Duration.seconds(10));
         service.start();
     }
 
-
     @FXML
     private void removeRules(ActionEvent event) {
-        ruleList.removeAll(listView.getSelectionModel().getSelectedItems());
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Rimozione");
+        alert.setHeaderText("");
+        alert.setContentText("Sei sicuro di voler rimuovere?");
+        Optional<ButtonType> response = alert.showAndWait();
+        if (response.isPresent()) {
+            ButtonType b = response.get();
+            if (b == ButtonType.OK) {
+                rules.getArrayList().removeAll(tableView.getSelectionModel().getSelectedItems());
+                updateTableView();
+            }
+        }
 
     }
 
@@ -108,19 +141,21 @@ public class FXMLDocumentController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("FXMLRule.fxml"));
 
             Parent root = loader.load();
+            Rule r = new Rule();
+            rules.add(r);
 
             Stage stage = new Stage();
-            stage.setTitle("RuleCretor");
+            stage.setTitle("RuleCreator");
             stage.setScene(new Scene(root));
             stage.showAndWait();
-
-            RuleSingleton r = RuleSingleton.getInstance();
-            if (r.isValid()) {
-                ruleList.add(r.getRule());
+            if (rules.getLast().ruleIsValid()) {
+                updateTableView();
                 alertShow("Inserimento", "", "Regola correttamente inserita", Alert.AlertType.INFORMATION);
-            }else{
+            } else {
                 alertShow("Errore!", "", "Regola non inserita", Alert.AlertType.ERROR);
-                r.clearRule();
+
+                rules.removeLast();
+
             }
 
         } catch (IOException e) {
@@ -129,4 +164,24 @@ public class FXMLDocumentController implements Initializable {
 
     }
 
+    private void updateTableView() {
+        ObservableList<Rule> observableRules = FXCollections.observableArrayList(rules.getArrayList());
+        tableView.setItems(observableRules);
+
+    }
+
+    @FXML
+    private void setOnRule(ActionEvent event) {
+        Rule r = tableView.getSelectionModel().getSelectedItem();
+        r.active();
+        tableView.refresh();
+
+    }
+
+    @FXML
+    private void set(ActionEvent event) {
+        Rule r = tableView.getSelectionModel().getSelectedItem();
+        r.deactive();
+        tableView.refresh();
+    }
 }
