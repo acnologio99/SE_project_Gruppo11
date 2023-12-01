@@ -2,11 +2,16 @@ package SE_project2023.Regole;
 import SE_project2023.Action.Action;
 import SE_project2023.Trigger.Trigger;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
+
 /**
  *
  * @author emanu
  */
-public class Rule {
+public class Rule extends Observable{
     private String name;
     private Action action;
     private Trigger trigger;
@@ -15,15 +20,19 @@ public class Rule {
     private long sleep = 0;
     private boolean fireOnce=false;
     private LocalDateTime wakeUp;
+    
+    List<Observer> obs;
 
     //Costruttori
-    public Rule() {}
+    public Rule()  {obs = new ArrayList<>();}
 
     public Rule(String name, Action action, Trigger trigger) {
         this.name = name;
         this.action = action;
         this.trigger = trigger;
         this.status= true;
+        
+        obs = new ArrayList<>();
     }
 
     public void setSleep(Long sleep) {
@@ -75,6 +84,7 @@ public class Rule {
     }
     public void deactive(){
         this.status=false;
+        this.notifyObservers();
     }
     @Override
         public String toString() {
@@ -102,4 +112,19 @@ public class Rule {
     public Boolean sleepCheck(){
         return LocalDateTime.now().compareTo(wakeUp)>=0;
     }
+    
+    /*this method attaches the observers to the rule*/
+    public void attach(Observer o){
+        obs.add(o);
+    }
+    
+    @Override
+    public void notifyObservers(){
+        for(Observer o : obs){
+            o.update(null,o);
+        }
+    }
+   
+
+  
 }

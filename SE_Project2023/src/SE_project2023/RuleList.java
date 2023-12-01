@@ -3,22 +3,27 @@ package SE_project2023;
 import SE_project2023.Regole.Rule;
 import java.util.ArrayList;
 import java.util.List;
-import javafx.application.Platform;
+import java.util.Observable;
+import java.util.Observer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+
+
 
 /**
  *
  * @author emanu
  */
-public class RuleList {
+public class RuleList extends Observable {
 
     private static RuleList ruleList = null;
 
     private ObservableList<Rule> rules;
+    private List<Observer> obs;
 
     private RuleList() {
         rules = FXCollections.observableArrayList();
+        obs = new ArrayList<>();
     }
 
     public static RuleList getRuleList() {
@@ -34,6 +39,7 @@ public class RuleList {
 
     public void add(Rule r) {
         rules.add(r);
+        this.notifyObservers();
     }
 
     public Rule getLast() {
@@ -42,7 +48,24 @@ public class RuleList {
 
     public void removeLast() {
         rules.remove(rules.size()-1);
+        this.notifyObservers();
+        
     }
+    
+     public void attach(Observer o){
+        obs.add(o);
+    }
+    
+   @Override
+    public void notifyObservers(){
+        for(Observer o : obs){
+            o.update(null, o);
+        }
+    }
+
+   
+
+    
 
     
 

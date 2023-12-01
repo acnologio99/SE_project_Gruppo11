@@ -5,6 +5,7 @@ package SE_project2023;
  * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXML2.java to edit this template
  */
 import SE_project2023.Action.Action;
+import SE_project2023.Regole.CustomTableView;
 import SE_project2023.Regole.Rule;
 import SE_project2023.Trigger.Trigger;
 import java.io.IOException;
@@ -26,12 +27,9 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -61,12 +59,15 @@ public class FXMLDocumentController implements Initializable {
     private TableColumn<Rule, Boolean> statusCln;
     @FXML
     private TableView<Rule> tableView;
+    @FXML
+    private CustomTableView customTable;
 
     //lista che mostra le azioni scelte
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        customTable = new CustomTableView(tableView);
         //inizializzazione Liste
-        ruleList = FXCollections.observableArrayList(rules.getArrayList());     
+        ruleList = FXCollections.observableArrayList(rules.getArrayList());    
         //setting selezione multipla 
         tableView.getSelectionModel().setSelectionMode(javafx.scene.control.SelectionMode.MULTIPLE);
         //aggiunta regola di testing
@@ -76,6 +77,17 @@ public class FXMLDocumentController implements Initializable {
         triggerCln.setCellValueFactory(new PropertyValueFactory<>("Trigger"));
         statusCln.setCellValueFactory(new PropertyValueFactory<>("Status"));
         tableView.setItems(ruleList);
+        
+        
+        
+        
+        for(Rule r : rules.getArrayList()){
+            r.attach( customTable );
+        }//il controller diventa observer
+            
+        rules.attach(customTable);
+        
+       
         
         
         serviceControl();
@@ -101,7 +113,8 @@ public class FXMLDocumentController implements Initializable {
                         if (r.isVerifiedRule()) {
                                         r.fire();
                                         r.deactive();
-                                        tableView.refresh();
+                                        //tableView.refresh();
+                                        
                                     }
                                 });
                             }
@@ -151,12 +164,14 @@ public class FXMLDocumentController implements Initializable {
             Parent root = loader.load();
             Rule r=new Rule();
             rules.add(r);
+            r.attach(customTable);  //Attacco ad ogni regola creata ()->tableView.refresh()
 
             Stage stage = new Stage();
             stage.setTitle("RuleCretor");
             stage.setScene(new Scene(root));
             stage.showAndWait();
             if (rules.getLast().ruleIsValid()) {
+                
                 updateTableView();
                 alertShow("Inserimento", "", "Regola correttamente inserita", Alert.AlertType.INFORMATION);
             }else{
@@ -182,8 +197,11 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private void setOnRule(ActionEvent event) {
         Rule r = tableView.getSelectionModel().getSelectedItem();
+        if(r!=null){
         r.active();
         tableView.refresh();
+        }else{
+        }
         
         
     }
@@ -191,7 +209,12 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private void set(ActionEvent event) {
         Rule r = tableView.getSelectionModel().getSelectedItem();
+        if(r!=null){
         r.deactive();
         tableView.refresh();
+        }else {
+        }
     }
+
+    
 }
