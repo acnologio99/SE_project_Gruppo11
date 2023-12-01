@@ -1,8 +1,8 @@
 package SE_project2023;
 
 import SE_project2023.Regole.Rule;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -12,10 +12,10 @@ public class RuleList {
 
     private static RuleList ruleList = null;
 
-    private ObservableList<Rule> rules;
+    private List<Rule> rules;
 
     private RuleList() {
-        rules = FXCollections.observableArrayList();
+        rules = new ArrayList<Rule>();
     }
 
     public static RuleList getRuleList() {
@@ -25,7 +25,7 @@ public class RuleList {
         return ruleList;
     }
 
-    public ObservableList<Rule> getArrayList() {
+    public List<Rule> getArrayList() {
         return rules;
     }
 

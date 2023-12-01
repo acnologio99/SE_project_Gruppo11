@@ -4,6 +4,9 @@
  */
 package SE_project2023.Action;
 
+import java.io.File;
+import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -81,21 +84,40 @@ public class FileActionTest {
     @Test
     public void testFire() {
         System.out.println("fire");
-        a.setSourcePath("C:\\Users\\emanu\\Desktop\\doc.txt");
-        a.setDestinationPath("C:\\Users\\emanu\\Downloads\\doc.txt");
-        System.out.println("move");
-        a.setAction("move");
-        a.fire();
+        JFXPanel jfxPanel = new JFXPanel();
 
-        a.setSourcePath("C:\\Users\\emanu\\Downloads\\doc.txt");
-        a.setDestinationPath("C:\\Users\\emanu\\Desktop\\doc.txt");
-        System.out.println("copy");
-        a.setAction("copy");
-        a.fire();
+        Platform.runLater(() -> {
+            a.setSourcePath("C:\\Users\\emanu\\Desktop\\doc.txt");
+            a.setDestinationPath("C:\\Users\\emanu\\Downloads\\doc.txt");
+            System.out.println("move");
+            a.setAction("move");
+            a.fire();
+            File f = new File(a.getSourcePath());
+            assertFalse(f.exists());
+            f = new File(a.getDestinationPath());
+            assertTrue(f.exists());
 
-        System.out.println("remove");
-        a.setAction("remove");
-        a.fire();
+            a.setSourcePath("C:\\Users\\emanu\\Downloads\\doc.txt");
+            a.setDestinationPath("C:\\Users\\emanu\\Desktop\\doc.txt");
+            System.out.println("copy");
+            a.setAction("copy");
+            a.fire();
+            f = new File(a.getSourcePath());
+            assertTrue(f.exists());
+            f = new File(a.getDestinationPath());
+            assertTrue(f.exists());
+
+            System.out.println("remove");
+            a.setAction("remove");
+            a.fire();
+            f = new File(a.getDestinationPath());
+            assertFalse(f.exists());
+        });
+        try {
+            Thread.sleep(5000); //devo aspettare che il metodo viene richiamato sul thread e che abbia il tempo di eseguire il test
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

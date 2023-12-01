@@ -145,7 +145,7 @@ public class FXMLDocumentController implements Initializable {
             rules.add(r);
 
             Stage stage = new Stage();
-            stage.setTitle("RuleCretor");
+            stage.setTitle("RuleCreator");
             stage.setScene(new Scene(root));
             stage.showAndWait();
             if (rules.getLast().ruleIsValid()) {

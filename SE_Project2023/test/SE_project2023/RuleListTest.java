@@ -4,27 +4,38 @@
  */
 package SE_project2023;
 
-import SE_project2023.Action.MessageBoxAction;
 import SE_project2023.Regole.Rule;
-import SE_project2023.Trigger.TimeTrigger;
-import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
+import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.BeforeClass;
 
 /**
  *
  * @author giova
  */
 public class RuleListTest {
-    
+
     public RuleListTest() {
     }
-    
+
+    @BeforeClass
+    public static void setUpClass() throws Exception {
+    }
+
+    @AfterClass
+    public static void tearDownClass() throws Exception {
+    }
+
     @Before
     public void setUp() {
+    }
+
+    @After
+    public void tearDown() throws Exception {
     }
 
     /**
@@ -33,8 +44,6 @@ public class RuleListTest {
     @Test
     public void testGetRuleList() {
         System.out.println("getRuleList");
-       
-        
     }
 
     /**
@@ -47,7 +56,6 @@ public class RuleListTest {
         List<Rule> expResult = instance.getArrayList();
         List<Rule> result = instance.getArrayList();
         assertEquals(expResult, result);
-        
     }
 
     /**
@@ -59,8 +67,7 @@ public class RuleListTest {
         Rule r = new Rule();
         RuleList instance = RuleList.getRuleList();
         instance.add(r);
-        assertEquals(r,instance.getLast());
-        
+        assertEquals(r, instance.getLast());
     }
 
     /**
@@ -74,7 +81,7 @@ public class RuleListTest {
         instance.add(expResult);
         Rule result = instance.getLast();
         assertEquals(expResult, result);
-        
+
     }
 
     /**
@@ -82,7 +89,6 @@ public class RuleListTest {
      */
     @Test
     public void testRemoveLast() {
-        
         System.out.println("removeLast");
         RuleList instance = RuleList.getRuleList();
         instance.getArrayList().clear();
@@ -91,14 +97,4 @@ public class RuleListTest {
         assertTrue(instance.getArrayList().isEmpty());
     }
 
-    /**
-     * Test of iterator method, of class RuleList.
-     */
-    @Test
-    public void testIterator() {
-        System.out.println("iterator");
-        
-        
-    }
-    
 }

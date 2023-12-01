@@ -100,7 +100,7 @@ public class FileAction implements Action {
                 break;
         }
         this.isFired = true;
-        alert.show();
+        alert.showAndWait();
     }
 
     private void copyF() {
