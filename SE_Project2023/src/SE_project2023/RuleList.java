@@ -1,9 +1,6 @@
 package SE_project2023;
 
 import SE_project2023.Regole.Rule;
-import java.util.ArrayList;
-import java.util.List;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 

@@ -18,7 +18,7 @@
                 <TableColumn fx:id="actionCln" prefWidth="137.0" text="Action" />
                   <TableColumn fx:id="triggerCln" prefWidth="143.0" text="Trigger" />
                   <TableColumn fx:id="statusCln" prefWidth="118.0" text="Status" />
-              </columns>
+</columns>
                <contextMenu>
                   <ContextMenu autoHide="false">
                     <items>

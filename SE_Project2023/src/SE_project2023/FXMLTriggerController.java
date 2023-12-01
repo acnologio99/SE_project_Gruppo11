@@ -43,7 +43,7 @@ public class FXMLTriggerController implements Initializable {
     private ComboBox<String> timeComboBox2;
     @FXML
     private AnchorPane comboBoxPane;
-    
+
     private int flagTrigger;
     private LocalTime temp;
     ObservableList<Trigger> triggerList;
@@ -72,7 +72,7 @@ public class FXMLTriggerController implements Initializable {
         triggerListView.getItems().addAll(
                 "Time Trigger"
         );
-        
+
         anchorPanes.put("Time Trigger", comboBoxPane);
        
 
@@ -91,7 +91,7 @@ public class FXMLTriggerController implements Initializable {
                 handleTriggerSelection(newValue); // Gestisci la selezione dell'opzione
             }
         });
-        
+
         menuExec = new MenuExecutor();
 
     }
@@ -102,10 +102,10 @@ public class FXMLTriggerController implements Initializable {
 
     @FXML
     private void doneTrigger(ActionEvent event) {
-        
+
         TimeTrigger t = new TimeTrigger(temp);
         triggerList.add(t);
-        
+
         //System.out.println("ORARIO SELEZIONATO:"+temp);
         r.getLast().setTrigger(t);
 

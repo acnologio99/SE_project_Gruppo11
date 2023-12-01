@@ -1,29 +1,33 @@
 package SE_project2023.Regole;
+
 import SE_project2023.Action.Action;
 import SE_project2023.Trigger.Trigger;
 import java.time.LocalDateTime;
+
 /**
  *
  * @author emanu
  */
 public class Rule {
+
     private String name;
     private Action action;
     private Trigger trigger;
-    private boolean status= true;
+    private boolean status = true;
     private boolean flag = false;
     private long sleep = 0;
-    private boolean fireOnce=false;
+    private boolean fireOnce = false;
     private LocalDateTime wakeUp;
 
     //Costruttori
-    public Rule() {}
+    public Rule() {
+    }
 
     public Rule(String name, Action action, Trigger trigger) {
         this.name = name;
         this.action = action;
         this.trigger = trigger;
-        this.status= true;
+        this.status = true;
     }
 
     public void setSleep(Long sleep) {
@@ -38,7 +42,7 @@ public class Rule {
     public Trigger getTrigger() {
         return trigger;
     }
-    
+
     public String getName() {
         return name;
     }
@@ -46,7 +50,7 @@ public class Rule {
     public boolean getFlag() {
         return flag;
     }
-    
+
     //Setter
     public void setAction(Action action) {
         this.action = action;
@@ -63,43 +67,50 @@ public class Rule {
     public void setFlag(boolean flag) {
         this.flag = flag;
     }
-    
-    public boolean ruleIsValid(){
-        return this.getTrigger()!=null && this.getAction()!=null && this.flag;
+
+    public boolean ruleIsValid() {
+        return this.getTrigger() != null && this.getAction() != null && this.flag;
     }
-    public boolean getStatus(){
+
+    public boolean getStatus() {
         return this.status;
     }
-    public void active(){
-        this.status=true;
+
+    public void active() {
+        this.status = true;
     }
-    public void deactive(){
-        this.status=false;
+
+    public void deactive() {
+        this.status = false;
     }
+
     @Override
-        public String toString() {
-            return "Rule : " + name + "; Action : " + action + "; Trigger : " + trigger + "; Status : " + status;
+    public String toString() {
+        return "Rule : " + name + "; Action : " + action + "; Trigger : " + trigger + "; Status : " + status;
+    }
+
+    public boolean isVerifiedRule() {
+        if (sleep == 0 || !action.isFired()) {
+            return trigger.isVerified() && status;
         }
-        
-    public boolean isVerifiedRule(){
-        if(sleep==0 || !action.isFired())
-            return trigger.isVerified() && status ;
-        if(fireOnce=true)
+        if (fireOnce = true) {
             return trigger.isVerified() && status && action.isFired();
-        else{
-            
+        } else {
+
             return trigger.isVerified() && status && sleepCheck();
         }
     }
-    public void fire(){
+
+    public void fire() {
         action.fire();
-        if(!(sleep==0)){
-            wakeUp= LocalDateTime.now().plusMinutes(sleep);
+        if (!(sleep == 0)) {
+            wakeUp = LocalDateTime.now().plusMinutes(sleep);
             System.out.print(wakeUp);
         }
-        
+
     }
-    public Boolean sleepCheck(){
-        return LocalDateTime.now().compareTo(wakeUp)>=0;
+
+    public Boolean sleepCheck() {
+        return LocalDateTime.now().compareTo(wakeUp) >= 0;
     }
 }
