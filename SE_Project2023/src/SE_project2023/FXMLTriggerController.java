@@ -7,6 +7,7 @@ package SE_project2023;
 import SE_project2023.Trigger.*;
 import java.net.URL;
 import java.time.LocalTime;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
@@ -15,7 +16,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
@@ -43,11 +43,14 @@ public class FXMLTriggerController implements Initializable {
     private ComboBox<String> timeComboBox2;
     @FXML
     private AnchorPane comboBoxPane;
-    
+
     private int flagTrigger;
     private LocalTime temp;
     ObservableList<Trigger> triggerList;
-    RuleSingleton r;
+    RuleList r;
+    
+    HashMap<String, AnchorPane> anchorPanes = new HashMap<>();
+    private MenuExecutor menuExec;
 
     /**
      * Initializes the controller class.
@@ -59,7 +62,7 @@ public class FXMLTriggerController implements Initializable {
         triggerList = FXCollections.observableArrayList(triggers);
 
         /*Prendiamo una regola temporanea a cui aggiungere il trigger*/
-        r = RuleSingleton.getInstance();
+        r = RuleList.getRuleList();
 
         /*Popola le timebox con i valori delle ore e dei minuti*/
         populateTimeComboBox(timeComboBox1, 24);
@@ -69,6 +72,10 @@ public class FXMLTriggerController implements Initializable {
         triggerListView.getItems().addAll(
                 "Time Trigger"
         );
+
+        anchorPanes.put("Time Trigger", comboBoxPane);
+       
+
 
         /*La variabile temp per l'inizializzazione del trigger viene impostata di default all'orario attuale*/
         temp = LocalTime.of(LocalTime.now().getHour(), LocalTime.now().getMinute());
@@ -85,34 +92,22 @@ public class FXMLTriggerController implements Initializable {
             }
         });
 
+        menuExec = new MenuExecutor();
+
     }
 
     private void handleTriggerSelection(String selectedTrigger) {
-        if (null != selectedTrigger) {
-            switch (selectedTrigger) {
-                case "Time Trigger":
-                    flagTrigger = 1;
-                    comboBoxPane.setVisible(true);
-                    fileTriggerButton.setVisible(false);
-                    break;
-                default:
-                    break;
-            }
-        }
+        menuExec.execute(new SwitchCommand(anchorPanes, selectedTrigger));
     }
 
     @FXML
     private void doneTrigger(ActionEvent event) {
-        
-        if (flagTrigger == 0) {
-            alertShow("Attenzione", "", "Orario non selezionato", Alert.AlertType.WARNING);
-        } else {
-            TimeTrigger t = new TimeTrigger(temp);
-            triggerList.add(t);
-            alertShow("", "L'orario scelto è: " + temp.toString(), "", Alert.AlertType.INFORMATION);
-            //System.out.println("ORARIO SELEZIONATO:"+temp);
-            r.setTrigger(t);
-        }
+
+        TimeTrigger t = new TimeTrigger(temp);
+        triggerList.add(t);
+
+        //System.out.println("ORARIO SELEZIONATO:"+temp);
+        r.getLast().setTrigger(t);
 
         Node sourceNode = (Node) event.getSource();
         Stage stage = (Stage) sourceNode.getScene().getWindow();
@@ -138,14 +133,6 @@ public class FXMLTriggerController implements Initializable {
             System.out.println("Cartella selezionata: " + selectedDirectory.getAbsolutePath());
         }
          */
-    }
-
-    private void alertShow(String title, String header, String content, Alert.AlertType type) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(header);
-        alert.setContentText(content);
-        alert.show();
     }
 
     private void populateTimeComboBox(ComboBox<String> comboBox, int pop) {

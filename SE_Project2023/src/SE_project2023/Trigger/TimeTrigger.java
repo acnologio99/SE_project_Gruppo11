@@ -4,13 +4,14 @@
  */
 package SE_project2023.Trigger;
 
+import java.io.Serializable;
 import java.time.LocalTime;
 
 /**
  *
  * @author cauro
  */
-public class TimeTrigger implements Trigger {
+public class TimeTrigger implements Trigger, Serializable {
 
     private LocalTime timeOfDay;
 

@@ -7,6 +7,7 @@ package SE_project2023;
 import SE_project2023.Action.*;
 import java.io.File;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
@@ -15,13 +16,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
-import javafx.scene.control.MenuButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -32,15 +34,13 @@ import javafx.stage.Stage;
  */
 public class FXMLActionController implements Initializable {
 
-    private AnchorPane TextPane;
     @FXML
     private TextArea TextMessage;
-    private MenuButton chooseAction;
 
     ObservableList<Action> actionList;
-    RuleSingleton r;
+    RuleList r;
+    HashMap<String, AnchorPane> anchorPanes = new HashMap<>();
 
-    private int flagAction;
     @FXML
     private ListView<String> actionListView;
     @FXML
@@ -53,6 +53,28 @@ public class FXMLActionController implements Initializable {
     private TextField audioText;
     @FXML
     private AnchorPane audioPane;
+    @FXML
+    private AnchorPane textPane;
+
+    private MenuExecutor menuExec; //invoker for commands
+    @FXML
+    private AnchorPane filePane;
+    @FXML
+    private TextField sourcePath;
+    @FXML
+    private TextField destPath;
+    @FXML
+    private Button fileSource;
+    @FXML
+    private Button destFile;
+    @FXML
+    private ToggleButton moveToggle;
+    @FXML
+    private ToggleGroup fileChoices;
+    @FXML
+    private ToggleButton removeToggle;
+    @FXML
+    private ToggleButton copyToggle;
 
     /**
      * Initializes the controller class.
@@ -62,56 +84,68 @@ public class FXMLActionController implements Initializable {
         // TODO
         HashSet<Action> actions = new HashSet();
         actionList = FXCollections.observableArrayList(actions);
-        r = RuleSingleton.getInstance();
+        r = RuleList.getRuleList();
+
+        anchorPanes.put("TextBox Action", textPane);
+        anchorPanes.put("Audio Action", audioPane);
+        anchorPanes.put("File Action", filePane);
 
         actionListView.getItems().addAll(
                 "TextBox Action",
-                "Audio Action"
+                "Audio Action",
+                "File Action"
         );
 
         // Aggiungi un listener per gestire la selezione della ListView
         actionListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
-                handleActionSelection(newValue); // Gestisci la selezione dell'opzione
+                handleSelection(newValue); // Gestisci la selezione dell'opzione
             }
         });
+        
+//        fileChoices.getToggles().addListener((Observable l)->{
+//            if()
+//        });
+
+        menuExec = new MenuExecutor(); //vedere se togliere e fare una classe interna****
 
     }
 
-    private void handleActionSelection(String selectedAction) {
-        if ("TextBox Action".equals(selectedAction)) {
-            flagAction = 1;
-            TextMessage.setVisible(true);
-            audioPane.setVisible(false);
-        } else if ("Audio Action".equals(selectedAction)) {
-            flagAction = 2;
-            TextMessage.setVisible(false);
-            audioPane.setVisible(true);
-        }
+    private void handleSelection(String selectedAction) {
+        menuExec.execute(new SwitchCommand(anchorPanes, selectedAction)); //vedere se posso fare classe innestata
+        // for (AnchorPane pane : anchorPanes.values()) {
+        //     pane.setVisible(false);
+        // }
+        // if (anchorPanes.containsKey(selectedAction)) {
+        //     anchorPanes.get(selectedAction).setVisible(true);
+        // }
     }
 
     @FXML
     private void doneAction(ActionEvent event) {
-        
-        if ((TextMessage.getText().equals("") && audioText.getText().equals(""))|| flagAction == 0) {
-            alertShow("Attenzione", "", "Azione non aggiunta", Alert.AlertType.WARNING);
-        } else {
-            if (flagAction == 1) {
-                String mess = TextMessage.getText();
-                Action a = new MessageBoxAction(mess);
-                r.setAction(a);
-            } else if (flagAction == 2) {
-                Action a = new AudioAction(audioText.getText());
-                r.setAction(a);
-            }
-            alertShow("Inserimento", "", "Azione aggiunta!", Alert.AlertType.INFORMATION);
+//        if (flagAction == 1 && !"".equals(TextMessage.getText())) {
+//            String mess = TextMessage.getText();
+//            Action a = new MessageBoxAction(mess);
+//            r.setAction(a);
+//        } else if (flagAction == 2 && !"".equals(audioText.getText())) {
+//            Action a = new AudioAction(audioText.getText());
+//            r.setAction(a);
+//        }
+        if (anchorPanes.get("TextBox Action").isVisible() && !"".equals(TextMessage.getText())) {
+            String mess = TextMessage.getText();
+            Action a = new MessageBoxAction(mess);
+            r.getLast().setAction(a);
+        } else if (anchorPanes.get("Audio Action").isVisible() && !"".equals(audioText.getText())) {
+            Action a = new AudioAction(audioText.getText());
+            r.getLast().setAction(a);
+        } else if (anchorPanes.get("File Action").isVisible()
+                && !"".equals(sourcePath.getText())) {
+            String action = ((ToggleButton)fileChoices.getSelectedToggle()).getId().split("Toggle")[0];
+            Action a = new FileAction(sourcePath.getText(), destPath.getText(), action);
+            
+            r.getLast().setAction(a);
         }
-
-        Node sourceNode = (Node) event.getSource();
-        Stage stage = (Stage) sourceNode.getScene().getWindow();
-
-        // Chiudi la finestra corrente
-        stage.close();
+        cancelAction(event);
     }
 
     @FXML
@@ -119,11 +153,6 @@ public class FXMLActionController implements Initializable {
         Node sourceNode = (Node) event.getSource();
         Stage stage = (Stage) sourceNode.getScene().getWindow();
         stage.close();
-    }
-
-    private void textAction(ActionEvent event) {
-        TextPane.setVisible(true); //quando clicco sul pulsante TextAction mi esce la casella di testo.
-        chooseAction.setDisable(true);
     }
 
     @FXML
@@ -141,11 +170,32 @@ public class FXMLActionController implements Initializable {
 
     }
 
-    private void alertShow(String title, String header, String content, Alert.AlertType type) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(header);
-        alert.setContentText(content);
-        alert.show();
+    @FXML
+    private void fileAction(ActionEvent event) {
+        if (event.getSource().toString().contains("fileSource")) {
+            FileChooser fil_chooser = new FileChooser();
+            File file = fil_chooser.showOpenDialog(new Stage());
+            if (file != null) {
+                sourcePath.setText(file.toString());
+            }
+        } else if (event.getSource().toString().contains("destFile")) {
+            DirectoryChooser dir_chooser = new DirectoryChooser();
+            File selectedDirectory = dir_chooser.showDialog(new Stage());
+            if (selectedDirectory != null) {
+                destPath.setText(selectedDirectory.toString());
+            }
+        }
     }
+
+    @FXML
+    private void toggleHandle(ActionEvent event) {
+        if (removeToggle.isSelected()) {
+            destPath.setDisable(true);
+            destFile.setDisable(true);
+        } else {
+            destPath.setDisable(false);
+            destFile.setDisable(false);
+        }
+    }
+
 }

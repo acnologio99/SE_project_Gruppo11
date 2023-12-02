@@ -32,15 +32,16 @@ public class RuleSingleton {
     public void setTrigger(Trigger t) {
         r.setTrigger(t);
     }
-    
+
     public void setFlag(boolean flag) {
         r.setFlag(flag);
     }
 
     public Rule getRule() {
-        Rule temp = r;
-        clearRule();
-        return temp;
+//        Rule temp = r;
+////        clearRule();
+//        return temp;
+        return this.r;
     }
 
     public void clearRule() {
