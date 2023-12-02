@@ -35,7 +35,9 @@ public class Rule extends Observable implements Serializable{
         this.status= true;
 
         obs = new ArrayList<>();
+        
     }
+    
 
     public void setSleep(Long sleep) {
         this.sleep = sleep;
@@ -122,8 +124,11 @@ public class Rule extends Observable implements Serializable{
     }
 
     /*this method attaches the observers to the rule*/
-    public void attach(Observer o){
+    public void attach(Observer o){      
         obs.add(o);
+    }
+    public void detach(){
+        obs.clear();
     }
 
     @Override

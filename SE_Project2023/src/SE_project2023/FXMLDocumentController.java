@@ -65,6 +65,7 @@ public class FXMLDocumentController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         customTable = new CustomTableView(tableView);
+        
         //inizializzazione Liste
         ruleList = FXCollections.observableArrayList(rules.getArrayList());
         //setting selezione multipla
@@ -81,7 +82,7 @@ public class FXMLDocumentController implements Initializable {
 
 
         for(Rule r : rules.getArrayList()){
-            r.attach( customTable );
+            r.attach( rules );
         }//il controller diventa observer
 
         rules.attach(customTable);
@@ -163,7 +164,7 @@ public class FXMLDocumentController implements Initializable {
             Parent root = loader.load();
             Rule r = new Rule();
             rules.add(r);
-            r.attach(customTable);  //Attacco ad ogni regola creata ()->tableView.refresh()
+            r.attach(rules);  //Attacco ad ogni regola creata ()->tableView.refresh()
 
             Stage stage = new Stage();
             stage.setTitle("RuleCreator");

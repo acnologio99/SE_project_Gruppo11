@@ -315,9 +315,7 @@ public class RuleTest {
     @Test
     public void testAttach() {
         System.out.println("attach");
-        Observer o = null;
-        Rule instance = new Rule();
-        instance.attach((SE_project2023.Regole.Observer) o);
+        
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }

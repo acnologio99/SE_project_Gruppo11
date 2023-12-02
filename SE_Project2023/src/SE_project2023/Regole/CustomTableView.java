@@ -4,11 +4,12 @@
  */
 package SE_project2023.Regole;
 
+import java.io.Serializable;
 import java.util.Observable;
 import java.util.Observer;
 import javafx.scene.control.TableView;
 
-public class CustomTableView implements Observer {
+public class CustomTableView implements Observer,Serializable{
 
     TableView<Rule> tv;
     
