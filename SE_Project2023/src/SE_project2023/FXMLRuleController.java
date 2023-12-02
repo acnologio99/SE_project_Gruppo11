@@ -18,6 +18,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -56,10 +58,26 @@ public class FXMLRuleController implements Initializable {
     private TextField daysPicker;
     @FXML
     private TextField minutesPicker;
+    @FXML
+    private RadioButton fireOnceRadio;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        ToggleGroup toggleGroup = new ToggleGroup();
+        sleepRadio.setToggleGroup(toggleGroup);
+        fireOnceRadio.setToggleGroup(toggleGroup);
+        toggleGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                if (newValue == sleepRadio) {
+                    // Quando SleepRadio è selezionato, rendi visibile sleepPicker
+                    sleepPicker.setVisible(true);
+                } else if (newValue == fireOnceRadio) {
+                    // Quando FireOnceRadio è selezionato, rendi invisibile sleepPicker
+                    sleepPicker.setVisible(false);
+                }
+            }
+        });
         sleepPicker.setVisible(false);
         daysPicker.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("\\d*")) {
@@ -140,6 +158,8 @@ public class FXMLRuleController implements Initializable {
         Stage stage = (Stage) sourceNode.getScene().getWindow();
 
         r.getLast().setFlag(true);
+        if (fireOnceRadio.isSelected())
+            r.getLast().setFireOnce(true);
         if (sleepRadio.isSelected()) {
             r.getLast().setSleep(24 * 60 * (Long.parseLong(daysPicker.getText())) + (Long.parseLong(minutesPicker.getText())));
         }
@@ -154,9 +174,8 @@ public class FXMLRuleController implements Initializable {
         Stage stage = (Stage) sourceNode.getScene().getWindow();
 
         RuleList r = RuleList.getRuleList();
-        r.removeLast();
+        
         r.getLast().setFlag(false);
-
         // Chiudi la finestra corrente
         stage.close();
     }
