@@ -43,7 +43,11 @@ public class RuleList extends Observable implements Observer, Serializable{
     public List<Rule> getArrayList() {
         return rules;
     }
-
+    
+    public int size() {
+        return rules.size();
+    }
+    
     public void add(Rule r) {
         rules.add(r);
         this.notifyObservers();
@@ -110,4 +114,5 @@ public class RuleList extends Observable implements Observer, Serializable{
         notifyObservers();
     }
 
+   
 }
