@@ -64,7 +64,7 @@ public class FXMLDocumentController implements Initializable {
     //lista che mostra le azioni scelte
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        //customTable = new CustomTableView();
+        customTable = new CustomTableView(tableView);
         
         //inizializzazione Liste
         ruleList = FXCollections.observableArrayList(rules.getArrayList());
@@ -85,7 +85,7 @@ public class FXMLDocumentController implements Initializable {
             r.attach( rules );
         }//il controller diventa observer
 
-        //rules.attach(customTable);
+        rules.attach(customTable);
 
 
 
@@ -111,7 +111,9 @@ public class FXMLDocumentController implements Initializable {
                                 Platform.runLater(() -> {
                                     if (r.isVerifiedRule()) {
                                         r.fire();
+                                        r.deactive();
                                         AutoSaveInBackGround();//salva
+                                        tableView.refresh();
                                     }
                                 });
                             }
@@ -139,6 +141,7 @@ public class FXMLDocumentController implements Initializable {
             if (b == ButtonType.OK) {
                 rules.getArrayList().removeAll(tableView.getSelectionModel().getSelectedItems());
                 AutoSaveInBackGround();
+                updateTableView();
             }
         }
 
@@ -169,7 +172,7 @@ public class FXMLDocumentController implements Initializable {
             stage.showAndWait();
             if (rules.getLast().ruleIsValid()) {
                 AutoSaveInBackGround();
-                
+                updateTableView();
                 alertShow("Inserimento", "", "Regola correttamente inserita", Alert.AlertType.INFORMATION);
             } else {
                 alertShow("Errore!", "", "Regola non inserita", Alert.AlertType.ERROR);
@@ -184,7 +187,11 @@ public class FXMLDocumentController implements Initializable {
 
     }
 
-    
+    private void updateTableView() {
+        ObservableList<Rule> observableRules = FXCollections.observableArrayList(rules.getArrayList());
+        tableView.setItems(observableRules);
+
+    }
 
     @FXML
     private void setOnRule(ActionEvent event) {
@@ -212,7 +219,7 @@ public class FXMLDocumentController implements Initializable {
 
 private void AutoLoadInBackGround() {
     Thread loadThread = new Thread(() -> {
-        RuleList.getRuleList().loadRules("rules.bin");
+        RuleList.getRuleList().loadRules("rules.txt");
         ObservableList<Rule> loadedRules = FXCollections.observableArrayList(RuleList.getRuleList().getArrayList());
         //Platform.runLater(() -> {
             tableView.getItems().clear(); // Cancella gli elementi attuali dalla tableView
@@ -224,7 +231,7 @@ private void AutoLoadInBackGround() {
 }
 private void AutoSaveInBackGround() {
         Thread saveThread = new Thread(() -> {
-        RuleList.getRuleList().saveRules("rules.bin");
+        RuleList.getRuleList().saveRules("rules.txt");
         ObservableList<Rule> savedRules = FXCollections.observableArrayList(RuleList.getRuleList().getArrayList());
         //Platform.runLater(() -> {
             tableView.getItems().clear(); // Cancella gli elementi attuali dalla tableView

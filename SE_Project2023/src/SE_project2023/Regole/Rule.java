@@ -59,9 +59,6 @@ public class Rule extends Observable implements Serializable{
     public boolean getFlag() {
         return flag;
     }
-    public boolean getStatus() {
-        return this.status;
-    }
 
     //Setter
     public void setAction(Action action) {
@@ -83,10 +80,10 @@ public class Rule extends Observable implements Serializable{
     public boolean ruleIsValid() {
         return this.getTrigger() != null && this.getAction() != null && this.flag;
     }
-    public void setFireOnce(boolean f){
-        this.fireOnce=true;
+
+    public boolean getStatus() {
+        return this.status;
     }
-    
 
     public void active() {
         this.status = true;
@@ -102,21 +99,21 @@ public class Rule extends Observable implements Serializable{
     }
 
     public boolean isVerifiedRule() {
-        if (!action.isFired()) {
+        if (sleep == 0 || !action.isFired()) {
             return trigger.isVerified() && status;
         }
-        if (fireOnce == true) {
-            return trigger.isVerified() && status && !action.isFired();
-        } else if(sleep!=0){
+        if (fireOnce = true) {
+            return trigger.isVerified() && status && action.isFired();
+        } else {
+
             return trigger.isVerified() && status && sleepCheck();
-        }else return trigger.isVerified() && status;
-        
+        }
     }
 
     public void fire() {
         action.fire();
         if (!(sleep == 0)) {
-            wakeUp = LocalDateTime.now().plusSeconds(sleep);
+            wakeUp = LocalDateTime.now().plusMinutes(sleep);
             System.out.print(wakeUp);
         }
 
