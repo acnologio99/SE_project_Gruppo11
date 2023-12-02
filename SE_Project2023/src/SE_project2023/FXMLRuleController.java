@@ -144,6 +144,7 @@ public class FXMLRuleController implements Initializable {
             r.getLast().setSleep(24 * 60 * (Long.parseLong(daysPicker.getText())) + (Long.parseLong(minutesPicker.getText())));
         }
         // Chiudi la finestra corrente
+        
         stage.close();
     }
 

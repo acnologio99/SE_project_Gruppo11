@@ -4,6 +4,7 @@
  */
 package SE_project2023.Action;
 
+import java.io.Serializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
@@ -11,7 +12,7 @@ import javafx.scene.control.Alert.AlertType;
  *
  * @author chris
  */
-public class MessageBoxAction implements Action {
+public class MessageBoxAction implements Action , Serializable{
 
     private String msg;
 

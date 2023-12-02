@@ -61,6 +61,9 @@ public class FXMLDocumentController implements Initializable {
     //lista che mostra le azioni scelte
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
+        
+        
         //inizializzazione Liste
         ruleList = FXCollections.observableArrayList(rules.getArrayList());
         //setting selezione multipla 
@@ -72,7 +75,9 @@ public class FXMLDocumentController implements Initializable {
         triggerCln.setCellValueFactory(new PropertyValueFactory<>("Trigger"));
         statusCln.setCellValueFactory(new PropertyValueFactory<>("Status"));
         tableView.setItems(ruleList);
-
+        
+        
+        AutoLoadInBackGround();
         serviceControl();
 
         // Creazione del servizio per controllare la lista ogni 10 secondi
@@ -94,6 +99,7 @@ public class FXMLDocumentController implements Initializable {
                                     if (r.isVerifiedRule()) {
                                         r.fire();
                                         r.deactive();
+                                        AutoSaveInBackGround();//salva
                                         tableView.refresh();
                                     }
                                 });
@@ -121,10 +127,12 @@ public class FXMLDocumentController implements Initializable {
             ButtonType b = response.get();
             if (b == ButtonType.OK) {
                 rules.getArrayList().removeAll(tableView.getSelectionModel().getSelectedItems());
+                AutoSaveInBackGround();
                 updateTableView();
             }
         }
 
+        AutoSaveInBackGround();
     }
 
     private void alertShow(String title, String header, String content, Alert.AlertType type) {
@@ -143,12 +151,14 @@ public class FXMLDocumentController implements Initializable {
             Parent root = loader.load();
             Rule r = new Rule();
             rules.add(r);
-
+            
+        
             Stage stage = new Stage();
             stage.setTitle("RuleCreator");
             stage.setScene(new Scene(root));
             stage.showAndWait();
             if (rules.getLast().ruleIsValid()) {
+                AutoSaveInBackGround();
                 updateTableView();
                 alertShow("Inserimento", "", "Regola correttamente inserita", Alert.AlertType.INFORMATION);
             } else {
@@ -184,4 +194,31 @@ public class FXMLDocumentController implements Initializable {
         r.deactive();
         tableView.refresh();
     }
+           
+
+
+private void AutoLoadInBackGround() {
+    Thread loadThread = new Thread(() -> {
+        RuleList.getRuleList().loadRules("rules.txt");
+        ObservableList<Rule> loadedRules = FXCollections.observableArrayList(RuleList.getRuleList().getArrayList());
+        //Platform.runLater(() -> {
+            tableView.getItems().clear(); // Cancella gli elementi attuali dalla tableView
+            tableView.getItems().addAll(loadedRules); // Aggiunge i nuovi elementi dalla lista caricata
+       // });
+    });
+
+    loadThread.start();
+}
+private void AutoSaveInBackGround() {
+        Thread saveThread = new Thread(() -> {
+        RuleList.getRuleList().saveRules("rules.txt");
+        ObservableList<Rule> savedRules = FXCollections.observableArrayList(RuleList.getRuleList().getArrayList());
+        //Platform.runLater(() -> {
+            tableView.getItems().clear(); // Cancella gli elementi attuali dalla tableView
+            tableView.getItems().addAll(savedRules); // Aggiunge i nuovi elementi dalla lista caricata
+        //});
+    });
+
+    saveThread.start();
+}
 }

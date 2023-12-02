@@ -1,6 +1,7 @@
 package SE_project2023.Action;
 
 import java.io.File;
+import java.io.Serializable;
 import javafx.scene.control.Alert;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -9,7 +10,7 @@ import javafx.scene.media.MediaPlayer;
  *
  * @author emanu
  */
-public class AudioAction implements Action {
+public class AudioAction implements Action, Serializable {
 
     private String path;
     private boolean isFired = false;
