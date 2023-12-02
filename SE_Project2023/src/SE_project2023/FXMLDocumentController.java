@@ -45,7 +45,6 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private Button removeButton;
 
-
     ObservableList<Rule> ruleList;
 
     RuleList rules = RuleList.getRuleList();
@@ -67,8 +66,8 @@ public class FXMLDocumentController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         customTable = new CustomTableView(tableView);
         //inizializzazione Liste
-        ruleList = FXCollections.observableArrayList(rules.getArrayList());    
-        //setting selezione multipla 
+        ruleList = FXCollections.observableArrayList(rules.getArrayList());
+        //setting selezione multipla
         tableView.getSelectionModel().setSelectionMode(javafx.scene.control.SelectionMode.MULTIPLE);
         //aggiunta regola di testing
         //setting View
@@ -77,26 +76,26 @@ public class FXMLDocumentController implements Initializable {
         triggerCln.setCellValueFactory(new PropertyValueFactory<>("Trigger"));
         statusCln.setCellValueFactory(new PropertyValueFactory<>("Status"));
         tableView.setItems(ruleList);
-        
-        
-        
-        
+
+
+
+
         for(Rule r : rules.getArrayList()){
             r.attach( customTable );
         }//il controller diventa observer
-            
+
         rules.attach(customTable);
-        
-       
-        
-        
+
+
+
+
+        AutoLoadInBackGround();
         serviceControl();
 
         // Creazione del servizio per controllare la lista ogni 10 secondi
-        
     }
 
-    private void serviceControl(){
+    private void serviceControl() {
         ScheduledService<Void> service = new ScheduledService<Void>() {
             @Override
             protected Task<Void> createTask() {
@@ -106,31 +105,29 @@ public class FXMLDocumentController implements Initializable {
                         // Codice per controllare la lista
                         System.out.println("Controllo lista...");
 
-                        
-        for (Rule r : rules.getArrayList()) {
-            if(r.ruleIsValid()){
-                Platform.runLater(() -> {
-                        if (r.isVerifiedRule()) {
+                        for (Rule r : rules.getArrayList()) {
+                            if (r.ruleIsValid()) {
+                                Platform.runLater(() -> {
+                                    if (r.isVerifiedRule()) {
                                         r.fire();
                                         r.deactive();
-                                        //tableView.refresh();
-                                        
+                                        AutoSaveInBackGround();//salva
+                                        tableView.refresh();
                                     }
                                 });
                             }
-        }
-    
+                        }
 
                         return null;
                     }
                 };
             }
         };
-        
+
         service.setPeriod(Duration.seconds(10));
         service.start();
     }
-    
+
     @FXML
     private void removeRules(ActionEvent event) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -142,10 +139,12 @@ public class FXMLDocumentController implements Initializable {
             ButtonType b = response.get();
             if (b == ButtonType.OK) {
                 rules.getArrayList().removeAll(tableView.getSelectionModel().getSelectedItems());
+                AutoSaveInBackGround();
                 updateTableView();
             }
         }
-        
+
+        AutoSaveInBackGround();
     }
 
     private void alertShow(String title, String header, String content, Alert.AlertType type) {
@@ -162,23 +161,22 @@ public class FXMLDocumentController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("FXMLRule.fxml"));
 
             Parent root = loader.load();
-            Rule r=new Rule();
+            Rule r = new Rule();
             rules.add(r);
             r.attach(customTable);  //Attacco ad ogni regola creata ()->tableView.refresh()
 
             Stage stage = new Stage();
-            stage.setTitle("RuleCretor");
+            stage.setTitle("RuleCreator");
             stage.setScene(new Scene(root));
             stage.showAndWait();
             if (rules.getLast().ruleIsValid()) {
-                
+                AutoSaveInBackGround();
                 updateTableView();
                 alertShow("Inserimento", "", "Regola correttamente inserita", Alert.AlertType.INFORMATION);
-            }else{
+            } else {
                 alertShow("Errore!", "", "Regola non inserita", Alert.AlertType.ERROR);
 
                 rules.removeLast();
-                
 
             }
 
@@ -191,7 +189,7 @@ public class FXMLDocumentController implements Initializable {
     private void updateTableView() {
         ObservableList<Rule> observableRules = FXCollections.observableArrayList(rules.getArrayList());
         tableView.setItems(observableRules);
-        
+
     }
 
     @FXML
@@ -202,8 +200,8 @@ public class FXMLDocumentController implements Initializable {
         tableView.refresh();
         }else{
         }
-        
-        
+
+
     }
 
     @FXML
@@ -216,5 +214,30 @@ public class FXMLDocumentController implements Initializable {
         }
     }
 
-    
+
+
+private void AutoLoadInBackGround() {
+    Thread loadThread = new Thread(() -> {
+        RuleList.getRuleList().loadRules("rules.txt");
+        ObservableList<Rule> loadedRules = FXCollections.observableArrayList(RuleList.getRuleList().getArrayList());
+        //Platform.runLater(() -> {
+            tableView.getItems().clear(); // Cancella gli elementi attuali dalla tableView
+            tableView.getItems().addAll(loadedRules); // Aggiunge i nuovi elementi dalla lista caricata
+       // });
+    });
+
+    loadThread.start();
+}
+private void AutoSaveInBackGround() {
+        Thread saveThread = new Thread(() -> {
+        RuleList.getRuleList().saveRules("rules.txt");
+        ObservableList<Rule> savedRules = FXCollections.observableArrayList(RuleList.getRuleList().getArrayList());
+        //Platform.runLater(() -> {
+            tableView.getItems().clear(); // Cancella gli elementi attuali dalla tableView
+            tableView.getItems().addAll(savedRules); // Aggiunge i nuovi elementi dalla lista caricata
+        //});
+    });
+
+    saveThread.start();
+}
 }

@@ -73,7 +73,7 @@ public class AudioActionTest {
         assertEquals(expResult, result);
 
         Platform.runLater(() -> {
-            a.setPath("data/song02.wav");           
+            a.setPath("data/song02.wav");
             a.fire();
             assertTrue(a.isFired());
         });
