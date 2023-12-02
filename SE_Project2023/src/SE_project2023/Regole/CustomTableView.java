@@ -7,21 +7,20 @@ package SE_project2023.Regole;
 import java.io.Serializable;
 import java.util.Observable;
 import java.util.Observer;
-import javafx.scene.control.TableView;
 
 public class CustomTableView implements Observer,Serializable{
 
-    TableView<Rule> tv;
     
-    public CustomTableView(TableView<Rule> tv) {
+    
+    public CustomTableView() {
        
-        this.tv=tv;
+       
         
     }
 
     @Override
     public void update(Observable o, Object arg) {
-        tv.refresh();
+        
     }
     
     
