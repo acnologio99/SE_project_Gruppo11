@@ -5,22 +5,27 @@ package SE_project2023;
  * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXML2.java to edit this template
  */
 import SE_project2023.Action.Action;
-import SE_project2023.Regole.CustomTableView;
 import SE_project2023.Regole.Rule;
 import SE_project2023.Trigger.Trigger;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Observer;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.ScheduledService;
+import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -30,8 +35,12 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import javafx.util.converter.BooleanStringConverter;
+import static jdk.nashorn.internal.objects.NativeRegExp.source;
 
 /**
  *
@@ -55,19 +64,37 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private TableColumn<Rule, Trigger> triggerCln;
     @FXML
-    private TableColumn<Rule, Boolean> statusCln;
+    private TableColumn<Rule, String> statusCln;
     @FXML
     private TableView<Rule> tableView;
     @FXML
-    private CustomTableView customTable;
+    private TableColumn<Rule, String> sleepCln;
+    @FXML
+    private VBox rootScene;
 
     //lista che mostra le azioni scelte
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         //customTable = new CustomTableView();
-        
+
+        /*Thread load = new Thread(new LoadThread());
+        load.setDaemon(true);
+        load.start();
+        try {
+            load.join();
+        } catch (InterruptedException ex) {
+            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+        }*/
+        LoadService load = new LoadService();
+
+        load.start();
         //inizializzazione Liste
-        ruleList = FXCollections.observableArrayList(rules.getArrayList());
+        load.setOnSucceeded(e -> {
+            ruleList = FXCollections.observableArrayList(rules.getArrayList());
+            tableView.setItems(ruleList);
+
+        });
+
         //setting selezione multipla
         tableView.getSelectionModel().setSelectionMode(javafx.scene.control.SelectionMode.MULTIPLE);
         //aggiunta regola di testing
@@ -75,60 +102,35 @@ public class FXMLDocumentController implements Initializable {
         nameCln.setCellValueFactory(new PropertyValueFactory<>("Name"));
         actionCln.setCellValueFactory(new PropertyValueFactory<>("Action"));
         triggerCln.setCellValueFactory(new PropertyValueFactory<>("Trigger"));
-        statusCln.setCellValueFactory(new PropertyValueFactory<>("Status"));
-        tableView.setItems(ruleList);
+        statusCln.setCellValueFactory(cellData -> {
+            boolean status = cellData.getValue().getStatus(); // Assume che "isStatus()" sia il metodo che restituisce il booleano dalla classe Rule
+            return new SimpleStringProperty(status ? "On" : "Off");
+        });
+        sleepCln.setCellValueFactory(new PropertyValueFactory<>("Sleep"));
 
-
-
-
-        for(Rule r : rules.getArrayList()){
-            r.attach( rules );
+        for (Rule r : rules.getArrayList()) {
+            r.attach(rules);
         }//il controller diventa observer
 
-        //rules.attach(customTable);
-
-
-
-
-        AutoLoadInBackGround();
+        //Thread check = new Thread(new CheckRuleThread());
+        //check.setDaemon(true);
+        //check.start();
+        //AutoLoadInBackGround();    
         serviceControl();
 
-        // Creazione del servizio per controllare la lista ogni 10 secondi
     }
 
     private void serviceControl() {
-        ScheduledService<Void> service = new ScheduledService<Void>() {
-            @Override
-            protected Task<Void> createTask() {
-                return new Task<Void>() {
-                    @Override
-                    protected Void call() {
-                        // Codice per controllare la lista
-                        System.out.println("Controllo lista...");
-
-                        for (Rule r : rules.getArrayList()) {
-                            if (r.ruleIsValid()) {
-                                Platform.runLater(() -> {
-                                    if (r.isVerifiedRule()) {
-                                        r.fire();
-                                        AutoSaveInBackGround();//salva
-                                    }
-                                });
-                            }
-                        }
-
-                        return null;
-                    }
-                };
-            }
-        };
-
+        CheckService service = new CheckService(tableView);
         service.setPeriod(Duration.seconds(10));
         service.start();
     }
 
     @FXML
     private void removeRules(ActionEvent event) {
+        if (tableView.getSelectionModel().getSelectedItems() == null) {
+            return;
+        }
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Rimozione");
         alert.setHeaderText("");
@@ -138,7 +140,7 @@ public class FXMLDocumentController implements Initializable {
             ButtonType b = response.get();
             if (b == ButtonType.OK) {
                 rules.getArrayList().removeAll(tableView.getSelectionModel().getSelectedItems());
-                AutoSaveInBackGround();
+                //AutoSaveInBackGround();
             }
         }
 
@@ -161,15 +163,21 @@ public class FXMLDocumentController implements Initializable {
             Parent root = loader.load();
             Rule r = new Rule();
             rules.add(r);
+            rootScene.setDisable(true);
+            
+            
+
             r.attach(rules);  //Attacco ad ogni regola creata ()->tableView.refresh()
 
             Stage stage = new Stage();
             stage.setTitle("RuleCreator");
             stage.setScene(new Scene(root));
             stage.showAndWait();
+
+            rootScene.setDisable(false);
             if (rules.getLast().ruleIsValid()) {
                 AutoSaveInBackGround();
-                
+
                 alertShow("Inserimento", "", "Regola correttamente inserita", Alert.AlertType.INFORMATION);
             } else {
                 alertShow("Errore!", "", "Regola non inserita", Alert.AlertType.ERROR);
@@ -184,33 +192,29 @@ public class FXMLDocumentController implements Initializable {
 
     }
 
-    
-
     @FXML
     private void setOnRule(ActionEvent event) {
         Rule r = tableView.getSelectionModel().getSelectedItem();
-        if(r!=null){
-        r.active();
-        tableView.refresh();
-        }else{
+        if (r != null) {
+            r.active();
+            tableView.refresh();
+        } else {
         }
-
 
     }
 
     @FXML
     private void set(ActionEvent event) {
         Rule r = tableView.getSelectionModel().getSelectedItem();
-        if(r!=null){
-        r.deactive();
-        tableView.refresh();
-        }else {
+        if (r != null) {
+            r.deactive();
+            tableView.refresh();
+        } else {
         }
     }
 
-
-
-private void AutoLoadInBackGround() {
+    /*private void AutoLoadInBackGround( ) {
+    
     Thread loadThread = new Thread(() -> {
         RuleList.getRuleList().loadRules("rules.bin");
         ObservableList<Rule> loadedRules = FXCollections.observableArrayList(RuleList.getRuleList().getArrayList());
@@ -221,17 +225,17 @@ private void AutoLoadInBackGround() {
     });
 
     loadThread.start();
-}
-private void AutoSaveInBackGround() {
+}*/
+    private void AutoSaveInBackGround() {
         Thread saveThread = new Thread(() -> {
-        RuleList.getRuleList().saveRules("rules.bin");
-        ObservableList<Rule> savedRules = FXCollections.observableArrayList(RuleList.getRuleList().getArrayList());
-        //Platform.runLater(() -> {
+            RuleList.getRuleList().saveRules("rules.bin");
+            ObservableList<Rule> savedRules = FXCollections.observableArrayList(RuleList.getRuleList().getArrayList());
+
             tableView.getItems().clear(); // Cancella gli elementi attuali dalla tableView
             tableView.getItems().addAll(savedRules); // Aggiunge i nuovi elementi dalla lista caricata
-        //});
-    });
 
-    saveThread.start();
-}
+        });
+
+        saveThread.start();
+    }
 }

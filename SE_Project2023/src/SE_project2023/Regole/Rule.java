@@ -62,7 +62,7 @@ public class Rule extends Observable implements Serializable{
     public boolean getStatus() {
         return this.status;
     }
-
+    
     //Setter
     public void setAction(Action action) {
         this.action = action;
@@ -86,10 +86,18 @@ public class Rule extends Observable implements Serializable{
     public void setFireOnce(boolean f){
         this.fireOnce=true;
     }
+
+    public String getSleep() {
+        if(sleep == 0)
+        return "No";
+        else
+        return "Yes";
+    }
     
 
     public void active() {
         this.status = true;
+        this.notifyObservers();
     }
     public void deactive(){
         this.status=false;

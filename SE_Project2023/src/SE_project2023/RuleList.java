@@ -4,6 +4,7 @@ import SE_project2023.Regole.Rule;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.EOFException;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -84,29 +85,39 @@ public class RuleList extends Observable implements Observer, Serializable{
                 
                 objectOut.writeObject(r);
             }
-            System.out.print("Ho salvato bro");
         } catch (IOException e) {
             e.printStackTrace();
             // Gestione dell'eccezione durante il salvataggio delle regole
         }
     }
 
-    public void loadRules(String filename) {
-        try (ObjectInputStream objectIn = new ObjectInputStream(new BufferedInputStream(new FileInputStream(filename)))) {
-            while(true){
-                try{Rule r = (Rule) objectIn.readObject();
-                    
-                    rules.add(r);
-                 } catch (EOFException e) {
-                // EOFException indica la fine del file
-                break;
-            }
-            }
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-            // Gestione dell'eccezione durante il caricamento delle regole
+   public void loadRules(String filename) {
+    try {
+        File file = new File(filename);
+        if (!file.exists()) {
+            // Se il file non esiste, crea un nuovo file con il nome specificato
+            file.createNewFile();
         }
+
+        try (ObjectInputStream objectIn = new ObjectInputStream(new BufferedInputStream(new FileInputStream(file)))) {
+            while (true) {
+                try {
+                    Rule r = (Rule) objectIn.readObject();
+                    rules.add(r);
+                } catch (EOFException e) {
+                    
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+        
     }
+}
     
 
     @Override

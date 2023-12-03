@@ -23,7 +23,7 @@ public class SE_project2023 extends Application {
         Scene scene = new Scene(root);
         
         stage.setScene(scene);
-        stage.setTitle("RegoleInator");
+        stage.setTitle("Rules");
         stage.show();
     }
 

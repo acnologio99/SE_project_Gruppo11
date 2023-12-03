@@ -4,11 +4,13 @@
  */
 package SE_project2023.Action;
 
+import java.io.Serializable;
+
 /**
  *
  * @author chris
  */
-public interface Action {
+public interface Action extends Serializable {
     
     public boolean isFired();
     public void fire();

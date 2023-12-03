@@ -52,6 +52,7 @@ public class MessageBoxAction implements Action , Serializable{
         alert.setHeaderText(null);
         alert.setContentText(msg);
         alert.showAndWait();
+        System.out.println("Ciaooo");
 
     }
 

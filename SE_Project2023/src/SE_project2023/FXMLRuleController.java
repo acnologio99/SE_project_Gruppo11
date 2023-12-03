@@ -60,6 +60,8 @@ public class FXMLRuleController implements Initializable {
     private TextField minutesPicker;
     @FXML
     private RadioButton fireOnceRadio;
+    @FXML
+    private AnchorPane rootScene;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -100,7 +102,9 @@ public class FXMLRuleController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("FXMLAction.fxml"));
 
             Parent root = loader.load();
-
+            rootScene.setDisable(true);
+            
+            
             Stage stage = new Stage();
             stage.setTitle("Action");
             stage.setScene(new Scene(root));
@@ -113,7 +117,8 @@ public class FXMLRuleController implements Initializable {
                     }
                 }
             });
-            stage.show();
+            stage.showAndWait();
+            rootScene.setDisable(false);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -124,6 +129,7 @@ public class FXMLRuleController implements Initializable {
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("FXMLTrigger.fxml"));
+            rootScene.setDisable(true);
 
             Parent root = loader.load();
 
@@ -140,7 +146,8 @@ public class FXMLRuleController implements Initializable {
                 }
             });
 
-            stage.show();
+            stage.showAndWait();
+            rootScene.setDisable(false);
         } catch (IOException e) {
             e.printStackTrace();
         }

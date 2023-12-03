@@ -8,6 +8,7 @@ import SE_project2023.Regole.Rule;
 import javafx.application.Platform;
 import javafx.concurrent.ScheduledService;
 import javafx.concurrent.Task;
+import javafx.scene.control.TableView;
 import javafx.util.Duration;
 
 /**
@@ -15,9 +16,11 @@ import javafx.util.Duration;
  * @author giova
  */
 public class CheckService extends ScheduledService {
-    RuleList r= RuleList.getRuleList();
+    private RuleList r= RuleList.getRuleList();
+    private TableView tv;
 
-    public CheckService() {
+    public CheckService(TableView tv) {
+        this.tv=tv;
     }
     
         @Override
@@ -33,7 +36,8 @@ public class CheckService extends ScheduledService {
                             Platform.runLater(() -> {
                                 if (r.isVerifiedRule()) {
                                     r.fire();
-                                    r.deactive();
+                                    tv.refresh();
+                                    
                                     
                                 }
                             });
