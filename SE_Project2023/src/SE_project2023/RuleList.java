@@ -28,7 +28,7 @@ public class RuleList extends Observable implements Observer, Serializable{
     private ArrayList<Rule> rules;
     private List<Observer> obs;
 
-   private RuleList() {
+    private RuleList() {
         rules = new ArrayList<>();
         obs = new ArrayList<>();
     }
@@ -43,11 +43,11 @@ public class RuleList extends Observable implements Observer, Serializable{
     public List<Rule> getArrayList() {
         return rules;
     }
-
-     public int size() {
+    
+    public int size() {
         return rules.size();
     }
-     
+    
     public void add(Rule r) {
         rules.add(r);
         this.notifyObservers();
@@ -67,10 +67,6 @@ public class RuleList extends Observable implements Observer, Serializable{
         obs.add(o);
     }
 
-     public void detach(Observer o){
-        obs.remove(o);
-    }
-     
    @Override
     public void notifyObservers(){
         for(Observer o : obs){
@@ -83,24 +79,23 @@ public class RuleList extends Observable implements Observer, Serializable{
 
 
      public void saveRules(String filename) {
-    try (ObjectOutputStream objectOut = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(filename)))) {
-        for (Rule r : rules) {
-            // Eseguo il detach prima di scrivere l'oggetto
-            r.detach();
-            objectOut.writeObject(r);
+        try (ObjectOutputStream objectOut = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(filename)))) {
+            for(Rule r: rules){
+                
+                objectOut.writeObject(r);
+            }
+            System.out.print("Ho salvato bro");
+        } catch (IOException e) {
+            e.printStackTrace();
+            // Gestione dell'eccezione durante il salvataggio delle regole
         }
-    } catch (IOException e) {
-        e.printStackTrace();
-        // Gestione dell'eccezione durante il salvataggio delle regole
     }
-}
-
 
     public void loadRules(String filename) {
         try (ObjectInputStream objectIn = new ObjectInputStream(new BufferedInputStream(new FileInputStream(filename)))) {
             while(true){
                 try{Rule r = (Rule) objectIn.readObject();
-                    r.attach(this);
+                    
                     rules.add(r);
                  } catch (EOFException e) {
                 // EOFException indica la fine del file
@@ -119,5 +114,5 @@ public class RuleList extends Observable implements Observer, Serializable{
         notifyObservers();
     }
 
-
+   
 }

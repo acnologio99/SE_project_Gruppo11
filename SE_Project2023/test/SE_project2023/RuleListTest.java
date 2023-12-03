@@ -7,9 +7,6 @@ package SE_project2023;
 import SE_project2023.Regole.Rule;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -23,7 +20,7 @@ import org.junit.BeforeClass;
  * @author giova
  */
 public class RuleListTest {
-    private static final String TEST_FILE = "test_rules.txt";
+     private static final String TEST_FILE = "test_rules.txt";
     private RuleList ruleManager;
     public RuleListTest() {
     }
@@ -38,7 +35,7 @@ public class RuleListTest {
 
     @Before
     public void setUp() {
-    ruleManager = new RuleList(); 
+        ruleManager = RuleList.getRuleList(); 
     }
 
     @After
@@ -103,9 +100,8 @@ public class RuleListTest {
         instance.removeLast();
         assertTrue(instance.getArrayList().isEmpty());
     }
-   
-@Test   
-public void testSaveRulesWhenNoRules() {
+    @Test   
+    public void testSaveRulesWhenNoRules() {
     ruleManager.saveRules(TEST_FILE);
     File emptyFile = new File(TEST_FILE);
         try {
@@ -120,18 +116,13 @@ public void testSaveRulesWhenNoRules() {
     //faccio la creazione di due file vuoti poiché non posso usare numeri 
     //interi per lenght dato che il file è binario e non ritorna 
     //correttamente un valore pari a 0
-
-
 }
-
-    @Test
+     @Test
     public void testLoadRulesFromFileNotExists() {
         // Verifica che il caricamento da un file inesistente non aggiunga regole
         ruleManager.loadRules("non_esiste.dat");
-
         assertEquals(0, ruleManager.getRuleList().size());
     }
-
     @Test
     public void testLoadRulesFromEmptyFile() {
         // Creazione di un file vuoto
@@ -141,24 +132,20 @@ public void testSaveRulesWhenNoRules() {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         // Caricamento da un file vuoto
         ruleManager.loadRules(TEST_FILE);
-
         assertEquals(0, ruleManager.getRuleList().size());
     }
-
     @Test
     public void testLoadInvalidRules() {
         // Scrittura dati non validi nel file
         // Considera di scrivere dati non corrispondenti a oggetti Rule
-
         // Caricamento da un file con dati non validi
         ruleManager.loadRules(TEST_FILE);
-
         // Verifica che non siano state caricate regole non valide
         assertEquals(0, ruleManager.getRuleList().size());
     }
     
    
 }
+

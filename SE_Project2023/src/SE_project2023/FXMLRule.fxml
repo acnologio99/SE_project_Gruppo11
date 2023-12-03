@@ -28,6 +28,7 @@
             <Text fx:id="triggerTxt" layoutX="135.0" layoutY="155.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Trigger non inserito" />
 <Text layoutX="398.0" layoutY="238.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="74.0" />
             <RadioButton fx:id="sleepRadio" layoutX="14.0" layoutY="179.0" mnemonicParsing="false" onAction="#sleepPick" text="Sleep" />
+            <RadioButton fx:id="fireOnceRadio" layoutX="107.0" layoutY="179.0" mnemonicParsing="false" text="Fire Once" />
          </children>
       </AnchorPane>
    </children>
