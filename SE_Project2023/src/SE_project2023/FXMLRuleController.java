@@ -173,6 +173,7 @@ public class FXMLRuleController implements Initializable {
         // Chiudi la finestra corrente
         
         stage.close();
+        rootScene.setDisable(false);
     }
 
     @FXML
