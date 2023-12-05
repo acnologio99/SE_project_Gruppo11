@@ -126,7 +126,7 @@ public class FXMLDocumentController implements Initializable, Observer, Serializ
 
     private void serviceControl() {
         CheckService service = new CheckService(tableView);
-        service.setPeriod(Duration.seconds(2));
+        service.setPeriod(Duration.seconds(10));
         service.start();
         
     }
