@@ -12,6 +12,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -22,21 +23,22 @@ import java.util.Observer;
  *
  * @author emanu
  */
-public class RuleList extends Observable implements Observer, Serializable{
+public class RuleList extends Observable implements Observer, Serializable, Iterable{
 
     private static RuleList ruleList = null;
 
     private ArrayList<Rule> rules;
-    private List<Observer> obs;
+    
 
     private RuleList() {
         rules = new ArrayList<>();
-        obs = new ArrayList<>();
+        
     }
 
     public static RuleList getRuleList() {
         if (ruleList == null) {
             ruleList = new RuleList();
+            
         }
         return ruleList;
     }
@@ -51,6 +53,7 @@ public class RuleList extends Observable implements Observer, Serializable{
     
     public void add(Rule r) {
         rules.add(r);
+        r.addObserver(this);
         this.notifyObservers();
     }
 
@@ -63,28 +66,18 @@ public class RuleList extends Observable implements Observer, Serializable{
         this.notifyObservers();
 
     }
-
-     public void attach(Observer o){
-        obs.add(o);
+    public void addObserver(){
+        for(Rule r: rules)
+            r.addObserver(this);
     }
-
-   @Override
-    public void notifyObservers(){
-        for(Observer o : obs){
-            o.update(null, o);
-        }
-    }
-
-
-
 
 
      public void saveRules(String filename) {
         try (ObjectOutputStream objectOut = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(filename)))) {
-            for(Rule r: rules){
+
                 
-                objectOut.writeObject(r);
-            }
+                objectOut.writeObject(rules);
+            
         } catch (IOException e) {
             e.printStackTrace();
             // Gestione dell'eccezione durante il salvataggio delle regole
@@ -102,8 +95,8 @@ public class RuleList extends Observable implements Observer, Serializable{
         try (ObjectInputStream objectIn = new ObjectInputStream(new BufferedInputStream(new FileInputStream(file)))) {
             while (true) {
                 try {
-                    Rule r = (Rule) objectIn.readObject();
-                    rules.add(r);
+                    rules= (ArrayList<Rule>) objectIn.readObject();
+                    this.addObserver();
                 } catch (EOFException e) {
                     
                     break;
@@ -122,7 +115,13 @@ public class RuleList extends Observable implements Observer, Serializable{
 
     @Override
     public void update(Observable o, Object arg) {
+        setChanged();
         notifyObservers();
+    }
+
+    @Override
+    public Iterator iterator() {
+        return rules.iterator();
     }
 
    

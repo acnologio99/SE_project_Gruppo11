@@ -23,10 +23,10 @@ public class Rule extends Observable implements Serializable{
     private boolean fireOnce = false;
     private LocalDateTime wakeUp;
 
-    List<Observer> obs;
+   
 
     //Costruttori
-    public Rule()  {obs = new ArrayList<>();}
+    public Rule()  {}
 
     public Rule(String name, Action action, Trigger trigger) {
         this.name = name;
@@ -34,7 +34,7 @@ public class Rule extends Observable implements Serializable{
         this.trigger = trigger;
         this.status= true;
 
-        obs = new ArrayList<>();
+        
         
     }
     
@@ -97,10 +97,12 @@ public class Rule extends Observable implements Serializable{
 
     public void active() {
         this.status = true;
+        this.setChanged();
         this.notifyObservers();
     }
     public void deactive(){
         this.status=false;
+        this.setChanged();
         this.notifyObservers();
     }
 
@@ -135,19 +137,7 @@ public class Rule extends Observable implements Serializable{
     }
 
     /*this method attaches the observers to the rule*/
-    public void attach(Observer o){      
-        obs.add(o);
-    }
-    public void detach(){
-        obs.clear();
-    }
-
-    @Override
-    public void notifyObservers(){
-        for(Observer o : obs){
-            o.update(null,o);
-        }
-    }
+    
 
 
 

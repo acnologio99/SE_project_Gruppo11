@@ -8,7 +8,9 @@ import SE_project2023.Action.Action;
 import SE_project2023.Regole.Rule;
 import SE_project2023.Trigger.Trigger;
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.URL;
+import java.util.Observable;
 import java.util.Observer;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -46,7 +48,7 @@ import static jdk.nashorn.internal.objects.NativeRegExp.source;
  *
  * @author giova
  */
-public class FXMLDocumentController implements Initializable {
+public class FXMLDocumentController implements Initializable, Observer, Serializable {
 
     private Label label;
     @FXML
@@ -108,14 +110,13 @@ public class FXMLDocumentController implements Initializable {
         });
         sleepCln.setCellValueFactory(new PropertyValueFactory<>("Sleep"));
 
-        for (Rule r : rules.getArrayList()) {
-            r.attach(rules);
-        }//il controller diventa observer
+        
 
         //Thread check = new Thread(new CheckRuleThread());
         //check.setDaemon(true);
         //check.start();
-        //AutoLoadInBackGround();    
+        //AutoLoadInBackGround(); 
+        rules.addObserver(this);
         serviceControl();
 
     }
@@ -124,6 +125,7 @@ public class FXMLDocumentController implements Initializable {
         CheckService service = new CheckService(tableView);
         service.setPeriod(Duration.seconds(10));
         service.start();
+        
     }
 
     @FXML
@@ -165,10 +167,6 @@ public class FXMLDocumentController implements Initializable {
             rules.add(r);
             rootScene.setDisable(true);
             
-            
-
-            r.attach(rules);  //Attacco ad ogni regola creata ()->tableView.refresh()
-
             Stage stage = new Stage();
             stage.setTitle("RuleCreator");
             stage.setScene(new Scene(root));
@@ -197,7 +195,7 @@ public class FXMLDocumentController implements Initializable {
         Rule r = tableView.getSelectionModel().getSelectedItem();
         if (r != null) {
             r.active();
-            tableView.refresh();
+            //tableView.refresh();
         } else {
         }
 
@@ -208,7 +206,7 @@ public class FXMLDocumentController implements Initializable {
         Rule r = tableView.getSelectionModel().getSelectedItem();
         if (r != null) {
             r.deactive();
-            tableView.refresh();
+            //tableView.refresh();
         } else {
         }
     }
@@ -237,5 +235,10 @@ public class FXMLDocumentController implements Initializable {
         });
 
         saveThread.start();
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        tableView.refresh();
     }
 }

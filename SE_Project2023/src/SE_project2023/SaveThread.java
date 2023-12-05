@@ -14,7 +14,7 @@ import java.util.Observer;
 public class SaveThread implements Runnable, Observer {
 private RuleList rules;
     public SaveThread() {
-        rules.attach(this);
+        rules.addObserver(this);
         
     }
 
