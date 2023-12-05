@@ -4,6 +4,9 @@
  */
 package SE_project2023;
 
+import SE_project2023.Tool.FireMultipleVerified;
+import SE_project2023.Tool.FireOnceVerified;
+import SE_project2023.Tool.SleepVerified;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -163,12 +166,18 @@ public class FXMLRuleController implements Initializable {
 
         Node sourceNode = (Node) event.getSource();
         Stage stage = (Stage) sourceNode.getScene().getWindow();
-
+        
         r.getLast().setFlag(true);
-        if (fireOnceRadio.isSelected())
-            r.getLast().setFireOnce(true);
-        if (sleepRadio.isSelected()) {
+        if (fireOnceRadio.isSelected()){
+            FireOnceVerified f= new FireOnceVerified();
+            r.getLast().setVerifiedTool(f);
+        }else if (sleepRadio.isSelected()) {
+            SleepVerified s= new SleepVerified();
+            r.getLast().setVerifiedTool(s);
             r.getLast().setSleep(24 * 60 * (Long.parseLong(daysPicker.getText())) + (Long.parseLong(minutesPicker.getText())));
+        }else{
+            FireMultipleVerified m= new FireMultipleVerified();
+            r.getLast().setVerifiedTool(m);
         }
         // Chiudi la finestra corrente
         
