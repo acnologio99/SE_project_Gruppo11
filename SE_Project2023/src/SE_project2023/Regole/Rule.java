@@ -1,13 +1,12 @@
 package SE_project2023.Regole;
 
 import SE_project2023.Action.Action;
+import SE_project2023.Tool.FireMultipleVerified;
+import SE_project2023.Tool.VerifiedTool;
 import SE_project2023.Trigger.Trigger;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Observable;
-import java.util.Observer;
 
 /**
  *
@@ -20,10 +19,9 @@ public class Rule extends Observable implements Serializable{
     private boolean status = true;
     private boolean flag = false;
     private long sleep = 0;
-    private boolean fireOnce = false;
     private LocalDateTime wakeUp;
+    private VerifiedTool vT;
 
-   
 
     //Costruttori
     public Rule()  {}
@@ -34,13 +32,8 @@ public class Rule extends Observable implements Serializable{
         this.trigger = trigger;
         this.status= true;
 
-        
-        
-    }
-    
 
-    public void setSleep(Long sleep) {
-        this.sleep = sleep;
+
     }
 
     //Getter
@@ -62,7 +55,14 @@ public class Rule extends Observable implements Serializable{
     public boolean getStatus() {
         return this.status;
     }
-    
+    public LocalDateTime getWakeUp() {
+        return wakeUp;
+    }
+     public long getSleep() {
+        return sleep;
+    }
+
+
     //Setter
     public void setAction(Action action) {
         this.action = action;
@@ -85,21 +85,22 @@ public class Rule extends Observable implements Serializable{
     public void setFlag(boolean flag) {
         this.flag = flag;
     }
+    public void setVerifiedTool(VerifiedTool v){
+        this.vT= v;
+    }
+    public void setWakeUp(LocalDateTime wakeUp) {
+        this.wakeUp = wakeUp;
+    }
+    public void setSleep(Long sleep) {
+        this.sleep = sleep;
+        setWakeUp(LocalDateTime.now().plusMinutes(sleep));
+    }
+
 
     public boolean ruleIsValid() {
         return this.getTrigger() != null && this.getAction() != null && this.flag;
     }
-    public void setFireOnce(boolean f){
-        this.fireOnce=true;
-    }
 
-    public String getSleep() {
-        if(sleep == 0)
-        return "No";
-        else
-        return "Yes";
-    }
-    
 
     public void active() {
         this.status = true;
@@ -118,19 +119,16 @@ public class Rule extends Observable implements Serializable{
     }
 
     public boolean isVerifiedRule() {
-        if (!action.isFired()) {
+        if(!action.isFired())
             return trigger.isVerified() && status;
-        }
-        if (fireOnce == true) {
-            return trigger.isVerified() && status && !action.isFired();
-        } else if(sleep!=0){
-            return trigger.isVerified() && status && sleepCheck();
-        }else return trigger.isVerified() && status;
-        
+        else
+            return trigger.isVerified() && status && vT.Verified(this);
+
+
     }
 
     public void fire() {
-        
+
         action.fire();
         this.setChanged();
         this.notifyObservers();
@@ -146,7 +144,7 @@ public class Rule extends Observable implements Serializable{
     }
 
     /*this method attaches the observers to the rule*/
-    
+
 
 
 
