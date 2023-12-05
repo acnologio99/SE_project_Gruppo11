@@ -36,7 +36,8 @@ public class CheckService extends ScheduledService {
                             Platform.runLater(() -> {
                                 if (r.isVerifiedRule()) {
                                     r.fire();
-                                    tv.refresh();
+                                    r.deactive();
+                                   
                                     
                                     
                                 }

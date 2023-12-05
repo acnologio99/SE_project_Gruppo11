@@ -37,6 +37,7 @@ public class CheckRuleThread implements Runnable {
                     if (r.ruleIsValid() && r.isVerifiedRule()) {
                         r.fire();
                     }
+                    else ;
                 }
              }
             

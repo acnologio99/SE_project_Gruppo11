@@ -4,7 +4,6 @@
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Text?>
 
 <AnchorPane id="AnchorPane" fx:id="rootScene" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SE_project2023.FXMLRuleController">
@@ -19,7 +18,6 @@
       </AnchorPane>
       <Button fx:id="rulesBtn" layoutX="12.0" layoutY="82.0" mnemonicParsing="false" onAction="#addAction" text="Add Action" />
       <Button fx:id="triggerBtn" layoutX="12.0" layoutY="134.0" mnemonicParsing="false" onAction="#addTrigger" text="Add Trigger" />
-      <HBox prefHeight="100.0" prefWidth="200.0" />
       <Button fx:id="confirmBtn" layoutX="512.0" layoutY="355.0" mnemonicParsing="false" onAction="#confirmRule" text="Confirm" />
       <Button fx:id="cancelBtn" layoutX="14.0" layoutY="355.0" mnemonicParsing="false" onAction="#cancel" text="Cancel" />
       <TextField fx:id="ruleName" layoutX="14.0" layoutY="24.0" promptText="Set RuleName" />

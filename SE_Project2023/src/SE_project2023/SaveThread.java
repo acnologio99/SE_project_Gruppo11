@@ -12,16 +12,18 @@ import java.util.Observer;
  * @author chris
  */
 public class SaveThread implements Runnable, Observer {
-private RuleList rules;
+
+    private RuleList rules;
+
     public SaveThread() {
+        rules = RuleList.getRuleList();
         rules.addObserver(this);
-        
+
     }
 
-    
-    
     @Override
     public void run() {
+        System.out.println("Salvo");
         RuleList.getRuleList().saveRules("rules.bin");
     }
 
@@ -29,5 +31,5 @@ private RuleList rules;
     public void update(Observable o, Object arg) {
         this.run(); //Save every time the ruleList gets an update.
     }
-    
+
 }

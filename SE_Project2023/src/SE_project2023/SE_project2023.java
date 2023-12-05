@@ -20,11 +20,20 @@ public class SE_project2023 extends Application {
     public void start(Stage stage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
         
+        Thread check = new Thread(new CheckRuleThread());
+        check.setDaemon(true);
+        check.start();
+        
+        Thread save = new Thread(new SaveThread());
+        
+        
         Scene scene = new Scene(root);
         
         stage.setScene(scene);
         stage.setTitle("Rules");
         stage.show();
+        
+        
     }
 
     /**
@@ -32,6 +41,7 @@ public class SE_project2023 extends Application {
      */
     public static void main(String[] args) {
         launch(args);
+       
     }
     
 }

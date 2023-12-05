@@ -66,14 +66,20 @@ public class Rule extends Observable implements Serializable{
     //Setter
     public void setAction(Action action) {
         this.action = action;
+        this.setChanged();
+        this.notifyObservers();
     }
 
     public void setTrigger(Trigger trigger) {
         this.trigger = trigger;
+        this.setChanged();
+        this.notifyObservers();
     }
 
     public void setName(String Name) {
         this.name = Name;
+        this.setChanged();
+        this.notifyObservers();
     }
 
     public void setFlag(boolean flag) {
@@ -124,7 +130,10 @@ public class Rule extends Observable implements Serializable{
     }
 
     public void fire() {
+        
         action.fire();
+        this.setChanged();
+        this.notifyObservers();
         if (!(sleep == 0)) {
             wakeUp = LocalDateTime.now().plusSeconds(sleep);
             System.out.print(wakeUp);

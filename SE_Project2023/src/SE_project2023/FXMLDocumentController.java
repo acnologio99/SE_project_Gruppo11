@@ -77,24 +77,13 @@ public class FXMLDocumentController implements Initializable, Observer, Serializ
     //lista che mostra le azioni scelte
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        //customTable = new CustomTableView();
 
-        /*Thread load = new Thread(new LoadThread());
-        load.setDaemon(true);
-        load.start();
-        try {
-            load.join();
-        } catch (InterruptedException ex) {
-            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-        }*/
         LoadService load = new LoadService();
-
         load.start();
         //inizializzazione Liste
         load.setOnSucceeded(e -> {
             ruleList = FXCollections.observableArrayList(rules.getArrayList());
             tableView.setItems(ruleList);
-
         });
 
         //setting selezione multipla
@@ -110,14 +99,9 @@ public class FXMLDocumentController implements Initializable, Observer, Serializ
         });
         sleepCln.setCellValueFactory(new PropertyValueFactory<>("Sleep"));
 
-        
-
-        //Thread check = new Thread(new CheckRuleThread());
-        //check.setDaemon(true);
-        //check.start();
-        //AutoLoadInBackGround(); 
+     
         rules.addObserver(this);
-        serviceControl();
+        
 
     }
 
@@ -125,7 +109,7 @@ public class FXMLDocumentController implements Initializable, Observer, Serializ
         CheckService service = new CheckService(tableView);
         service.setPeriod(Duration.seconds(10));
         service.start();
-        
+
     }
 
     @FXML
@@ -142,11 +126,11 @@ public class FXMLDocumentController implements Initializable, Observer, Serializ
             ButtonType b = response.get();
             if (b == ButtonType.OK) {
                 rules.getArrayList().removeAll(tableView.getSelectionModel().getSelectedItems());
-                //AutoSaveInBackGround();
+                ruleList.removeAll(tableView.getSelectionModel().getSelectedItems());
+
             }
         }
 
-        AutoSaveInBackGround();
     }
 
     private void alertShow(String title, String header, String content, Alert.AlertType type) {
@@ -166,22 +150,19 @@ public class FXMLDocumentController implements Initializable, Observer, Serializ
             Rule r = new Rule();
             rules.add(r);
             rootScene.setDisable(true);
-            
+
             Stage stage = new Stage();
             stage.setTitle("RuleCreator");
             stage.setScene(new Scene(root));
             stage.showAndWait();
-
             rootScene.setDisable(false);
-            if (rules.getLast().ruleIsValid()) {
-                AutoSaveInBackGround();
 
+            if (rules.getLast().ruleIsValid()) {
                 alertShow("Inserimento", "", "Regola correttamente inserita", Alert.AlertType.INFORMATION);
+                ruleList.add(r);
             } else {
                 alertShow("Errore!", "", "Regola non inserita", Alert.AlertType.ERROR);
-
                 rules.removeLast();
-
             }
 
         } catch (IOException e) {
@@ -195,7 +176,6 @@ public class FXMLDocumentController implements Initializable, Observer, Serializ
         Rule r = tableView.getSelectionModel().getSelectedItem();
         if (r != null) {
             r.active();
-            //tableView.refresh();
         } else {
         }
 
@@ -206,32 +186,14 @@ public class FXMLDocumentController implements Initializable, Observer, Serializ
         Rule r = tableView.getSelectionModel().getSelectedItem();
         if (r != null) {
             r.deactive();
-            //tableView.refresh();
         } else {
         }
     }
 
-    /*private void AutoLoadInBackGround( ) {
-    
-    Thread loadThread = new Thread(() -> {
-        RuleList.getRuleList().loadRules("rules.bin");
-        ObservableList<Rule> loadedRules = FXCollections.observableArrayList(RuleList.getRuleList().getArrayList());
-        //Platform.runLater(() -> {
-            tableView.getItems().clear(); // Cancella gli elementi attuali dalla tableView
-            tableView.getItems().addAll(loadedRules); // Aggiunge i nuovi elementi dalla lista caricata
-       // });
-    });
-
-    loadThread.start();
-}*/
     private void AutoSaveInBackGround() {
         Thread saveThread = new Thread(() -> {
             RuleList.getRuleList().saveRules("rules.bin");
             ObservableList<Rule> savedRules = FXCollections.observableArrayList(RuleList.getRuleList().getArrayList());
-
-            tableView.getItems().clear(); // Cancella gli elementi attuali dalla tableView
-            tableView.getItems().addAll(savedRules); // Aggiunge i nuovi elementi dalla lista caricata
-
         });
 
         saveThread.start();

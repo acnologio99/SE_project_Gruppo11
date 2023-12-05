@@ -9,6 +9,8 @@ import java.io.File;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -32,7 +34,7 @@ import javafx.stage.Stage;
  *
  * @author giova
  */
-public class FXMLActionController implements Initializable {
+public class FXMLActionController implements Initializable{
 
     @FXML
     private TextArea TextMessage;
@@ -103,34 +105,20 @@ public class FXMLActionController implements Initializable {
             }
         });
         
-//        fileChoices.getToggles().addListener((Observable l)->{
-//            if()
-//        });
+
 
         menuExec = new MenuExecutor(); //vedere se togliere e fare una classe interna****
+       
 
     }
 
     private void handleSelection(String selectedAction) {
         menuExec.execute(new SwitchCommand(anchorPanes, selectedAction)); //vedere se posso fare classe innestata
-        // for (AnchorPane pane : anchorPanes.values()) {
-        //     pane.setVisible(false);
-        // }
-        // if (anchorPanes.containsKey(selectedAction)) {
-        //     anchorPanes.get(selectedAction).setVisible(true);
-        // }
     }
 
     @FXML
     private void doneAction(ActionEvent event) {
-//        if (flagAction == 1 && !"".equals(TextMessage.getText())) {
-//            String mess = TextMessage.getText();
-//            Action a = new MessageBoxAction(mess);
-//            r.setAction(a);
-//        } else if (flagAction == 2 && !"".equals(audioText.getText())) {
-//            Action a = new AudioAction(audioText.getText());
-//            r.setAction(a);
-//        }
+
         if (anchorPanes.get("TextBox Action").isVisible() && !"".equals(TextMessage.getText())) {
             String mess = TextMessage.getText();
             Action a = new MessageBoxAction(mess);
@@ -197,5 +185,7 @@ public class FXMLActionController implements Initializable {
             destFile.setDisable(false);
         }
     }
+
+   
 
 }
