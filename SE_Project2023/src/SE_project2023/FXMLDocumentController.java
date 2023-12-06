@@ -97,10 +97,7 @@ public class FXMLDocumentController implements Initializable, Observer, Serializ
             boolean status = cellData.getValue().getStatus(); // Assume che "isStatus()" sia il metodo che restituisce il booleano dalla classe Rule
             return new SimpleStringProperty(status ? "On" : "Off");
         });
-        sleepCln.setCellValueFactory(cellData -> {
-            long sleep = cellData.getValue().getSleep(); // Assume che "isStatus()" sia il metodo che restituisce il booleano dalla classe Rule
-            return new SimpleStringProperty(sleep>0 ? "On" : "Off");
-        });
+        sleepCln.setCellValueFactory(new PropertyValueFactory<>("Sleep"));
 
      
         rules.addObserver(this);
@@ -128,9 +125,10 @@ public class FXMLDocumentController implements Initializable, Observer, Serializ
         if (response.isPresent()) {
             ButtonType b = response.get();
             if (b == ButtonType.OK) {
-                rules.getArrayList().removeAll(tableView.getSelectionModel().getSelectedItems());
+                rules.removeAll(tableView.getSelectionModel().getSelectedItems());
                 ruleList.removeAll(tableView.getSelectionModel().getSelectedItems());
-
+                System.out.println(rules.getArrayList());
+                
             }
         }
 

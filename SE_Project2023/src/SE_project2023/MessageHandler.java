@@ -4,43 +4,48 @@
  */
 package SE_project2023;
 
+import SE_project2023.Action.Action;
+import SE_project2023.Action.FileAction;
 import SE_project2023.Action.MessageBoxAction;
 import SE_project2023.Regole.Rule;
 import java.util.Observable;
 import java.util.Observer;
+import javafx.application.Platform;
 import javafx.scene.control.Alert;
 
 /**
  *
  * @author chris
  */
-public class MessageHandler extends ActionHandler implements Observer {
+public class MessageHandler extends ActionHandler  {
     
     public MessageHandler(ActionHandler handler) {
         super(handler);
-        RuleList.getRuleList().addObserver(this);
-    }
-
-    @Override
-    public void handleRequest(Rule r) {
-        System.out.println("dentro");
-        if(r.getAction().getClass().isInstance(new MessageBoxAction(""))){
-            
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Information Dialog");
-        alert.setHeaderText(null);
-        alert.setContentText("ciao");
-        alert.showAndWait();
-        }else{
-            next.handleRequest(r);
-        }
+        
         
     }
 
     @Override
-    public void update(Observable o, Object arg) {
-        handleRequest((Rule) o);
+    public void handleRequest(Rule r) {
+        
+        if(!(r.getAction() instanceof MessageBoxAction) && next!=null){
+            
+            System.out.println("dentro");
+            next.handleRequest(r);
+       
+        }else{
+        MessageBoxAction act = (MessageBoxAction) r.getAction();
+        Platform.runLater(() -> {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Information Dialog");
+        alert.setHeaderText(null);
+        alert.setContentText(act.getMsg());
+        alert.showAndWait();
+        });}
+        
     }
+
+   
     
     
     

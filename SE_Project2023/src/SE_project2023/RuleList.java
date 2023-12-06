@@ -12,6 +12,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Observable;
@@ -46,6 +47,14 @@ public class RuleList extends Observable implements Observer, Serializable, Iter
 
     public int size() {
         return rules.size();
+        
+    }
+    
+    public boolean removeAll(Collection c){
+        Boolean a = rules.removeAll(c);
+        this.setChanged();
+        this.notifyObservers();
+        return a;
     }
 
     public void add(Rule r) {
@@ -58,6 +67,8 @@ public class RuleList extends Observable implements Observer, Serializable, Iter
     public Rule getLast() {
         return rules.get(rules.size() - 1);
     }
+    
+    
 
     public void removeLast() {
         rules.remove(rules.size() - 1);
@@ -95,7 +106,6 @@ public class RuleList extends Observable implements Observer, Serializable, Iter
                 while (true) {
                     try {
                         rules = (ArrayList<Rule>) objectIn.readObject();
-                        this.addObserver();
                     } catch (EOFException e) {
 
                         break;

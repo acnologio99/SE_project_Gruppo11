@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import javafx.scene.control.Alert;
+
 
 /**
  *
@@ -31,7 +31,7 @@ public class FileAction implements Action {
     }
 
     public FileAction(String sourcePath, String destinationPath, String action) {
-        if (destinationPath.isEmpty()) {
+        if (!"".equals(destinationPath)) {
             this.destinationPath = destinationPath + "\\";
             this.sourcePath = sourcePath;
             this.action = action;
@@ -73,11 +73,8 @@ public class FileAction implements Action {
     @Override
     public void fire() {
         File file = new File(this.sourcePath);
-        Alert alert;
         String mess = " choosen file...";
-        alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Operating on file");
-        alert.setHeaderText(null);
+       
 
         if (this.destinationPath.lastIndexOf("\\") == (this.destinationPath.length() - 1)) {
             this.destinationPath += "\\" + file.getName();
@@ -85,22 +82,21 @@ public class FileAction implements Action {
         switch (action) {
             case "copy":
                 copyF();
-                alert.setContentText("Copying" + mess);
+                System.out.println("copying..");
                 break;
             case "move":
                 copyF();
+                System.out.println("moving..");
                 removeF(file);
-                alert.setContentText("Moving" + mess);
                 break;
             case "remove":
                 removeF(file);
-                alert.setContentText("Removing" + mess);
+                System.out.println("removing..");
                 break;
             default:
                 break;
         }
         this.isFired = true;
-        alert.showAndWait();
     }
 
     private void copyF() {

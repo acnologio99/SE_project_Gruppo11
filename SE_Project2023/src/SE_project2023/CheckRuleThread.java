@@ -4,7 +4,9 @@
  */
 package SE_project2023;
 
+import SE_project2023.Action.Action;
 import SE_project2023.Regole.Rule;
+import java.util.Observable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -15,9 +17,12 @@ import java.util.logging.Logger;
 public class CheckRuleThread implements Runnable {
 
     private RuleList rules;
+    ActionHandler handler;
 
     public CheckRuleThread() {
       rules = RuleList.getRuleList();
+     ActionHandler msg = new MessageHandler(null);
+     handler = new FileHandler(msg);
     }
 
     @Override
@@ -36,6 +41,7 @@ public class CheckRuleThread implements Runnable {
                 for (Rule r : rules.getArrayList()) {
                     if (r.ruleIsValid() && r.isVerifiedRule()) {
                         r.fire();
+                        handler.handleRequest(r);
                     }
                     else ;
                 }

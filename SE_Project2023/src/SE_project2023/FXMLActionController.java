@@ -94,8 +94,8 @@ public class FXMLActionController implements Initializable{
 
         actionListView.getItems().addAll(
                 "TextBox Action",
-                "Audio Action",
-                "File Action"
+                "Audio Action"
+                //"File Action"
         );
 
         // Aggiungi un listener per gestire la selezione della ListView

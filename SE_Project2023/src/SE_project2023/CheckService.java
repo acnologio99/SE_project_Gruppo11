@@ -15,18 +15,17 @@ import javafx.util.Duration;
  *
  * @author giova
  */
-public class CheckService extends ScheduledService {
+public class CheckService extends ScheduledService{
     private RuleList r= RuleList.getRuleList();
-    private TableView tv;
-
+    
     public CheckService(TableView tv) {
-        this.tv=tv;
+     
     }
     
         @Override
         protected Task<Void> createTask() {
             return new Task<Void>() {
-                @Override
+                @Override 
                 protected Void call() {
                     // Codice per controllare la lista
                     System.out.println("Controllo lista...");
