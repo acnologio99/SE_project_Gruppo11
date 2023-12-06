@@ -5,8 +5,6 @@
 package SE_project2023.Action;
 
 import java.io.Serializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 
 /**
  *

@@ -9,8 +9,6 @@ import java.io.File;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -34,9 +32,8 @@ import javafx.stage.Stage;
  *
  * @author giova
  */
-public class FXMLActionController implements Initializable{
+public class FXMLActionController implements Initializable {
 
-    @FXML
     private TextArea TextMessage;
 
     ObservableList<Action> actionList;
@@ -77,6 +74,8 @@ public class FXMLActionController implements Initializable{
     private ToggleButton removeToggle;
     @FXML
     private ToggleButton copyToggle;
+    @FXML
+    private TextArea textMessage;
 
     /**
      * Initializes the controller class.
@@ -94,8 +93,8 @@ public class FXMLActionController implements Initializable{
 
         actionListView.getItems().addAll(
                 "TextBox Action",
-                "Audio Action"
-                //"File Action"
+                "Audio Action",
+                "File Action"
         );
 
         // Aggiungi un listener per gestire la selezione della ListView
@@ -104,23 +103,20 @@ public class FXMLActionController implements Initializable{
                 handleSelection(newValue); // Gestisci la selezione dell'opzione
             }
         });
-        
 
-
-        menuExec = new MenuExecutor(); //vedere se togliere e fare una classe interna****
-       
+        menuExec = new MenuExecutor(); 
 
     }
 
     private void handleSelection(String selectedAction) {
-        menuExec.execute(new SwitchCommand(anchorPanes, selectedAction)); //vedere se posso fare classe innestata
+        menuExec.execute(new SwitchCommand(anchorPanes, selectedAction)); 
     }
 
     @FXML
     private void doneAction(ActionEvent event) {
 
-        if (anchorPanes.get("TextBox Action").isVisible() && !"".equals(TextMessage.getText())) {
-            String mess = TextMessage.getText();
+        if (anchorPanes.get("TextBox Action").isVisible() && !"".equals(textMessage.getText())) {
+            String mess = textMessage.getText();
             Action a = new MessageBoxAction(mess);
             r.getLast().setAction(a);
         } else if (anchorPanes.get("Audio Action").isVisible() && !"".equals(audioText.getText())) {
@@ -128,9 +124,9 @@ public class FXMLActionController implements Initializable{
             r.getLast().setAction(a);
         } else if (anchorPanes.get("File Action").isVisible()
                 && !"".equals(sourcePath.getText())) {
-            String action = ((ToggleButton)fileChoices.getSelectedToggle()).getId().split("Toggle")[0];
+            String action = ((ToggleButton) fileChoices.getSelectedToggle()).getId().split("Toggle")[0];
             Action a = new FileAction(sourcePath.getText(), destPath.getText(), action);
-            
+
             r.getLast().setAction(a);
         }
         cancelAction(event);
@@ -185,7 +181,5 @@ public class FXMLActionController implements Initializable{
             destFile.setDisable(false);
         }
     }
-
-   
 
 }

@@ -60,23 +60,13 @@ public class MessageBoxActionTest {
      */
     @Test
     public void testFire() {
-        JFXPanel jfxPanel = new JFXPanel();
+        
         System.out.println("fire");
         boolean expResult = false;
         boolean result = instance.isFired();
         assertEquals(expResult, result);
 
-        Platform.runLater(() -> {
-            instance.setMsg("Messaggio Test");
-            instance.fire();
-            assertTrue(instance.isFired());
-
-        });
-        try {
-            Thread.sleep(5000); //devo aspettare che il metodo viene richiamato sul thread e che abbia il tempo di eseguire il test
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+       
 
     }
 

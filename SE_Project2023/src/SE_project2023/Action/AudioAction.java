@@ -1,10 +1,6 @@
 package SE_project2023.Action;
 
-import java.io.File;
 import java.io.Serializable;
-import javafx.scene.control.Alert;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 
 /**
  *

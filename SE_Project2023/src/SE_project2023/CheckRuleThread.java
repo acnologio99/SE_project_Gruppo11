@@ -4,9 +4,7 @@
  */
 package SE_project2023;
 
-import SE_project2023.Action.Action;
 import SE_project2023.Regole.Rule;
-import java.util.Observable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -21,8 +19,7 @@ public class CheckRuleThread implements Runnable {
 
     public CheckRuleThread() {
       rules = RuleList.getRuleList();
-     ActionHandler msg = new MessageHandler(null);
-     handler = new FileHandler(msg);
+     handler = ActionHandlerFactory.createActionHandler();
     }
 
     @Override
@@ -38,10 +35,10 @@ public class CheckRuleThread implements Runnable {
                 // Codice per controllare la lista
                 System.out.println("Controllo lista...");
                 if(!rules.getArrayList().isEmpty()){
-                for (Rule r : rules.getArrayList()) {
+                for (Rule r : rules) {
                     if (r.ruleIsValid() && r.isVerifiedRule()) {
                         r.fire();
-                        handler.handleRequest(r);
+                        handler.fireAction(r);
                     }
                     else ;
                 }

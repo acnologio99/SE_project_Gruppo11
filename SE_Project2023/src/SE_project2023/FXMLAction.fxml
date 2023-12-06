@@ -15,7 +15,7 @@
       <Button fx:id="Cancel" layoutX="521.0" layoutY="350.0" mnemonicParsing="false" onAction="#cancelAction" text="Cancel" />
       <AnchorPane fx:id="textPane" layoutX="321.0" layoutY="50.0" prefHeight="200.0" prefWidth="200.0" visible="false">
          <children>
-            <TextArea fx:id="TextMessage" layoutY="22.0" prefHeight="157.0" prefWidth="200.0" />
+            <TextArea fx:id="textMessage" layoutY="22.0" prefHeight="157.0" prefWidth="200.0" />
          </children>
       </AnchorPane>
       <AnchorPane fx:id="audioPane" layoutX="252.0" layoutY="100.0" prefHeight="200.0" prefWidth="321.0" visible="false">

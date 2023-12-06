@@ -123,39 +123,27 @@ public class FileActionTest {
     /**
      * Test of add method, of class FileAction.
      */
-    @Test
+    @Test(expected = UnsupportedOperationException.class)
     public void testAdd() {
-//        System.out.println("add");
-//        FileAction instance = new FileAction();
-//        instance.add();
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
+        a.add();
     }
 
     /**
      * Test of remove method, of class FileAction.
      */
-    @Test
+    @Test(expected = UnsupportedOperationException.class)
     public void testRemove() {
-//        System.out.println("remove");
-//        FileAction instance = new FileAction();
-//        instance.remove();
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
+        a.remove();
     }
 
     /**
      * Test of getChild method, of class FileAction.
      */
-    @Test
+    @Test(expected = UnsupportedOperationException.class)
     public void testGetChild() {
-//        System.out.println("getChild");
-//        FileAction instance = new FileAction();
-//        Action expResult = null;
-//        Action result = instance.getChild();
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
+
+        a.getChild();
+
     }
 
     /**

@@ -24,11 +24,11 @@ public class FileHandler extends ActionHandler {
     }
 
     @Override
-    public void handleRequest(Rule r) {
+    public void fireAction(Rule r) {
         System.out.println("dentro");
         if (!(r.getAction() instanceof AudioAction) && next != null) {
 
-            next.handleRequest(r);
+            next.fireAction(r);
         } else {
             Platform.runLater(() -> {
             AudioAction act = (AudioAction) r.getAction();

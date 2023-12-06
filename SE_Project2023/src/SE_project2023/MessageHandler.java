@@ -19,20 +19,17 @@ import javafx.scene.control.Alert;
  */
 public class MessageHandler extends ActionHandler  {
     
-    public MessageHandler(ActionHandler handler) {
-        super(handler);
+    public MessageHandler(ActionHandler next) {
+        super(next);
         
         
     }
 
     @Override
-    public void handleRequest(Rule r) {
+    public void fireAction(Rule r) {
         
         if(!(r.getAction() instanceof MessageBoxAction) && next!=null){
-            
-            System.out.println("dentro");
-            next.handleRequest(r);
-       
+            next.fireAction(r);
         }else{
         MessageBoxAction act = (MessageBoxAction) r.getAction();
         Platform.runLater(() -> {

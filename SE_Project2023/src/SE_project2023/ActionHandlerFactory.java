@@ -4,22 +4,15 @@
  */
 package SE_project2023;
 
-import SE_project2023.Regole.Rule;
-
 /**
  *
  * @author chris
  */
-public abstract class ActionHandler {
-    ActionHandler next;
-
-    public ActionHandler(ActionHandler next) {
-        this.next = next;
+public class ActionHandlerFactory {
+    
+    
+    public static ActionHandler createActionHandler(){
+     ActionHandler msg = new MessageHandler(null);
+     return new FileHandler(msg);
     }
-    
-    
-    
-   public abstract void fireAction(Rule r);
-        
-    
 }

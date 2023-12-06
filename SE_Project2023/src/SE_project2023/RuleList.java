@@ -22,14 +22,14 @@ import java.util.Observer;
  *
  * @author emanu
  */
-public class RuleList extends Observable implements Observer, Serializable, Iterable {
+public class RuleList extends Observable implements Observer, Serializable, Iterable<Rule> {
 
     private static RuleList ruleList = null;
 
-    private ArrayList<Rule> rules;
+    private List<Rule> rules;
 
     private RuleList() {
-        rules = new ArrayList<>();
+        rules = new ArrayList<Rule>();
 
     }
 
@@ -47,10 +47,10 @@ public class RuleList extends Observable implements Observer, Serializable, Iter
 
     public int size() {
         return rules.size();
-        
+
     }
-    
-    public boolean removeAll(Collection c){
+
+    public boolean removeAll(Collection c) {
         Boolean a = rules.removeAll(c);
         this.setChanged();
         this.notifyObservers();
@@ -67,20 +67,25 @@ public class RuleList extends Observable implements Observer, Serializable, Iter
     public Rule getLast() {
         return rules.get(rules.size() - 1);
     }
-    
-    
 
     public void removeLast() {
         rules.remove(rules.size() - 1);
-        this.setChanged();
-        this.notifyObservers();
+        
 
     }
-
-    public void addObserver() {
-        for (Rule r : rules) {
-            r.addObserver(this);
-        }
+    
+    public Rule get(int index){
+        Rule r = rules.get(index);
+        this.setChanged();
+        this.notifyObservers();
+        return r;
+    }
+    
+    public boolean remove(Rule r){
+        boolean rmv = rules.remove(r);
+        this.setChanged();
+        this.notifyObservers();
+        return rmv;
     }
 
     public void saveRules(String filename) {
@@ -90,7 +95,6 @@ public class RuleList extends Observable implements Observer, Serializable, Iter
 
         } catch (IOException e) {
             e.printStackTrace();
-            // Gestione dell'eccezione durante il salvataggio delle regole
         }
     }
 
@@ -105,7 +109,7 @@ public class RuleList extends Observable implements Observer, Serializable, Iter
             try (ObjectInputStream objectIn = new ObjectInputStream(new BufferedInputStream(new FileInputStream(file)))) {
                 while (true) {
                     try {
-                        rules = (ArrayList<Rule>) objectIn.readObject();
+                        rules = (List<Rule>) objectIn.readObject();
                     } catch (EOFException e) {
 
                         break;
@@ -128,7 +132,7 @@ public class RuleList extends Observable implements Observer, Serializable, Iter
     }
 
     @Override
-    public Iterator iterator() {
+    public Iterator<Rule> iterator() {
         return rules.iterator();
     }
 

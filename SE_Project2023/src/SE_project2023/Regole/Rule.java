@@ -13,31 +13,28 @@ import java.util.Observer;
  *
  * @author emanu
  */
-public class Rule extends Observable implements Serializable{
+public class Rule extends Observable implements Serializable {
+
     private String name;
     private Action action;
     private Trigger trigger;
     private boolean status = true;
-    private boolean flag = false;
+    private boolean flag = false; //CREARE O NO LA REGOLA
     private long sleep = 0;
     private boolean fireOnce = false;
     private LocalDateTime wakeUp;
 
-   
-
     //Costruttori
-    public Rule()  {}
+    public Rule() {
+    }
 
     public Rule(String name, Action action, Trigger trigger) {
         this.name = name;
         this.action = action;
         this.trigger = trigger;
-        this.status= true;
+        this.status = true;
 
-        
-        
     }
-    
 
     public void setSleep(Long sleep) {
         this.sleep = sleep;
@@ -59,10 +56,11 @@ public class Rule extends Observable implements Serializable{
     public boolean getFlag() {
         return flag;
     }
+
     public boolean getStatus() {
         return this.status;
     }
-    
+
     //Setter
     public void setAction(Action action) {
         this.action = action;
@@ -89,25 +87,27 @@ public class Rule extends Observable implements Serializable{
     public boolean ruleIsValid() {
         return this.getTrigger() != null && this.getAction() != null && this.flag;
     }
-    public void setFireOnce(boolean f){
-        this.fireOnce=true;
+
+    public void setFireOnce(boolean f) {
+        this.fireOnce = true;
     }
 
     public String getSleep() {
-        if(sleep == 0)
-        return "No";
-        else
-        return "Yes";
+        if (sleep == 0) {
+            return "No";
+        } else {
+            return "Yes";
+        }
     }
-    
 
     public void active() {
         this.status = true;
         this.setChanged();
         this.notifyObservers();
     }
-    public void deactive(){
-        this.status=false;
+
+    public void deactive() {
+        this.status = false;
         this.setChanged();
         this.notifyObservers();
     }
@@ -123,14 +123,16 @@ public class Rule extends Observable implements Serializable{
         }
         if (fireOnce == true) {
             return trigger.isVerified() && status && !action.isFired();
-        } else if(sleep!=0){
+        } else if (sleep != 0) {
             return trigger.isVerified() && status && sleepCheck();
-        }else return trigger.isVerified() && status;
-        
+        } else {
+            return trigger.isVerified() && status;
+        }
+
     }
 
     public void fire() {
-        
+
         action.fire();
         this.setChanged();
         this.notifyObservers();
@@ -146,8 +148,4 @@ public class Rule extends Observable implements Serializable{
     }
 
     /*this method attaches the observers to the rule*/
-    
-
-
-
 }
