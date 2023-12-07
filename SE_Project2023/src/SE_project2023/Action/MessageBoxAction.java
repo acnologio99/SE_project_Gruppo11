@@ -65,7 +65,7 @@ public class MessageBoxAction implements Action , Serializable{
 
     @Override
     public String toString() {
-        return "ActionMessageBox: " + msg;
+        return "messaggio: " + msg;
     }
 
 }

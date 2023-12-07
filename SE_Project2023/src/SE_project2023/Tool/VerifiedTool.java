@@ -12,7 +12,7 @@ import java.io.Serializable;
  * @author giova
  */
 public abstract class VerifiedTool implements Serializable{
-       public boolean Verified(Rule r){
+       public boolean verified(Rule r){
             return true;
        }
 }

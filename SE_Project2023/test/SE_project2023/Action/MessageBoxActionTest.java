@@ -65,9 +65,6 @@ public class MessageBoxActionTest {
         boolean expResult = false;
         boolean result = instance.isFired();
         assertEquals(expResult, result);
-
-       
-
     }
 
     /**

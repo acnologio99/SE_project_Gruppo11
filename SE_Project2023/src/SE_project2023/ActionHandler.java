@@ -19,7 +19,6 @@ public abstract class ActionHandler {
     
     
     
-   public abstract void fireAction(Rule r);
-        
+public abstract void fireAction(Rule r);        
     
 }

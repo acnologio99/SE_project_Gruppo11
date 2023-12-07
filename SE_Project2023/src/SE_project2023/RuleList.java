@@ -47,9 +47,9 @@ public class RuleList extends Observable implements Observer, Serializable, Iter
 
     public int size() {
         return rules.size();
-
+        
     }
-
+    
     public boolean removeAll(Collection c) {
         Boolean a = rules.removeAll(c);
         this.setChanged();
@@ -70,24 +70,26 @@ public class RuleList extends Observable implements Observer, Serializable, Iter
 
     public void removeLast() {
         rules.remove(rules.size() - 1);
+        this.setChanged();
+        this.notifyObservers();
         
-
     }
     
     public Rule get(int index){
         Rule r = rules.get(index);
         this.setChanged();
         this.notifyObservers();
+        
         return r;
     }
-    
+
     public boolean remove(Rule r){
         boolean rmv = rules.remove(r);
         this.setChanged();
         this.notifyObservers();
         return rmv;
     }
-
+    
     public void saveRules(String filename) {
         try (ObjectOutputStream objectOut = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(filename)))) {
 
@@ -95,6 +97,7 @@ public class RuleList extends Observable implements Observer, Serializable, Iter
 
         } catch (IOException e) {
             e.printStackTrace();
+            // Gestione dell'eccezione durante il salvataggio delle regole
         }
     }
 
@@ -109,7 +112,7 @@ public class RuleList extends Observable implements Observer, Serializable, Iter
             try (ObjectInputStream objectIn = new ObjectInputStream(new BufferedInputStream(new FileInputStream(file)))) {
                 while (true) {
                     try {
-                        rules = (List<Rule>) objectIn.readObject();
+                         rules = (List<Rule>) objectIn.readObject();
                     } catch (EOFException e) {
 
                         break;
@@ -132,8 +135,9 @@ public class RuleList extends Observable implements Observer, Serializable, Iter
     }
 
     @Override
-    public Iterator<Rule> iterator() {
+     public Iterator<Rule> iterator() {
         return rules.iterator();
     }
+
 
 }

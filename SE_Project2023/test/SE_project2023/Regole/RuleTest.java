@@ -20,15 +20,26 @@ import static org.junit.Assert.*;
  * @author emanu
  */
 public class RuleTest {
-
+    
     Rule r;
-
-    public RuleTest() {
+    
+    public RuleTest() {}
+    
+    @BeforeClass
+    public static void setUpClass() {
     }
-
+    
+    @AfterClass
+    public static void tearDownClass() {
+    }
+    
     @Before
     public void setUp() {
         r = new Rule();
+    }
+    
+    @After
+    public void tearDown() {
     }
 
     /**
@@ -89,7 +100,7 @@ public class RuleTest {
         testSetGetTrigger();
         boolean result = r.isVerifiedRule();
         assertEquals(expResult, result);
-
+        
         //Valid Rule
         System.out.println("isVerifiedRule");
         expResult = false;
@@ -282,57 +293,15 @@ public class RuleTest {
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
-
-    /**
-     * Test of sleepCheck method, of class Rule.
-     */
-    @Test
-    public void testSleepCheck() {
-        System.out.println("sleepCheck");
-        Rule instance = new Rule();
-        Boolean expResult = null;
-        Boolean result = instance.sleepCheck();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of attach method, of class Rule.
-     */
-    @Test
-    public void testAttach() {
-        System.out.println("attach");
-
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of setFireOnce method, of class Rule.
-     */
-    @Test
-    public void testSetFireOnce() {
-        System.out.println("setFireOnce");
-        boolean f = false;
-        Rule instance = new Rule();
-        instance.setFireOnce(f);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of getSleep method, of class Rule.
-     */
     @Test
     public void testGetSleep() {
         System.out.println("getSleep");
         Rule instance = new Rule();
-        String expResult = "";
-        String result = instance.getSleep();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        long expResult = 0;
+        long result = instance.getSleep();
+        assertTrue(expResult == result);
+        
     }
 
+    
 }

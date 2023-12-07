@@ -1,28 +1,26 @@
 package SE_project2023.Regole;
 
 import SE_project2023.Action.Action;
+import SE_project2023.Tool.VerifiedTool;
 import SE_project2023.Trigger.Trigger;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Observable;
-import java.util.Observer;
 
 /**
  *
  * @author emanu
  */
 public class Rule extends Observable implements Serializable {
-
     private String name;
     private Action action;
     private Trigger trigger;
     private boolean status = true;
     private boolean flag = false; //CREARE O NO LA REGOLA
     private long sleep = 0;
-    private boolean fireOnce = false;
     private LocalDateTime wakeUp;
+    private VerifiedTool vT;
+   
 
     //Costruttori
     public Rule() {
@@ -33,13 +31,7 @@ public class Rule extends Observable implements Serializable {
         this.action = action;
         this.trigger = trigger;
         this.status = true;
-
     }
-
-    public void setSleep(Long sleep) {
-        this.sleep = sleep;
-    }
-
     //Getter
     public Action getAction() {
         return action;
@@ -56,11 +48,19 @@ public class Rule extends Observable implements Serializable {
     public boolean getFlag() {
         return flag;
     }
-
+    
     public boolean getStatus() {
         return this.status;
     }
-
+    
+      public LocalDateTime getWakeUp() {
+        return wakeUp;
+    }
+      
+     public long getSleep() {
+        return sleep;
+    }   
+    
     //Setter
     public void setAction(Action action) {
         this.action = action;
@@ -83,29 +83,32 @@ public class Rule extends Observable implements Serializable {
     public void setFlag(boolean flag) {
         this.flag = flag;
     }
+    
+    public void setVerifiedTool(VerifiedTool v){
+        this.vT= v;
+    }
+    
+    public void setWakeUp(LocalDateTime wakeUp) {
+        this.wakeUp = wakeUp;
+    }
+    
+    public void setSleep(Long sleep) {
+        this.sleep = sleep;
+        setWakeUp(LocalDateTime.now().plusMinutes(sleep));
+    }
 
     public boolean ruleIsValid() {
         return this.getTrigger() != null && this.getAction() != null && this.flag;
     }
 
-    public void setFireOnce(boolean f) {
-        this.fireOnce = true;
-    }
 
-    public String getSleep() {
-        if (sleep == 0) {
-            return "No";
-        } else {
-            return "Yes";
-        }
-    }
+    
 
     public void active() {
         this.status = true;
         this.setChanged();
         this.notifyObservers();
     }
-
     public void deactive() {
         this.status = false;
         this.setChanged();
@@ -118,34 +121,16 @@ public class Rule extends Observable implements Serializable {
     }
 
     public boolean isVerifiedRule() {
-        if (!action.isFired()) {
+        if (!action.isFired()) 
             return trigger.isVerified() && status;
-        }
-        if (fireOnce == true) {
-            return trigger.isVerified() && status && !action.isFired();
-        } else if (sleep != 0) {
-            return trigger.isVerified() && status && sleepCheck();
-        } else {
-            return trigger.isVerified() && status;
-        }
-
+        else
+            return trigger.isVerified() && status && vT.verified(this);
     }
 
     public void fire() {
-
         action.fire();
         this.setChanged();
         this.notifyObservers();
-        if (!(sleep == 0)) {
-            wakeUp = LocalDateTime.now().plusSeconds(sleep);
-            System.out.print(wakeUp);
-        }
 
     }
-
-    public Boolean sleepCheck() {
-        return LocalDateTime.now().compareTo(wakeUp) >= 0;
-    }
-
-    /*this method attaches the observers to the rule*/
 }

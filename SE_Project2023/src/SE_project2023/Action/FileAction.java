@@ -31,7 +31,7 @@ public class FileAction implements Action {
     }
 
     public FileAction(String sourcePath, String destinationPath, String action) {
-        if (!"".equals(destinationPath)) {
+        if (destinationPath.isEmpty()) {
             this.destinationPath = destinationPath + "\\";
             this.sourcePath = sourcePath;
             this.action = action;
@@ -135,7 +135,7 @@ public class FileAction implements Action {
 
     @Override
     public String toString() {
-        return "FileAction : " + "source : " + sourcePath + "; destination : " + destinationPath;
+        return "source : " + sourcePath + "; destination : " + destinationPath;
     }
 
 }

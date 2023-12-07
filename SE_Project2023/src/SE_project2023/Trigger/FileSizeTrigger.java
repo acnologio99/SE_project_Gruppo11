@@ -2,20 +2,20 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package SE_project2023.Tool;
+package SE_project2023.Trigger;
 
-import SE_project2023.Regole.Rule;
+import java.io.File;
 
 /**
  *
  * @author giova
  */
-public class FireOnceVerified extends VerifiedTool{
-
-    public FireOnceVerified() {
+public class FileSizeTrigger implements Trigger{
+    File file;
+    int Dimension;
+    @Override
+    public boolean isVerified() {
+        return file.length()==Dimension;
     }
     
-    public boolean verified(Rule r){
-            return !r.getAction().isFired();
-       }
 }
