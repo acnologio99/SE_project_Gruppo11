@@ -6,6 +6,7 @@ package SE_project2023.Action;
 
 
 
+import SE_project2023.Regole.Rule;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import org.junit.Before;
@@ -60,23 +61,18 @@ public class MessageBoxActionTest {
      */
     @Test
     public void testFire() {
-        JFXPanel jfxPanel = new JFXPanel();
+
         System.out.println("fire");
         boolean expResult = false;
         boolean result = instance.isFired();
         assertEquals(expResult, result);
 
-        Platform.runLater(() -> {
-            instance.setMsg("Messaggio Test");
-            instance.fire();
-            assertTrue(instance.isFired());
+        Rule r = new Rule();
+        r.setAction(instance);
+        r.fire();
+        assertTrue(instance.isFired());
 
-        });
-        try {
-            Thread.sleep(5000); //devo aspettare che il metodo viene richiamato sul thread e che abbia il tempo di eseguire il test
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
 
     }
 
@@ -142,6 +138,6 @@ public class MessageBoxActionTest {
     }
 
 
-  
+
 
 }

@@ -4,6 +4,9 @@
  */
 package SE_project2023;
 
+import SE_project2023.Tool.FireMultipleVerified;
+import SE_project2023.Tool.FireOnceVerified;
+import SE_project2023.Tool.SleepVerified;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -18,7 +21,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
@@ -60,6 +62,8 @@ public class FXMLRuleController implements Initializable {
     private TextField minutesPicker;
     @FXML
     private RadioButton fireOnceRadio;
+    @FXML
+    private AnchorPane rootScene;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -100,7 +104,9 @@ public class FXMLRuleController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("FXMLAction.fxml"));
 
             Parent root = loader.load();
-
+            rootScene.setDisable(true);
+            
+            
             Stage stage = new Stage();
             stage.setTitle("Action");
             stage.setScene(new Scene(root));
@@ -113,7 +119,8 @@ public class FXMLRuleController implements Initializable {
                     }
                 }
             });
-            stage.show();
+            stage.showAndWait();
+            rootScene.setDisable(false);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -124,6 +131,7 @@ public class FXMLRuleController implements Initializable {
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("FXMLTrigger.fxml"));
+            rootScene.setDisable(true);
 
             Parent root = loader.load();
 
@@ -140,7 +148,8 @@ public class FXMLRuleController implements Initializable {
                 }
             });
 
-            stage.show();
+            stage.showAndWait();
+            rootScene.setDisable(false);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -158,14 +167,21 @@ public class FXMLRuleController implements Initializable {
         Stage stage = (Stage) sourceNode.getScene().getWindow();
 
         r.getLast().setFlag(true);
-        if (fireOnceRadio.isSelected())
-            r.getLast().setFireOnce(true);
-        if (sleepRadio.isSelected()) {
+        if (fireOnceRadio.isSelected()){
+            FireOnceVerified f= new FireOnceVerified();
+            r.getLast().setVerifiedTool(f);
+        }else if (sleepRadio.isSelected()) {
+            SleepVerified s= new SleepVerified();
+            r.getLast().setVerifiedTool(s);
             r.getLast().setSleep(24 * 60 * (Long.parseLong(daysPicker.getText())) + (Long.parseLong(minutesPicker.getText())));
+        }else{
+            FireMultipleVerified m= new FireMultipleVerified();
+            r.getLast().setVerifiedTool(m);
         }
         // Chiudi la finestra corrente
         
         stage.close();
+        rootScene.setDisable(false);
     }
 
     @FXML
@@ -180,9 +196,6 @@ public class FXMLRuleController implements Initializable {
         stage.close();
     }
 
-    public void close() {
-
-    }
 
     @FXML
     private void sleepPick(ActionEvent event) {

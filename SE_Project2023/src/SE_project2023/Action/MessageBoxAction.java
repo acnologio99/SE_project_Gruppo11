@@ -5,8 +5,6 @@
 package SE_project2023.Action;
 
 import java.io.Serializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 
 /**
  *
@@ -47,12 +45,7 @@ public class MessageBoxAction implements Action , Serializable{
     @Override
     public void fire() {
         this.isFired = true;
-        Alert alert = new Alert(AlertType.INFORMATION);
-        alert.setTitle("Information Dialog");
-        alert.setHeaderText(null);
-        alert.setContentText(msg);
-        alert.showAndWait();
-
+        System.out.println("Ciaooo");
     }
 
     @Override
@@ -72,7 +65,7 @@ public class MessageBoxAction implements Action , Serializable{
 
     @Override
     public String toString() {
-        return "ActionMessageBox: " + msg;
+        return "messaggio: " + msg;
     }
 
 }

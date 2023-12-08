@@ -1,10 +1,6 @@
 package SE_project2023.Action;
 
-import java.io.File;
 import java.io.Serializable;
-import javafx.scene.control.Alert;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 
 /**
  *
@@ -39,24 +35,7 @@ public class AudioAction implements Action, Serializable {
     @Override
     public void fire() {
         // Crea un oggetto File con il percorso memorizzato nel campo path
-        File file = new File(this.path);
-        // Crea un oggetto Media dal file 
-        Media media = new Media(file.toURI().toString());
-        // Crea un oggetto MediaPlayer con l'oggetto Media ed inizia a riprodurre l'audio
-        final MediaPlayer mediaPlayer = new MediaPlayer(media);
-        mediaPlayer.play();
-        // Se flagAlert è 0, imposta flagAlert a 1 e crea un oggetto Alert
-        if (flagAlert == 0) {
-            flagAlert = 1;
-            Alert alert;
-            alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Reminder");
-            alert.setHeaderText(null);
-            alert.setContentText("Playing choosen audio...");
-            alert.showAndWait();
-        }
-        //Ferma la riproduzione e setta isFired a true
-        mediaPlayer.stop();
+        System.out.println("music!");
         this.isFired = true;
     }
 
@@ -77,7 +56,7 @@ public class AudioAction implements Action, Serializable {
 
     @Override
     public String toString() {
-        return "ActionAudio : " + this.path;
+        return "Audio : " + this.path;
     }
 
 }

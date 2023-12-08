@@ -8,11 +8,9 @@ import SE_project2023.Action.*;
 import SE_project2023.Trigger.TimeTrigger;
 import SE_project2023.Trigger.Trigger;
 import java.time.LocalTime;
+import java.util.Observable;
 import java.util.Observer;
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -21,26 +19,29 @@ import static org.junit.Assert.*;
  * @author emanu
  */
 public class RuleTest {
-    
+
     Rule r;
-    
+
     public RuleTest() {}
-    
-    @BeforeClass
-    public static void setUpClass() {
-    }
-    
-    @AfterClass
-    public static void tearDownClass() {
-    }
-    
+
+  
+
     @Before
     public void setUp() {
         r = new Rule();
     }
-    
-    @After
-    public void tearDown() {
+
+  
+
+    /**
+     * Test of setSleep method, of class Rule.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testSetSleep() {
+        System.out.println("setSleep");
+        long sleep = -1;
+        r.setSleep(sleep); //expected IllegalArgumentException with negative value of sleep
+
     }
 
     /**
@@ -62,7 +63,7 @@ public class RuleTest {
     public void testSetGetTrigger() {
         System.out.println("setTrigger and getTrigger");
         Trigger expResult = new TimeTrigger(LocalTime.now());
-        r.setTrigger(expResult);
+        r.setTrigger(new TimeTrigger(LocalTime.now()));
         Trigger result = r.getTrigger();
         assertEquals(expResult, result);
     }
@@ -92,195 +93,64 @@ public class RuleTest {
     }
 
     /**
-     * Test of isVerifiedRule method, of class Rule.
-     */
-    @Test
-    public void testIsVerifiedRule() {
-        System.out.println("isVerifiedRule");
-        boolean expResult = false;
-        testSetGetTrigger();
-        boolean result = r.isVerifiedRule();
-        assertEquals(expResult, result);
-        
-        //Valid Rule
-        System.out.println("isVerifiedRule");
-        expResult = false;
-        testSetGetAction();
-        result = r.isVerifiedRule();
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of setSleep method, of class Rule.
-     */
-    @Test
-    public void testSetSleep() {
-        System.out.println("setSleep");
-        Long sleep = null;
-        Rule instance = new Rule();
-        instance.setSleep(sleep);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of getAction method, of class Rule.
-     */
-    @Test
-    public void testGetAction() {
-        System.out.println("getAction");
-        Rule instance = new Rule();
-        Action expResult = null;
-        Action result = instance.getAction();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of getTrigger method, of class Rule.
-     */
-    @Test
-    public void testGetTrigger() {
-        System.out.println("getTrigger");
-        Rule instance = new Rule();
-        Trigger expResult = null;
-        Trigger result = instance.getTrigger();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of getName method, of class Rule.
-     */
-    @Test
-    public void testGetName() {
-        System.out.println("getName");
-        Rule instance = new Rule();
-        String expResult = "";
-        String result = instance.getName();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of getFlag method, of class Rule.
-     */
-    @Test
-    public void testGetFlag() {
-        System.out.println("getFlag");
-        Rule instance = new Rule();
-        boolean expResult = false;
-        boolean result = instance.getFlag();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of setAction method, of class Rule.
-     */
-    @Test
-    public void testSetAction() {
-        System.out.println("setAction");
-        Action action = null;
-        Rule instance = new Rule();
-        instance.setAction(action);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of setTrigger method, of class Rule.
-     */
-    @Test
-    public void testSetTrigger() {
-        System.out.println("setTrigger");
-        Trigger trigger = null;
-        Rule instance = new Rule();
-        instance.setTrigger(trigger);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of setName method, of class Rule.
-     */
-    @Test
-    public void testSetName() {
-        System.out.println("setName");
-        String Name = "";
-        Rule instance = new Rule();
-        instance.setName(Name);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of setFlag method, of class Rule.
-     */
-    @Test
-    public void testSetFlag() {
-        System.out.println("setFlag");
-        boolean flag = false;
-        Rule instance = new Rule();
-        instance.setFlag(flag);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
      * Test of ruleIsValid method, of class Rule.
      */
     @Test
     public void testRuleIsValid() {
         System.out.println("ruleIsValid");
-        Rule instance = new Rule();
-        boolean expResult = false;
-        boolean result = instance.ruleIsValid();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        r.setAction(null);
+        r.setTrigger(null); //Action and trigger = null expected False
+        boolean result = r.ruleIsValid();
+        assertFalse(result);
+
+        r.setFlag(true);
+
+        r.setAction(new MessageBoxAction("Test"));
+        r.setTrigger(null); //Trigger = null but Action setted expected False
+        result = r.ruleIsValid();
+        assertFalse(result);
+
+        r.setAction(null);
+        r.setTrigger(new TimeTrigger(LocalTime.now())); //Action = null but Trigger setted expected False
+        result = r.ruleIsValid();
+        assertFalse(result);
+
+        r.setAction(new MessageBoxAction("Test"));
+        r.setTrigger(new TimeTrigger(LocalTime.now())); //Action and trigger setted expected True
+        result = r.ruleIsValid();
+        assertTrue(result);
+
     }
 
     /**
-     * Test of getStatus method, of class Rule.
+     * Test of isVerifiedRule method, of class Rule.
      */
     @Test
-    public void testGetStatus() {
-        System.out.println("getStatus");
-        Rule instance = new Rule();
-        boolean expResult = false;
-        boolean result = instance.getStatus();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    public void testIsVerifiedRule() {
+        System.out.println("isVerifiedRule");
+        r.setAction(new MessageBoxAction("Test"));
+        r.setTrigger(new TriggerForTest()); //Trigger is verified and the rule is active expected True
+        r.getTrigger().isVerified();
+        boolean result = r.isVerifiedRule();
+        assertTrue(result);
+
+        r.deactive();
+        result = r.isVerifiedRule();
+        assertFalse(result); //Trigger is verified but the rule is not active expected False
+
     }
 
     /**
-     * Test of active method, of class Rule.
+     * Test of Active and Deactive method, of class Rule.
      */
     @Test
-    public void testActive() {
-        System.out.println("active");
-        Rule instance = new Rule();
-        instance.active();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of deactive method, of class Rule.
-     */
-    @Test
-    public void testDeactive() {
+    public void testActiveDeactive() {
         System.out.println("deactive");
-        Rule instance = new Rule();
-        instance.deactive();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+
+        assertTrue(r.getStatus());//by default the rule is active
+
+        r.deactive(); //deactive the rule, status = false
+        assertFalse(r.getStatus());
     }
 
     /**
@@ -289,10 +159,23 @@ public class RuleTest {
     @Test
     public void testFire() {
         System.out.println("fire");
-        Rule instance = new Rule();
-        instance.fire();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        r.setAction(new MessageBoxAction("test"));
+        assertFalse(r.getAction().isFired()); //rule not fired, expected false
+
+        r.fire();
+        assertTrue(r.getAction().isFired()); //action is fired, expected true
+
+        long sleep = 10;
+        r.setSleep(sleep);
+        r.setAction(new MessageBoxAction("test"));
+        r.fire();
+        assertTrue(r.getAction().isFired() && r.getWakeUpTime().getMinute()!=0); //action is fired one, and wakeUp time is setted.
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testFireNoAction() {
+        System.out.println("fire no action");
+        r.fire();
     }
 
     /**
@@ -301,23 +184,56 @@ public class RuleTest {
     @Test
     public void testSleepCheck() {
         System.out.println("sleepCheck");
-        Rule instance = new Rule();
-        Boolean expResult = null;
-        Boolean result = instance.sleepCheck();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        long sleep = 10;
+        r.setSleep(sleep);
+        r.setAction(new MessageBoxAction("Test"));
+        r.fire();
+        assertFalse(r.sleepCheck());
+
     }
 
+
     /**
-     * Test of attach method, of class Rule.
+     * Test of setFireOnce method, of class Rule.
      */
     @Test
-    public void testAttach() {
-        System.out.println("attach");
-        
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    public void testSetFireOnce() {
+        System.out.println("setFireOnce");
+
     }
-    
+
+    /*
+    *
+    */
+    @Test
+    public void observableTest(){
+        class InnerObserver implements Observer {
+            boolean observed = false;
+            @Override
+            public void update(Observable o, Object arg) {
+                observed = true;
+            }
+        }
+
+        InnerObserver obs = new InnerObserver();
+        r.addObserver(obs);
+        assertFalse(obs.observed); //observed should be false becouse r didn't update.
+        r.deactive();
+        assertTrue(obs.observed); //observed is true becouse r updated.
+
+    }
+
+
+
+    @Test
+    public void testGetSleep() {
+        System.out.println("getSleep");
+        Rule instance = new Rule();
+        long expResult = 0;
+        long result = instance.getSleep();
+        assertTrue(expResult == result);
+
+    }
+
+
 }

@@ -5,8 +5,12 @@
 package SE_project2023;
 
 import SE_project2023.Action.*;
+import SE_project2023.Action.FileAction.FileAction;
+import SE_project2023.Action.FileAction.StrategyFactory;
 import java.io.File;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.ResourceBundle;
@@ -33,9 +37,6 @@ import javafx.stage.Stage;
  * @author giova
  */
 public class FXMLActionController implements Initializable {
-
-    @FXML
-    private TextArea TextMessage;
 
     ObservableList<Action> actionList;
     RuleList r;
@@ -75,6 +76,24 @@ public class FXMLActionController implements Initializable {
     private ToggleButton removeToggle;
     @FXML
     private ToggleButton copyToggle;
+    @FXML
+    private TextArea textMessage;
+    @FXML
+    private AnchorPane appendPane;
+    @FXML
+    private TextArea textMessage2;
+    @FXML
+    private TextField sourcePath1;
+    @FXML
+    private Button fileAppendSource;
+    @FXML
+    private AnchorPane programPane;
+    @FXML
+    private TextField commandsField;
+    @FXML
+    private Button execFileButton1;
+    @FXML
+    private TextField sourcePathExe;
 
     /**
      * Initializes the controller class.
@@ -89,11 +108,16 @@ public class FXMLActionController implements Initializable {
         anchorPanes.put("TextBox Action", textPane);
         anchorPanes.put("Audio Action", audioPane);
         anchorPanes.put("File Action", filePane);
+        anchorPanes.put("Append Action", appendPane);
+        anchorPanes.put("Program Action", programPane);
 
         actionListView.getItems().addAll(
                 "TextBox Action",
                 "Audio Action",
-                "File Action"
+                "File Action",
+                "Append Action",
+                "Program Action"
+
         );
 
         // Aggiungi un listener per gestire la selezione della ListView
@@ -102,52 +126,54 @@ public class FXMLActionController implements Initializable {
                 handleSelection(newValue); // Gestisci la selezione dell'opzione
             }
         });
-        
-//        fileChoices.getToggles().addListener((Observable l)->{
-//            if()
-//        });
 
-        menuExec = new MenuExecutor(); //vedere se togliere e fare una classe interna****
+        menuExec = new MenuExecutor();
 
     }
 
     private void handleSelection(String selectedAction) {
-        menuExec.execute(new SwitchCommand(anchorPanes, selectedAction)); //vedere se posso fare classe innestata
-        // for (AnchorPane pane : anchorPanes.values()) {
-        //     pane.setVisible(false);
-        // }
-        // if (anchorPanes.containsKey(selectedAction)) {
-        //     anchorPanes.get(selectedAction).setVisible(true);
-        // }
+        menuExec.execute(new SwitchCommand(anchorPanes, selectedAction));
     }
 
-    @FXML
+     @FXML
     private void doneAction(ActionEvent event) {
-//        if (flagAction == 1 && !"".equals(TextMessage.getText())) {
-//            String mess = TextMessage.getText();
-//            Action a = new MessageBoxAction(mess);
-//            r.setAction(a);
-//        } else if (flagAction == 2 && !"".equals(audioText.getText())) {
-//            Action a = new AudioAction(audioText.getText());
-//            r.setAction(a);
-//        }
-        if (anchorPanes.get("TextBox Action").isVisible() && !"".equals(TextMessage.getText())) {
-            String mess = TextMessage.getText();
-            Action a = new MessageBoxAction(mess);
-            r.getLast().setAction(a);
-        } else if (anchorPanes.get("Audio Action").isVisible() && !"".equals(audioText.getText())) {
-            Action a = new AudioAction(audioText.getText());
-            r.getLast().setAction(a);
-        } else if (anchorPanes.get("File Action").isVisible()
-                && !"".equals(sourcePath.getText())) {
-            String action = ((ToggleButton)fileChoices.getSelectedToggle()).getId().split("Toggle")[0];
-            Action a = new FileAction(sourcePath.getText(), destPath.getText(), action);
-            
-            r.getLast().setAction(a);
-        }
-        cancelAction(event);
+        
+        String selectedAction = actionListView.getSelectionModel().getSelectedItem();
+        ArrayList<String> actionParams = new ArrayList<>();
+        Action a = null;
+
+        if (selectedAction != null) {
+            switch (selectedAction) {
+                case "TextBox Action":
+                    createActionForTextBox(actionParams);
+                      a = new MessageBoxAction(actionParams.get(1));
+                    break;
+                case "Audio Action":
+                    createActionForAudio(actionParams);
+                     a = new AudioAction(actionParams.get(1));
+                    break;
+                case "File Action":
+                    createActionForFile(actionParams);
+                //a = new FileAction(actionParams.get(1),actionParams.get(2),actionParams.get(3));
+                    break;
+                case "Append Action":
+                    createActionForFileAppend(actionParams);
+                    a = new FileAppendAction(actionParams.get(1),actionParams.get(2));
+                    break;
+                case "Program Action":
+                createActionForProgram(actionParams);
+                a = new ProgramAction(actionParams.get(1), Arrays.asList(actionParams.get(2).split("\\s+")));
+                break;
+                default:
+                    break;
+            }
+
+     r.getLast().setAction(a);
+    cancelAction(event);
+    }
     }
 
+    //ACTION VISIBILITY
     @FXML
     private void cancelAction(ActionEvent event) {
         Node sourceNode = (Node) event.getSource();
@@ -157,8 +183,6 @@ public class FXMLActionController implements Initializable {
 
     @FXML
     private void audioAction(ActionEvent event) {
-        // get the file selected
-        // create a File chooser
         FileChooser fil_chooser = new FileChooser();
         fil_chooser.getExtensionFilters()
                 .add(new FileChooser.ExtensionFilter("Audio Files",
@@ -167,23 +191,22 @@ public class FXMLActionController implements Initializable {
         if (file != null) {
             audioText.setText(file.toString());
         }
+    }
 
+    private void fileAction(ActionEvent event, TextField source) {
+        FileChooser fil_chooser = new FileChooser();
+        File file = fil_chooser.showOpenDialog(new Stage());
+        if (file != null) {
+            source.setText(file.toString());
+        }
     }
 
     @FXML
-    private void fileAction(ActionEvent event) {
-        if (event.getSource().toString().contains("fileSource")) {
-            FileChooser fil_chooser = new FileChooser();
-            File file = fil_chooser.showOpenDialog(new Stage());
-            if (file != null) {
-                sourcePath.setText(file.toString());
-            }
-        } else if (event.getSource().toString().contains("destFile")) {
-            DirectoryChooser dir_chooser = new DirectoryChooser();
-            File selectedDirectory = dir_chooser.showDialog(new Stage());
-            if (selectedDirectory != null) {
-                destPath.setText(selectedDirectory.toString());
-            }
+    private void chooseFolder(ActionEvent event) {
+        DirectoryChooser dir_chooser = new DirectoryChooser();
+        File selectedDirectory = dir_chooser.showDialog(new Stage());
+        if (selectedDirectory != null) {
+            destPath.setText(selectedDirectory.toString());
         }
     }
 
@@ -197,5 +220,69 @@ public class FXMLActionController implements Initializable {
             destFile.setDisable(false);
         }
     }
+
+    @FXML
+    private void fileSetAction(ActionEvent event) {
+        fileAction(event, sourcePath1);
+    }
+
+    @FXML
+    private void fileAppendAction(ActionEvent event) {
+        fileAction(event, sourcePath);
+    }
+
+    @FXML
+    private void execAction(ActionEvent event) {
+        FileChooser fil_chooser = new FileChooser();
+        fil_chooser.getExtensionFilters()
+                .add(new FileChooser.ExtensionFilter("Program Files",
+                        "*.exe"));
+        File file = fil_chooser.showOpenDialog(new Stage());
+        if (file != null) {
+            sourcePathExe.setText(file.toString());
+    }
+    }
+  private void createActionForTextBox(ArrayList<String> actionParams) {
+    if (!textMessage.getText().isEmpty()) {
+        actionParams.add("MessageBox");
+        actionParams.add(textMessage.getText());
+    }
+}
+
+private void createActionForAudio(ArrayList<String> actionParams) {
+    if (!audioText.getText().isEmpty()) {
+        actionParams.add("Audio");
+        actionParams.add(audioText.getText());
+    }
+}
+
+private void createActionForFile(ArrayList<String> actionParams) {
+    if (!sourcePath.getText().isEmpty() && !destPath.getText().isEmpty()) {
+        actionParams.add("File");
+        actionParams.add(sourcePath.getText());
+        actionParams.add(destPath.getText());
+        actionParams.add(((ToggleButton) fileChoices.getSelectedToggle()).getId().split("Toggle")[0]);
+    }
+}
+
+private void createActionForProgram(ArrayList<String> actionParams) {
+        if(!sourcePathExe.getText().isEmpty() )
+        actionParams.add("Program");
+        actionParams.add(sourcePathExe.getText()); // Il percorso del file .exe
+        if (commandsField.getText().isEmpty()){
+            actionParams.add("");
+        } else {
+        actionParams.add(commandsField.getText()); // I parametri da passare all'eseguibile
+        }
+    
+}
+
+private void createActionForFileAppend(ArrayList<String> actionParams){
+    if (!textMessage2.getText().isEmpty()) {
+        actionParams.add("Append");
+        actionParams.add(sourcePath.getText());
+        actionParams.add(textMessage2.getText());
+    }
+}
 
 }

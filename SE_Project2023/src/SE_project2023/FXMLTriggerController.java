@@ -6,9 +6,14 @@ package SE_project2023;
 
 import SE_project2023.Trigger.*;
 import java.net.URL;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -18,8 +23,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 /**
@@ -51,6 +58,22 @@ public class FXMLTriggerController implements Initializable {
     
     HashMap<String, AnchorPane> anchorPanes = new HashMap<>();
     private MenuExecutor menuExec;
+    @FXML
+    private AnchorPane dayOfWeekPane;
+    @FXML
+    private ListView<DayOfWeek> daysOfWeek;
+    @FXML
+    private Text datePickerPrompt1;
+    @FXML
+    private ComboBox<String> daysOfMonth;
+    @FXML
+    private Text datePickerPrompt;
+    @FXML
+    private DatePicker datePicker;
+    @FXML
+    private AnchorPane dayOfMonthPane;
+    @FXML
+    private AnchorPane dayOfYearPane;
 
     /**
      * Initializes the controller class.
@@ -60,30 +83,42 @@ public class FXMLTriggerController implements Initializable {
         /*Inizializzazione di un observable list*/
         HashSet<Trigger> triggers = new HashSet();
         triggerList = FXCollections.observableArrayList(triggers);
-
         /*Prendiamo una regola temporanea a cui aggiungere il trigger*/
         r = RuleList.getRuleList();
 
         /*Popola le timebox con i valori delle ore e dei minuti*/
-        populateTimeComboBox(timeComboBox1, 24);
-        populateTimeComboBox(timeComboBox2, 60);
+        populateTimeComboBox(timeComboBox1,0, 24);
+        populateTimeComboBox(timeComboBox2,0, 60);
+        populateTimeComboBox(daysOfMonth,1, 32);
 
         /*Aggiungiamo alla ListView dei trigger i nomi dei vari tipi di trigger*/
         triggerListView.getItems().addAll(
-                "Time Trigger"
+                "Time Trigger",
+                "Day of Week Trigger",
+                "Day of Month Trigger",
+                "Day of Year Trigger"
         );
 
         anchorPanes.put("Time Trigger", comboBoxPane);
-       
+        anchorPanes.put("Day of Week Trigger", dayOfWeekPane);
+        anchorPanes.put("Day of Month Trigger", dayOfMonthPane);
+        anchorPanes.put("Day of Year Trigger", dayOfYearPane);
 
-
+        /*Popolamento Lista giorni della settimana*/
+        daysOfWeek.getItems().addAll(Arrays.asList(DayOfWeek.values()));
+        
         /*La variabile temp per l'inizializzazione del trigger viene impostata di default all'orario attuale*/
         temp = LocalTime.of(LocalTime.now().getHour(), LocalTime.now().getMinute());
 
-        /*Settiamo i valori delle due timeComboBox all'orario attuale*/
+        /*Settiamo i valori delle ComboBox all'orario attuale e Giorno corrente*/
         timeComboBox1.setPromptText(Integer.toString(LocalTime.now().getHour()));
         timeComboBox2.setPromptText(Integer.toString(LocalTime.now().getMinute()));
-
+        DayOfWeek currentDayOfWeek = LocalDate.now().getDayOfWeek();
+        int selectedIndex = currentDayOfWeek.getValue() - 1; // Indice inizia da 0
+        daysOfWeek.getSelectionModel().select(selectedIndex);
+        daysOfMonth.setValue(Integer.toString(LocalDate.now().getDayOfMonth()));
+        daysOfMonth.setPromptText(Integer.toString(LocalDate.now().getDayOfMonth()));
+        datePicker.setValue(LocalDate.now());
         /*Listener aggiunto per la gestione della visibilità degli elementi dell'interfaccia,
         chiama una funzione che setta la visibilità a TRUE*/
         triggerListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -103,11 +138,33 @@ public class FXMLTriggerController implements Initializable {
     @FXML
     private void doneTrigger(ActionEvent event) {
 
-        TimeTrigger t = new TimeTrigger(temp);
-        triggerList.add(t);
+        if (anchorPanes.get("Time Trigger").isVisible()) {
+            
+            Trigger t = new TimeTrigger(temp);
+            triggerList.add(t);
+            r.getLast().setTrigger(t);
+             System.out.println(r.getLast().getTrigger());
+        } else if (anchorPanes.get("Day of Week Trigger").isVisible()) {
+            
+            Trigger t = new DayOfWeekTrigger(daysOfWeek.getSelectionModel().getSelectedItem());
+            triggerList.add(t);
+            r.getLast().setTrigger(t);
+        } else if (anchorPanes.get("Day of Month Trigger").isVisible()) {
+            
+            Trigger t = new DayOfMonthTrigger(Integer.parseInt(daysOfMonth.getValue()));
+            triggerList.add(t);
+            r.getLast().setTrigger(t);
+           
+        }else if (anchorPanes.get("Day of Year Trigger").isVisible()) {
+            
+            Trigger t = new DayOfYearTrigger(datePicker.getValue());
+            triggerList.add(t);
+            r.getLast().setTrigger(t);
+           
+        }
+       
 
-        //System.out.println("ORARIO SELEZIONATO:"+temp);
-        r.getLast().setTrigger(t);
+
 
         Node sourceNode = (Node) event.getSource();
         Stage stage = (Stage) sourceNode.getScene().getWindow();
@@ -135,10 +192,11 @@ public class FXMLTriggerController implements Initializable {
          */
     }
 
-    private void populateTimeComboBox(ComboBox<String> comboBox, int pop) {
-        for (int hm = 0; hm < pop; hm++) {
-            String formattedTime = String.format("%02d", hm);
+    private void populateTimeComboBox(ComboBox<String> comboBox,int start, int pop) {
+        while(start<pop){
+            String formattedTime = String.format("%02d", start);
             comboBox.getItems().add(formattedTime);
+            start++;
         }
     }
 
