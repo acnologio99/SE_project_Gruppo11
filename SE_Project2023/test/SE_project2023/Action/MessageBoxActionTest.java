@@ -61,19 +61,17 @@ public class MessageBoxActionTest {
      */
     @Test
     public void testFire() {
-
+        
         System.out.println("fire");
         boolean expResult = false;
         boolean result = instance.isFired();
         assertEquals(expResult, result);
-
+	
+	
         Rule r = new Rule();
         r.setAction(instance);
         r.fire();
         assertTrue(instance.isFired());
-
-
-
     }
 
     /**
@@ -138,6 +136,6 @@ public class MessageBoxActionTest {
     }
 
 
-
+  
 
 }

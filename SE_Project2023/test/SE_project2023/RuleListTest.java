@@ -8,31 +8,30 @@ import SE_project2023.Regole.Rule;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Observable;
+import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.BeforeClass;
 
 /**
  *
  * @author giova
  */
 public class RuleListTest {
-
     private static final String TEST_FILE = "test_rules.bin";
     private RuleList rules;
-
     public RuleListTest() {
     }
 
     @Before
     public void setUp() {
-        rules = RuleList.getRuleList();
+         rules = RuleList.getRuleList();
     }
-
     /**
      * Test of add method, of class RuleList.
      */
@@ -42,9 +41,7 @@ public class RuleListTest {
         Rule r = new Rule();
         rules.add(r);
         assertEquals(r, rules.getLast()); //the new rule is equal to the last i the list
-
         rules.add(null); //expected NullPointerException
-
     }
 
     /**
@@ -54,7 +51,7 @@ public class RuleListTest {
     public void testGetLast() {
         System.out.println("getLast");
         Rule expResult = new Rule();
-        rules.add(expResult);
+         rules.add(expResult);
         Rule result = rules.getLast();
         assertEquals(expResult, result);
 
@@ -80,11 +77,10 @@ public class RuleListTest {
         rules.removeLast(); 
         rules.removeLast();// removeLast on empty list, expected BoundsException 
     }
-
-    @Test
+    @Test   
     public void testSaveRulesWhenNoRules() {
-        rules.saveRules(TEST_FILE);
-        File emptyFile = new File(TEST_FILE);
+    rules.saveRules(TEST_FILE);
+    File emptyFile = new File(TEST_FILE);
         try {
             emptyFile.createNewFile();
         } catch (IOException e) {
@@ -99,13 +95,12 @@ public class RuleListTest {
         //correttamente un valore pari a 0
     }
 
-    @Test
+     @Test
     public void testLoadRulesFromFileNotExists() {
         // Verifica che il caricamento da un file inesistente non aggiunga regole
         rules.loadRules("non_esiste.dat");
         assertEquals(0, rules.getRuleList().size());
     }
-
     @Test
     public void testLoadRulesFromEmptyFile() {
         // Creazione di un file vuoto
@@ -116,10 +111,9 @@ public class RuleListTest {
             e.printStackTrace();
         }
         // Caricamento da un file vuoto
-        rules.loadRules(TEST_FILE);
+         rules.loadRules(TEST_FILE);
         assertEquals(0, rules.getRuleList().size());
     }
-
     @Test
     public void testLoadInvalidRules() {
         // Scrittura dati non validi nel file
@@ -129,7 +123,7 @@ public class RuleListTest {
         // Verifica che non siano state caricate regole non valide
         assertEquals(0, rules.getRuleList().size());
     }
-
+    
     /**
      * Test of size method, of class RuleList.
      */
@@ -269,5 +263,6 @@ public class RuleListTest {
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
-
+   
 }
+

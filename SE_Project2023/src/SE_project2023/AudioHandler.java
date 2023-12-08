@@ -45,7 +45,6 @@ public class AudioHandler extends ActionHandler {
             alert.showAndWait();
 
             mediaPlayer.stop();
-            
             });}
         return true;
     }

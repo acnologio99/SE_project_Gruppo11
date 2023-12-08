@@ -11,17 +11,17 @@ import java.time.LocalDateTime;
  *
  * @author giova
  */
-public class SleepVerified extends VerifiedTool{
+public class SleepVerified implements VerifiedTool{
     public SleepVerified() {
     }
     
     @Override
     public boolean verified(Rule r){
-            boolean time=LocalDateTime.now().compareTo(r.getWakeUp())>=0;
+            boolean a=LocalDateTime.now().compareTo(r.getWakeUp())>=0;
             System.out.println("La regola "+ r.getName() +" ripartirà a "+ r.getWakeUp());
-            if(time)
+            if(a)
                 r.setWakeUp(LocalDateTime.now().plusMinutes(r.getSleep()));
-            return time;
+            return a;
        }
 
     

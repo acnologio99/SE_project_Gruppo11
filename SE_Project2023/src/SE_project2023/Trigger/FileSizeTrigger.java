@@ -13,9 +13,15 @@ import java.io.File;
 public class FileSizeTrigger implements Trigger{
     File file;
     int Dimension;
+
+    public FileSizeTrigger(File file, int Dimension) {
+        this.file = file;
+        this.Dimension = Dimension;
+    }
+    
     @Override
     public boolean isVerified() {
-        return file.length()==Dimension;
+        return (file.length()/1024)>=Dimension;
     }
     
 }

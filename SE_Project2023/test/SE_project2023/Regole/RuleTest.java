@@ -10,7 +10,10 @@ import SE_project2023.Trigger.Trigger;
 import java.time.LocalTime;
 import java.util.Observable;
 import java.util.Observer;
+import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -19,23 +22,24 @@ import static org.junit.Assert.*;
  * @author emanu
  */
 public class RuleTest {
-
+    
     Rule r;
-
+    
     public RuleTest() {}
-
-  
-
+    
+    @BeforeClass
+    public static void setUpClass() {
+    }
+    
+    @AfterClass
+    public static void tearDownClass() {
+    }
+    
     @Before
     public void setUp() {
         r = new Rule();
     }
-
-  
-
-    /**
-     * Test of setSleep method, of class Rule.
-     */
+    
     @Test(expected = IllegalArgumentException.class)
     public void testSetSleep() {
         System.out.println("setSleep");
@@ -43,7 +47,7 @@ public class RuleTest {
         r.setSleep(sleep); //expected IllegalArgumentException with negative value of sleep
 
     }
-
+    
     /**
      * Test of setAction and getAction method, of class Rule.
      */
@@ -91,7 +95,6 @@ public class RuleTest {
         String result = r.getName();
         assertEquals(expResult, result);
     }
-
     /**
      * Test of ruleIsValid method, of class Rule.
      */
@@ -102,26 +105,19 @@ public class RuleTest {
         r.setTrigger(null); //Action and trigger = null expected False
         boolean result = r.ruleIsValid();
         assertFalse(result);
-
-        r.setFlag(true);
-
         r.setAction(new MessageBoxAction("Test"));
         r.setTrigger(null); //Trigger = null but Action setted expected False
         result = r.ruleIsValid();
         assertFalse(result);
-
         r.setAction(null);
         r.setTrigger(new TimeTrigger(LocalTime.now())); //Action = null but Trigger setted expected False
         result = r.ruleIsValid();
         assertFalse(result);
-
         r.setAction(new MessageBoxAction("Test"));
         r.setTrigger(new TimeTrigger(LocalTime.now())); //Action and trigger setted expected True
         result = r.ruleIsValid();
         assertTrue(result);
-
     }
-
     /**
      * Test of isVerifiedRule method, of class Rule.
      */
@@ -133,78 +129,40 @@ public class RuleTest {
         r.getTrigger().isVerified();
         boolean result = r.isVerifiedRule();
         assertTrue(result);
-
         r.deactive();
         result = r.isVerifiedRule();
         assertFalse(result); //Trigger is verified but the rule is not active expected False
 
     }
-
-    /**
-     * Test of Active and Deactive method, of class Rule.
-     */
     @Test
     public void testActiveDeactive() {
         System.out.println("deactive");
-
         assertTrue(r.getStatus());//by default the rule is active
-
         r.deactive(); //deactive the rule, status = false
         assertFalse(r.getStatus());
     }
-
-    /**
+     /**
      * Test of fire method, of class Rule.
-     */
+     * */
     @Test
-    public void testFire() {
+     public void testFire() {
         System.out.println("fire");
         r.setAction(new MessageBoxAction("test"));
         assertFalse(r.getAction().isFired()); //rule not fired, expected false
-
         r.fire();
         assertTrue(r.getAction().isFired()); //action is fired, expected true
-
         long sleep = 10;
         r.setSleep(sleep);
         r.setAction(new MessageBoxAction("test"));
         r.fire();
-        assertTrue(r.getAction().isFired() && r.getWakeUpTime().getMinute()!=0); //action is fired one, and wakeUp time is setted.
-    }
-
-    @Test(expected = NullPointerException.class)
+        assertTrue(r.getAction().isFired() && r.getWakeUp().getMinute()!=0); //action is fired one, and wakeUp time is setted.
+     }
+     @Test(expected = NullPointerException.class)
     public void testFireNoAction() {
         System.out.println("fire no action");
         r.fire();
     }
 
-    /**
-     * Test of sleepCheck method, of class Rule.
-     */
-    @Test
-    public void testSleepCheck() {
-        System.out.println("sleepCheck");
-        long sleep = 10;
-        r.setSleep(sleep);
-        r.setAction(new MessageBoxAction("Test"));
-        r.fire();
-        assertFalse(r.sleepCheck());
-
-    }
-
-
-    /**
-     * Test of setFireOnce method, of class Rule.
-     */
-    @Test
-    public void testSetFireOnce() {
-        System.out.println("setFireOnce");
-
-    }
-
-    /*
-    *
-    */
     @Test
     public void observableTest(){
         class InnerObserver implements Observer {
@@ -214,15 +172,12 @@ public class RuleTest {
                 observed = true;
             }
         }
-
         InnerObserver obs = new InnerObserver();
         r.addObserver(obs);
         assertFalse(obs.observed); //observed should be false becouse r didn't update.
         r.deactive();
         assertTrue(obs.observed); //observed is true becouse r updated.
-
     }
-
 
 
     @Test
@@ -232,8 +187,8 @@ public class RuleTest {
         long expResult = 0;
         long result = instance.getSleep();
         assertTrue(expResult == result);
-
+        
     }
 
-
+    
 }

@@ -29,7 +29,7 @@ public class MessageHandler extends ActionHandler  {
             System.out.println("dentro");
             next.fireAction(r);
        
-        }else{
+        }else {
         MessageBoxAction act = (MessageBoxAction) r.getAction();
         Platform.runLater(() -> {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);

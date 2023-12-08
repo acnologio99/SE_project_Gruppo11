@@ -10,7 +10,7 @@ import SE_project2023.Regole.Rule;
  *
  * @author giova
  */
-public class FireMultipleVerified extends VerifiedTool {
+public class FireMultipleVerified implements VerifiedTool {
 
     public FireMultipleVerified() {
     }

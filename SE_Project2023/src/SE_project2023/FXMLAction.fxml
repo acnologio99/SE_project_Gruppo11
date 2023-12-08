@@ -46,5 +46,12 @@
             <Button fx:id="fileAppendSource" layoutX="85.0" layoutY="226.0" mnemonicParsing="false" onAction="#fileAppendAction" text="Choose Append File" />
          </children>
       </AnchorPane>
+      <AnchorPane fx:id="programPane" layoutX="279.0" layoutY="87.0" prefHeight="223.0" prefWidth="303.0" visible="false">
+         <children>
+            <TextField fx:id="commandsField" layoutX="14.0" layoutY="27.0" prefHeight="25.0" prefWidth="177.0" promptText="insert commands" />
+            <Button fx:id="execFileButton1" layoutX="25.0" layoutY="173.0" mnemonicParsing="false" onAction="#execAction" text="Choose program" />
+            <TextField fx:id="sourcePathExe" layoutX="10.0" layoutY="137.0" prefHeight="25.0" prefWidth="177.0" promptText="choose a program to exec" />
+         </children>
+      </AnchorPane>
    </children>
 </AnchorPane>
