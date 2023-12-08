@@ -8,6 +8,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -15,7 +16,7 @@ import java.util.logging.Logger;
  *
  * @author chris
  */
-public class FileAppendAction implements Action {
+public class FileAppendAction implements Action, Serializable {
 
     private String path;
     private String msg;

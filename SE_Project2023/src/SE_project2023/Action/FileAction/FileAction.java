@@ -1,22 +1,19 @@
-package SE_project2023.Action;
+package SE_project2023.Action.FileAction;
 
+import SE_project2023.Action.Action;
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-
+import java.io.Serializable;
 
 /**
  *
  * @author emanu
  */
-public class FileAction implements Action {
+public class FileAction implements Action, Serializable {
 
     private String sourcePath;
     private String destinationPath;
     private boolean isFired = false;
-    private String action;
+    private FileStrategy fileStrategy;
 
     public FileAction() {
     }
@@ -30,15 +27,23 @@ public class FileAction implements Action {
         this.destinationPath = destinationPath;
     }
 
-    public FileAction(String sourcePath, String destinationPath, String action) {
-        if (destinationPath.isEmpty()) {
+    public FileAction(String sourcePath, String destinationPath, FileStrategy fileStrategy) {
+        if (!destinationPath.isEmpty()) {
             this.destinationPath = destinationPath + "\\";
             this.sourcePath = sourcePath;
-            this.action = action;
+            this.fileStrategy = fileStrategy;
         } else {
             this.sourcePath = sourcePath;
-            this.action = action;
+            this.fileStrategy = fileStrategy;
         }
+    }
+
+    public FileStrategy getFileStrategy() {
+        return fileStrategy;
+    }
+
+    public void setFileStrategy(FileStrategy fileStrategy) {
+        this.fileStrategy = fileStrategy;
     }
 
     public String getSourcePath() {
@@ -57,14 +62,6 @@ public class FileAction implements Action {
         this.destinationPath = destinationPath;
     }
 
-    public String getAction() {
-        return action;
-    }
-
-    public void setAction(String action) {
-        this.action = action;
-    }
-
     @Override
     public boolean isFired() {
         return this.isFired;
@@ -74,48 +71,17 @@ public class FileAction implements Action {
     public void fire() {
         File file = new File(this.sourcePath);
         String mess = " choosen file...";
-       
 
-        if (this.destinationPath.lastIndexOf("\\") == (this.destinationPath.length() - 1)) {
-            this.destinationPath += "\\" + file.getName();
+        if (this.destinationPath != null) {
+            if (this.destinationPath.lastIndexOf("\\") == (this.destinationPath.length() - 1)) {
+                this.destinationPath += "\\" + file.getName();
+            }
         }
-        switch (action) {
-            case "copy":
-                copyF();
-                System.out.println("copying..");
-                break;
-            case "move":
-                copyF();
-                System.out.println("moving..");
-                removeF(file);
-                break;
-            case "remove":
-                removeF(file);
-                System.out.println("removing..");
-                break;
-            default:
-                break;
+
+        if (fileStrategy != null) {
+            fileStrategy.execute(file, this.sourcePath, this.destinationPath);
         }
         this.isFired = true;
-    }
-
-    private void copyF() {
-        try {
-            System.out.println(
-                    Files.copy(Paths.get(this.sourcePath),
-                            Paths.get(this.destinationPath), StandardCopyOption.REPLACE_EXISTING));
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void removeF(File file) {
-        if (file.delete()) {
-            System.out.println("File cancellato con successo");
-        } else {
-            System.out.println("Errore durante la cancellazione del file");
-        }
     }
 
     @Override

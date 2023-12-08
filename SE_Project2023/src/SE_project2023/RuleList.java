@@ -119,6 +119,7 @@ public class RuleList extends Observable implements Observer, Serializable, Iter
                 } catch (EOFException e) {
                 }
 
+            } catch (EOFException eof) {
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
 

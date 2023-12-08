@@ -5,6 +5,8 @@
 package SE_project2023;
 
 import SE_project2023.Action.*;
+import SE_project2023.Action.FileAction.FileAction;
+import SE_project2023.Action.FileAction.StrategyFactory;
 import java.io.File;
 import java.net.URL;
 import java.util.HashMap;
@@ -80,6 +82,8 @@ public class FXMLActionController implements Initializable {
     private TextArea textMessage2;
     @FXML
     private TextField sourcePath1;
+    @FXML
+    private Button fileAppendSource;
 
     /**
      * Initializes the controller class.
@@ -116,7 +120,6 @@ public class FXMLActionController implements Initializable {
 
     private void handleSelection(String selectedAction) {
         menuExec.execute(new SwitchCommand(anchorPanes, selectedAction));
-        sourcePath.clear();
     }
 
     @FXML
@@ -128,18 +131,18 @@ public class FXMLActionController implements Initializable {
         } else if (anchorPanes.get("Audio Action").isVisible() && !audioText.getText().isEmpty()) {
             a = new AudioAction(audioText.getText());
         } else if (anchorPanes.get("File Action").isVisible()
-                && !sourcePath.getText().isEmpty()) {
+                && !sourcePath1.getText().isEmpty()) {
             String action = ((ToggleButton) fileChoices.getSelectedToggle()).getId().split("Toggle")[0];
-            a = new FileAction(sourcePath.getText(), destPath.getText(), action);
+            StrategyFactory sf = new StrategyFactory();
+            a = new FileAction(sourcePath1.getText(), destPath.getText(), sf.getStrategy(action));
         } else if (anchorPanes.get("Append Action").isVisible() && !sourcePath.getText().isEmpty() && !textMessage2.getText().isEmpty()) {
             a = new FileAppendAction(sourcePath.getText(), textMessage2.getText());
         }
         r.getLast().setAction(a);
         cancelAction(event);
     }
-    
-    //ACTION VISIBILITY
 
+    //ACTION VISIBILITY
     @FXML
     private void cancelAction(ActionEvent event) {
         Node sourceNode = (Node) event.getSource();
@@ -157,15 +160,13 @@ public class FXMLActionController implements Initializable {
         if (file != null) {
             audioText.setText(file.toString());
         }
-
     }
 
-    @FXML
-    private void fileAction(ActionEvent event) {
+    private void fileAction(ActionEvent event, TextField source) {
         FileChooser fil_chooser = new FileChooser();
         File file = fil_chooser.showOpenDialog(new Stage());
         if (file != null) {
-            sourcePath.setText(file.toString());
+            source.setText(file.toString());
         }
     }
 
@@ -187,6 +188,16 @@ public class FXMLActionController implements Initializable {
             destPath.setDisable(false);
             destFile.setDisable(false);
         }
+    }
+
+    @FXML
+    private void fileSetAction(ActionEvent event) {
+        fileAction(event, sourcePath1);
+    }
+
+    @FXML
+    private void fileAppendAction(ActionEvent event) {
+        fileAction(event, sourcePath);
     }
 
 }
