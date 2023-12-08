@@ -17,11 +17,11 @@ public class SleepVerified extends VerifiedTool{
     
     @Override
     public boolean verified(Rule r){
-            boolean a=LocalDateTime.now().compareTo(r.getWakeUp())>=0;
+            boolean time=LocalDateTime.now().compareTo(r.getWakeUp())>=0;
             System.out.println("La regola "+ r.getName() +" ripartirà a "+ r.getWakeUp());
-            if(a)
+            if(time)
                 r.setWakeUp(LocalDateTime.now().plusMinutes(r.getSleep()));
-            return a;
+            return time;
        }
 
     

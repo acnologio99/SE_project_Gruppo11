@@ -9,8 +9,6 @@ import java.io.File;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -35,7 +33,6 @@ import javafx.stage.Stage;
  * @author giova
  */
 public class FXMLActionController implements Initializable {
-
 
     ObservableList<Action> actionList;
     RuleList r;
@@ -75,8 +72,14 @@ public class FXMLActionController implements Initializable {
     private ToggleButton removeToggle;
     @FXML
     private ToggleButton copyToggle;
-     @FXML
+    @FXML
     private TextArea textMessage;
+    @FXML
+    private AnchorPane appendPane;
+    @FXML
+    private TextArea textMessage2;
+    @FXML
+    private TextField sourcePath1;
 
     /**
      * Initializes the controller class.
@@ -91,11 +94,13 @@ public class FXMLActionController implements Initializable {
         anchorPanes.put("TextBox Action", textPane);
         anchorPanes.put("Audio Action", audioPane);
         anchorPanes.put("File Action", filePane);
+        anchorPanes.put("Append Action", appendPane);
 
         actionListView.getItems().addAll(
                 "TextBox Action",
                 "Audio Action",
-                "File Action"
+                "File Action",
+                "Append Action"
         );
 
         // Aggiungi un listener per gestire la selezione della ListView
@@ -104,36 +109,32 @@ public class FXMLActionController implements Initializable {
                 handleSelection(newValue); // Gestisci la selezione dell'opzione
             }
         });
-        
 
-
-        menuExec = new MenuExecutor(); 
-       
+        menuExec = new MenuExecutor();
 
     }
 
     private void handleSelection(String selectedAction) {
-         menuExec.execute(new SwitchCommand(anchorPanes, selectedAction)); 
+        menuExec.execute(new SwitchCommand(anchorPanes, selectedAction));
+        sourcePath.clear();
     }
 
     @FXML
     private void doneAction(ActionEvent event) {
-
-        if (anchorPanes.get("TextBox Action").isVisible() && !"".equals(textMessage.getText())) {
+        Action a = null;
+        if (anchorPanes.get("TextBox Action").isVisible() && !textMessage.getText().isEmpty()) {
             String mess = textMessage.getText();
-            Action a = new MessageBoxAction(mess);
-            r.getLast().setAction(a);
-        } else if (anchorPanes.get("Audio Action").isVisible() && !"".equals(audioText.getText())) {
-            Action a = new AudioAction(audioText.getText());
-            r.getLast().setAction(a);
+            a = new MessageBoxAction(mess);
+        } else if (anchorPanes.get("Audio Action").isVisible() && !audioText.getText().isEmpty()) {
+            a = new AudioAction(audioText.getText());
         } else if (anchorPanes.get("File Action").isVisible()
-                && !"".equals(sourcePath.getText())) {
+                && !sourcePath.getText().isEmpty()) {
             String action = ((ToggleButton) fileChoices.getSelectedToggle()).getId().split("Toggle")[0];
-            Action a = new FileAction(sourcePath.getText(), destPath.getText(), action);
-            
-            r.getLast().setAction(a);
+            a = new FileAction(sourcePath.getText(), destPath.getText(), action);
+        } else if (anchorPanes.get("Append Action").isVisible() && !sourcePath.getText().isEmpty() && !textMessage2.getText().isEmpty()) {
+            a = new FileAppendAction(sourcePath.getText(), textMessage2.getText());
         }
-        
+        r.getLast().setAction(a);
         cancelAction(event);
     }
 
@@ -146,8 +147,6 @@ public class FXMLActionController implements Initializable {
 
     @FXML
     private void audioAction(ActionEvent event) {
-        // get the file selected
-        // create a File chooser
         FileChooser fil_chooser = new FileChooser();
         fil_chooser.getExtensionFilters()
                 .add(new FileChooser.ExtensionFilter("Audio Files",
@@ -161,18 +160,19 @@ public class FXMLActionController implements Initializable {
 
     @FXML
     private void fileAction(ActionEvent event) {
-        if (event.getSource().toString().contains("fileSource")) {
-            FileChooser fil_chooser = new FileChooser();
-            File file = fil_chooser.showOpenDialog(new Stage());
-            if (file != null) {
-                sourcePath.setText(file.toString());
-            }
-        } else if (event.getSource().toString().contains("destFile")) {
-            DirectoryChooser dir_chooser = new DirectoryChooser();
-            File selectedDirectory = dir_chooser.showDialog(new Stage());
-            if (selectedDirectory != null) {
-                destPath.setText(selectedDirectory.toString());
-            }
+        FileChooser fil_chooser = new FileChooser();
+        File file = fil_chooser.showOpenDialog(new Stage());
+        if (file != null) {
+            sourcePath.setText(file.toString());
+        }
+    }
+
+    @FXML
+    private void chooseFolder(ActionEvent event) {
+        DirectoryChooser dir_chooser = new DirectoryChooser();
+        File selectedDirectory = dir_chooser.showDialog(new Stage());
+        if (selectedDirectory != null) {
+            destPath.setText(selectedDirectory.toString());
         }
     }
 
@@ -186,7 +186,5 @@ public class FXMLActionController implements Initializable {
             destFile.setDisable(false);
         }
     }
-
-   
 
 }

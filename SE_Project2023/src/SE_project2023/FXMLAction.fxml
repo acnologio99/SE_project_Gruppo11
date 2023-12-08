@@ -15,7 +15,7 @@
       <Button fx:id="Cancel" layoutX="521.0" layoutY="350.0" mnemonicParsing="false" onAction="#cancelAction" text="Cancel" />
       <AnchorPane fx:id="textPane" layoutX="321.0" layoutY="50.0" prefHeight="200.0" prefWidth="200.0" visible="false">
          <children>
-            <TextArea fx:id="textMessage" layoutY="22.0" prefHeight="157.0" prefWidth="200.0" />
+            <TextArea fx:id="textMessage" layoutY="22.0" prefHeight="157.0" prefWidth="200.0" promptText="Write a message..." />
          </children>
       </AnchorPane>
       <AnchorPane fx:id="audioPane" layoutX="252.0" layoutY="100.0" prefHeight="200.0" prefWidth="321.0" visible="false">
@@ -26,10 +26,10 @@
       </AnchorPane>
       <AnchorPane fx:id="filePane" layoutX="269.0" layoutY="63.0" prefHeight="273.0" prefWidth="303.0" visible="false">
          <children>
-            <TextField fx:id="sourcePath" editable="false" layoutX="14.0" layoutY="97.0" prefHeight="26.0" prefWidth="251.0" promptText="Select File " />
             <TextField fx:id="destPath" editable="false" layoutX="14.0" layoutY="188.0" prefHeight="26.0" prefWidth="251.0" promptText="Select Folder" />
+            <TextField fx:id="sourcePath1" editable="false" layoutX="14.0" layoutY="92.0" prefHeight="26.0" prefWidth="251.0" promptText="Select File " />
             <Button fx:id="fileSource" layoutX="14.0" layoutY="135.0" mnemonicParsing="false" onAction="#fileAction" text="Choose Source" />
-            <Button fx:id="destFile" layoutX="14.0" layoutY="223.0" mnemonicParsing="false" onAction="#fileAction" text="Choose Destination" />
+            <Button fx:id="destFile" layoutX="14.0" layoutY="223.0" mnemonicParsing="false" onAction="#chooseFolder" text="Choose Destination" />
             <ToggleButton fx:id="moveToggle" layoutX="14.0" layoutY="42.0" mnemonicParsing="false" onAction="#toggleHandle" selected="true" text="Move">
                <toggleGroup>
                   <ToggleGroup fx:id="fileChoices" />
@@ -37,6 +37,13 @@
             </ToggleButton>
             <ToggleButton fx:id="removeToggle" layoutX="104.0" layoutY="42.0" mnemonicParsing="false" onAction="#toggleHandle" text="Remove" toggleGroup="$fileChoices" />
             <ToggleButton fx:id="copyToggle" layoutX="207.0" layoutY="42.0" mnemonicParsing="false" onAction="#toggleHandle" text="Copy" toggleGroup="$fileChoices" />
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="appendPane" layoutX="278.0" layoutY="49.0" prefHeight="287.0" prefWidth="288.0" visible="false">
+         <children>
+            <TextArea fx:id="textMessage2" layoutX="47.0" layoutY="14.0" prefHeight="157.0" prefWidth="200.0" promptText="Write a message to append.." />
+            <TextField fx:id="sourcePath" editable="false" layoutX="21.0" layoutY="184.0" prefHeight="26.0" prefWidth="251.0" promptText="Select File " />
+            <Button layoutX="85.0" layoutY="226.0" mnemonicParsing="false" onAction="#fileAction" text="Choose Append File" />
          </children>
       </AnchorPane>
    </children>

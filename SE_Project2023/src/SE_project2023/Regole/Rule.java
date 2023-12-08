@@ -34,8 +34,10 @@ public class Rule extends Observable implements Serializable {
     }
 
     public void setSleep(Long sleep){
-        if(sleep > 0)
+        if(sleep > 0){
         this.sleep = sleep;
+        setWakeUp(LocalDateTime.now().plusMinutes(sleep));
+        }
         else
             throw new IllegalArgumentException("Sleep must be a positive value");
     }
@@ -100,10 +102,6 @@ public class Rule extends Observable implements Serializable {
         this.wakeUp = wakeUp;
     }
 
-    public void setSleep(Long sleep) {
-        this.sleep = sleep;
-        setWakeUp(LocalDateTime.now().plusMinutes(sleep));
-    }
 
     public boolean ruleIsValid() {
         return this.getTrigger() != null && this.getAction() != null && this.flag;

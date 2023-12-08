@@ -65,7 +65,7 @@ public class FXMLDocumentController implements Initializable, Observer, Serializ
     private TableColumn<Rule, String> sleepCln;
     @FXML
     private VBox rootScene;
-    
+
     private List<Rule> list;
 
     @Override
@@ -76,7 +76,7 @@ public class FXMLDocumentController implements Initializable, Observer, Serializ
         //inizializzazione Liste
         load.setOnSucceeded(e -> {
             list = new ArrayList<>(); //Lista d'appoggio per inserire le regole dopo il caricamento
-            for(Rule r : rules){
+            for (Rule r : rules) {
                 list.add(r);
             }
             ruleList = FXCollections.observableArrayList(list);
@@ -95,19 +95,10 @@ public class FXMLDocumentController implements Initializable, Observer, Serializ
         });
         sleepCln.setCellValueFactory(cellData -> {
             long sleep = cellData.getValue().getSleep(); // Assume che "isStatus()" sia il metodo che restituisce il booleano dalla classe Rule
-            return new SimpleStringProperty(sleep>0 ? "On" : "Off");
+            return new SimpleStringProperty(sleep > 0 ? "On" : "Off");
         });
 
-     
         rules.addObserver(this);
-        
-
-    }
-
-    private void serviceControl() {
-        CheckService service = new CheckService(tableView);
-        service.setPeriod(Duration.seconds(10));
-        service.start();
 
     }
 
@@ -126,7 +117,7 @@ public class FXMLDocumentController implements Initializable, Observer, Serializ
             if (b == ButtonType.OK) {
                 rules.removeAll(tableView.getSelectionModel().getSelectedItems());
                 ruleList.removeAll(tableView.getSelectionModel().getSelectedItems());
-                
+
             }
         }
 

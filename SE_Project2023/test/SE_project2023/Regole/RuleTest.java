@@ -24,22 +24,14 @@ public class RuleTest {
 
     public RuleTest() {}
 
-    @BeforeClass
-    public static void setUpClass() {
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-    }
+  
 
     @Before
     public void setUp() {
         r = new Rule();
     }
 
-    @After
-    public void tearDown() {
-    }
+  
 
     /**
      * Test of setSleep method, of class Rule.
