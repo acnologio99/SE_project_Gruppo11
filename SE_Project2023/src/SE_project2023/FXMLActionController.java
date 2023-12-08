@@ -137,6 +137,8 @@ public class FXMLActionController implements Initializable {
         r.getLast().setAction(a);
         cancelAction(event);
     }
+    
+    //ACTION VISIBILITY
 
     @FXML
     private void cancelAction(ActionEvent event) {

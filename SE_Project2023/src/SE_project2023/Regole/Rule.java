@@ -12,6 +12,7 @@ import java.util.Observable;
  * @author emanu
  */
 public class Rule extends Observable implements Serializable {
+
     private String name;
     private Action action;
     private Trigger trigger;
@@ -20,7 +21,6 @@ public class Rule extends Observable implements Serializable {
     private long sleep = 0;
     private LocalDateTime wakeUp;
     private VerifiedTool vT;
-
 
     //Costruttori
     public Rule() {
@@ -33,13 +33,13 @@ public class Rule extends Observable implements Serializable {
         this.status = true;
     }
 
-    public void setSleep(Long sleep){
-        if(sleep > 0){
-        this.sleep = sleep;
-        setWakeUp(LocalDateTime.now().plusMinutes(sleep));
-        }
-        else
+    public void setSleep(Long sleep) {
+        if (sleep > 0) {
+            this.sleep = sleep;
+            setWakeUp(LocalDateTime.now().plusMinutes(sleep));
+        } else {
             throw new IllegalArgumentException("Sleep must be a positive value");
+        }
     }
 
     //Getter
@@ -63,11 +63,11 @@ public class Rule extends Observable implements Serializable {
         return this.status;
     }
 
-      public LocalDateTime getWakeUp() {
+    public LocalDateTime getWakeUp() {
         return wakeUp;
     }
 
-     public long getSleep() {
+    public long getSleep() {
         return sleep;
     }
 
@@ -94,27 +94,24 @@ public class Rule extends Observable implements Serializable {
         this.flag = flag;
     }
 
-    public void setVerifiedTool(VerifiedTool v){
-        this.vT= v;
+    public void setVerifiedTool(VerifiedTool v) {
+        this.vT = v;
     }
 
     public void setWakeUp(LocalDateTime wakeUp) {
         this.wakeUp = wakeUp;
     }
 
-
     public boolean ruleIsValid() {
         return this.getTrigger() != null && this.getAction() != null && this.flag;
     }
-
-
-
 
     public void active() {
         this.status = true;
         this.setChanged();
         this.notifyObservers();
     }
+
     public void deactive() {
         this.status = false;
         this.setChanged();
@@ -127,10 +124,11 @@ public class Rule extends Observable implements Serializable {
     }
 
     public boolean isVerifiedRule() {
-        if (!action.isFired())
+        if (!action.isFired()) {
             return trigger.isVerified() && status;
-        else
+        } else {
             return trigger.isVerified() && status && vT.verified(this);
+        }
     }
 
     public void fire() {
@@ -144,17 +142,12 @@ public class Rule extends Observable implements Serializable {
 
     }
 
-
     public Boolean sleepCheck() {
         return LocalDateTime.now().compareTo(wakeUp) >= 0;
     }
 
-
     public LocalDateTime getWakeUpTime() {
         return wakeUp;
     }
-
-
-
 
 }

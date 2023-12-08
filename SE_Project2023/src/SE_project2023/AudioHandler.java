@@ -24,7 +24,7 @@ public class AudioHandler extends ActionHandler {
     }
 
     @Override
-    public void fireAction(Rule r) {
+    public boolean fireAction(Rule r) {
         if (!(r.getAction() instanceof AudioAction) && next != null) {
 
             next.fireAction(r);
@@ -46,7 +46,9 @@ public class AudioHandler extends ActionHandler {
             alert.showAndWait();
 
             mediaPlayer.stop();
+            
             });}
+        return true;
     }
 
 }

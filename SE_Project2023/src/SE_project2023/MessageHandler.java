@@ -26,7 +26,7 @@ public class MessageHandler extends ActionHandler  {
     }
 
     @Override
-    public void fireAction(Rule r) {
+    public boolean fireAction(Rule r) {
         System.out.println(r.getAction() instanceof MessageBoxAction);
         if(!(r.getAction() instanceof MessageBoxAction) && next!=null){
             
@@ -41,7 +41,9 @@ public class MessageHandler extends ActionHandler  {
         alert.setHeaderText(null);
         alert.setContentText(act.getMsg());
         alert.showAndWait();
-        });}    }
+        });}    
+    return true;
+    }
 
    
     

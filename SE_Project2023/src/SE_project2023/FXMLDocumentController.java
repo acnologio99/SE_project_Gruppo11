@@ -183,5 +183,6 @@ public class FXMLDocumentController implements Initializable, Observer, Serializ
     @Override
     public void update(Observable o, Object arg) {
         tableView.refresh();
+        
     }
 }

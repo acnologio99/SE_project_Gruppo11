@@ -41,8 +41,7 @@ public class RuleList extends Observable implements Observer, Serializable, Iter
         return ruleList;
     }
 
-   //***HO RIMOSSO GET RULELIST***///
-
+    //***HO RIMOSSO GET RULELIST***///
     public int size() {
         return rules.size();
     }
@@ -76,7 +75,7 @@ public class RuleList extends Observable implements Observer, Serializable, Iter
 
     }
 
-    public Rule get(int index){
+    public Rule get(int index) {
         Rule r = rules.get(index);
         this.setChanged();
         this.notifyObservers();
@@ -84,7 +83,7 @@ public class RuleList extends Observable implements Observer, Serializable, Iter
         return r;
     }
 
-    public boolean remove(Rule r){
+    public boolean remove(Rule r) {
         boolean rmv = rules.remove(r);
         this.setChanged();
         this.notifyObservers();
@@ -111,14 +110,15 @@ public class RuleList extends Observable implements Observer, Serializable, Iter
             }
 
             try (ObjectInputStream objectIn = new ObjectInputStream(new BufferedInputStream(new FileInputStream(file)))) {
-                while (true) {
-                    try {
-                         rules = (List<Rule>) objectIn.readObject();
-                    } catch (EOFException e) {
 
-                        break;
+                try {
+                    List<Rule> l = (List<Rule>) objectIn.readObject(); //lista d'appoggio in modo da poter osservare di nuovo tutte le regole.
+                    for (Rule r : l) {
+                        this.add(r);
                     }
+                } catch (EOFException e) {
                 }
+
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
 
@@ -136,9 +136,8 @@ public class RuleList extends Observable implements Observer, Serializable, Iter
     }
 
     @Override
-     public Iterator<Rule> iterator() {
+    public Iterator<Rule> iterator() {
         return rules.iterator();
     }
-
 
 }

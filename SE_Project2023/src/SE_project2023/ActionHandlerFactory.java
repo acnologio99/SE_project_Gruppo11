@@ -4,6 +4,8 @@
  */
 package SE_project2023;
 
+import SE_project2023.Regole.Rule;
+
 /**
  *
  * @author chris
@@ -12,7 +14,23 @@ public class ActionHandlerFactory {
     
     
     public static ActionHandler createActionHandler(){
-     ActionHandler msg = new MessageHandler(null);
+        
+     class NestedCatchAllHandler extends ActionHandler { //Handler innestato che cattura tutte le richieste non vrificate.
+
+            public NestedCatchAllHandler(ActionHandler next) {
+                super(next);
+            }
+           
+            @Override
+            public boolean fireAction(Rule r) {
+                return false;
+            }
+     }
+        
+        
+     ActionHandler catchAll = new NestedCatchAllHandler(null);
+     ActionHandler msg =new MessageHandler(catchAll);
      return new AudioHandler(msg);
     }
+    
 }

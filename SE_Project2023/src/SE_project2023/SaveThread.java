@@ -24,7 +24,7 @@ public class SaveThread implements Runnable, Observer {
     @Override
     public void run() {
         System.out.println("Salvo");
-        RuleList.getRuleList().saveRules("rules.bin");
+        rules.saveRules("rules.bin");
     }
 
     @Override
