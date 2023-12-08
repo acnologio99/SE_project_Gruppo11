@@ -9,6 +9,8 @@ import java.io.File;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -34,7 +36,6 @@ import javafx.stage.Stage;
  */
 public class FXMLActionController implements Initializable {
 
-    private TextArea TextMessage;
 
     ObservableList<Action> actionList;
     RuleList r;
@@ -74,7 +75,7 @@ public class FXMLActionController implements Initializable {
     private ToggleButton removeToggle;
     @FXML
     private ToggleButton copyToggle;
-    @FXML
+     @FXML
     private TextArea textMessage;
 
     /**
@@ -103,13 +104,16 @@ public class FXMLActionController implements Initializable {
                 handleSelection(newValue); // Gestisci la selezione dell'opzione
             }
         });
+        
+
 
         menuExec = new MenuExecutor(); 
+       
 
     }
 
     private void handleSelection(String selectedAction) {
-        menuExec.execute(new SwitchCommand(anchorPanes, selectedAction)); 
+         menuExec.execute(new SwitchCommand(anchorPanes, selectedAction)); 
     }
 
     @FXML
@@ -126,9 +130,10 @@ public class FXMLActionController implements Initializable {
                 && !"".equals(sourcePath.getText())) {
             String action = ((ToggleButton) fileChoices.getSelectedToggle()).getId().split("Toggle")[0];
             Action a = new FileAction(sourcePath.getText(), destPath.getText(), action);
-
+            
             r.getLast().setAction(a);
         }
+        
         cancelAction(event);
     }
 
@@ -181,5 +186,7 @@ public class FXMLActionController implements Initializable {
             destFile.setDisable(false);
         }
     }
+
+   
 
 }

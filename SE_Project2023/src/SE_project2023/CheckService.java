@@ -9,7 +9,6 @@ import javafx.application.Platform;
 import javafx.concurrent.ScheduledService;
 import javafx.concurrent.Task;
 import javafx.scene.control.TableView;
-import javafx.util.Duration;
 
 /**
  *

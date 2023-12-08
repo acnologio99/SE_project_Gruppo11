@@ -68,7 +68,6 @@ public class FXMLDocumentController implements Initializable, Observer, Serializ
     
     private List<Rule> list;
 
-   
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
@@ -86,7 +85,6 @@ public class FXMLDocumentController implements Initializable, Observer, Serializ
 
         //setting selezione multipla
         tableView.getSelectionModel().setSelectionMode(javafx.scene.control.SelectionMode.MULTIPLE);
-        
         //setting View
         nameCln.setCellValueFactory(new PropertyValueFactory<>("Name"));
         actionCln.setCellValueFactory(new PropertyValueFactory<>("Action"));
@@ -95,7 +93,10 @@ public class FXMLDocumentController implements Initializable, Observer, Serializ
             boolean status = cellData.getValue().getStatus(); // Assume che "isStatus()" sia il metodo che restituisce il booleano dalla classe Rule
             return new SimpleStringProperty(status ? "On" : "Off");
         });
-        sleepCln.setCellValueFactory(new PropertyValueFactory<>("Sleep"));
+        sleepCln.setCellValueFactory(cellData -> {
+            long sleep = cellData.getValue().getSleep(); // Assume che "isStatus()" sia il metodo che restituisce il booleano dalla classe Rule
+            return new SimpleStringProperty(sleep>0 ? "On" : "Off");
+        });
 
      
         rules.addObserver(this);
@@ -188,7 +189,6 @@ public class FXMLDocumentController implements Initializable, Observer, Serializ
         }
     }
 
-    
     @Override
     public void update(Observable o, Object arg) {
         tableView.refresh();

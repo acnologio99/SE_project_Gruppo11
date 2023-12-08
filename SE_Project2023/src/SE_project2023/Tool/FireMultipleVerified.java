@@ -15,7 +15,7 @@ public class FireMultipleVerified extends VerifiedTool {
     public FireMultipleVerified() {
     }
     @Override
-    public boolean Verified(Rule r){
+    public boolean verified(Rule r){
         return true;
     }
 }

@@ -22,12 +22,23 @@ public class RuleTest {
 
     Rule r;
 
-    public RuleTest() {
+    public RuleTest() {}
+
+    @BeforeClass
+    public static void setUpClass() {
+    }
+
+    @AfterClass
+    public static void tearDownClass() {
     }
 
     @Before
     public void setUp() {
         r = new Rule();
+    }
+
+    @After
+    public void tearDown() {
     }
 
     /**
@@ -143,9 +154,9 @@ public class RuleTest {
     @Test
     public void testActiveDeactive() {
         System.out.println("deactive");
-     
-        assertTrue(r.getStatus());//by default the rule is active   
-        
+
+        assertTrue(r.getStatus());//by default the rule is active
+
         r.deactive(); //deactive the rule, status = false
         assertFalse(r.getStatus());
     }
@@ -158,17 +169,17 @@ public class RuleTest {
         System.out.println("fire");
         r.setAction(new MessageBoxAction("test"));
         assertFalse(r.getAction().isFired()); //rule not fired, expected false
-        
+
         r.fire();
         assertTrue(r.getAction().isFired()); //action is fired, expected true
-        
+
         long sleep = 10;
         r.setSleep(sleep);
         r.setAction(new MessageBoxAction("test"));
         r.fire();
         assertTrue(r.getAction().isFired() && r.getWakeUpTime().getMinute()!=0); //action is fired one, and wakeUp time is setted.
     }
-    
+
     @Test(expected = NullPointerException.class)
     public void testFireNoAction() {
         System.out.println("fire no action");
@@ -183,10 +194,10 @@ public class RuleTest {
         System.out.println("sleepCheck");
         long sleep = 10;
         r.setSleep(sleep);
-        r.setAction(new MessageBoxAction("Test")); 
+        r.setAction(new MessageBoxAction("Test"));
         r.fire();
         assertFalse(r.sleepCheck());
-        
+
     }
 
 
@@ -196,9 +207,9 @@ public class RuleTest {
     @Test
     public void testSetFireOnce() {
         System.out.println("setFireOnce");
-        
+
     }
-    
+
     /*
     *
     */
@@ -211,16 +222,26 @@ public class RuleTest {
                 observed = true;
             }
         }
-        
+
         InnerObserver obs = new InnerObserver();
         r.addObserver(obs);
         assertFalse(obs.observed); //observed should be false becouse r didn't update.
         r.deactive();
         assertTrue(obs.observed); //observed is true becouse r updated.
-            
+
     }
 
-    
-   
+
+
+    @Test
+    public void testGetSleep() {
+        System.out.println("getSleep");
+        Rule instance = new Rule();
+        long expResult = 0;
+        long result = instance.getSleep();
+        assertTrue(expResult == result);
+
+    }
+
 
 }

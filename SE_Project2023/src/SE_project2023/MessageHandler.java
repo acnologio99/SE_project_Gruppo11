@@ -27,9 +27,12 @@ public class MessageHandler extends ActionHandler  {
 
     @Override
     public void fireAction(Rule r) {
-        
+        System.out.println(r.getAction() instanceof MessageBoxAction);
         if(!(r.getAction() instanceof MessageBoxAction) && next!=null){
+            
+            System.out.println("dentro");
             next.fireAction(r);
+       
         }else{
         MessageBoxAction act = (MessageBoxAction) r.getAction();
         Platform.runLater(() -> {
@@ -38,9 +41,7 @@ public class MessageHandler extends ActionHandler  {
         alert.setHeaderText(null);
         alert.setContentText(act.getMsg());
         alert.showAndWait();
-        });}
-        
-    }
+        });}    }
 
    
     

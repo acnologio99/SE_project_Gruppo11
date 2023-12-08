@@ -56,7 +56,7 @@ public class AudioAction implements Action, Serializable {
 
     @Override
     public String toString() {
-        return "ActionAudio : " + this.path;
+        return "Audio : " + this.path;
     }
 
 }

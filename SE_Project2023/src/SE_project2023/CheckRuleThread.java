@@ -18,8 +18,8 @@ public class CheckRuleThread implements Runnable {
     private ActionHandler handler;
 
     public CheckRuleThread() {
-      rules = RuleList.getRuleList();
-     handler = ActionHandlerFactory.createActionHandler();
+     rules = RuleList.getRuleList();
+     handler = ActionHandlerFactory.createActionHandler();;
     }
 
     @Override

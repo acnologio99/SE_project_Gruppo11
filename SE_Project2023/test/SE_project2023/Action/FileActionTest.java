@@ -141,9 +141,7 @@ public class FileActionTest {
      */
     @Test(expected = UnsupportedOperationException.class)
     public void testGetChild() {
-
         a.getChild();
-
     }
 
     /**

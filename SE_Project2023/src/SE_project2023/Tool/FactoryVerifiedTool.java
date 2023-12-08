@@ -4,18 +4,10 @@
  */
 package SE_project2023.Tool;
 
-import SE_project2023.Regole.Rule;
-
 /**
  *
  * @author giova
  */
-public class FireOnceVerified extends VerifiedTool{
-
-    public FireOnceVerified() {
-    }
+public class FactoryVerifiedTool {
     
-    public boolean verified(Rule r){
-            return !r.getAction().isFired();
-       }
 }
