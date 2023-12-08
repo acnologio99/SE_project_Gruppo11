@@ -41,13 +41,14 @@ public class RuleList extends Observable implements Observer, Serializable, Iter
         return ruleList;
     }
 
-    public List<Rule> getArrayList() {
-        return rules;
-    }
+   //***HO RIMOSSO GET RULELIST***///
 
     public int size() {
         return rules.size();
-
+    }
+    
+    public boolean isEmpty() {
+        return rules.isEmpty();
     }
 
     public boolean removeAll(Collection c) {
@@ -70,8 +71,6 @@ public class RuleList extends Observable implements Observer, Serializable, Iter
 
     public void removeLast() {
         rules.remove(rules.size() - 1);
-        
-
     }
     
     public Rule get(int index){

@@ -55,6 +55,7 @@ public class MessageHandlerTest {
     }
     
      @Test
+     //testint messageHandler with chain
     public void testFireActionChain() {
         System.out.println("fireActionChain");
         

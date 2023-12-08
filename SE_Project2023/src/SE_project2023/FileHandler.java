@@ -25,7 +25,6 @@ public class FileHandler extends ActionHandler {
 
     @Override
     public void fireAction(Rule r) {
-        System.out.println("dentro");
         if (!(r.getAction() instanceof AudioAction) && next != null) {
 
             next.fireAction(r);

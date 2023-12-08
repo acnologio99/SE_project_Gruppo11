@@ -30,7 +30,7 @@ public class CheckService extends ScheduledService{
                     // Codice per controllare la lista
                     System.out.println("Controllo lista...");
 
-                    for (Rule r : r.getArrayList()) {
+                    for (Rule r : r) {
                         if (r.ruleIsValid()) {
                             Platform.runLater(() -> {
                                 if (r.isVerifiedRule()) {

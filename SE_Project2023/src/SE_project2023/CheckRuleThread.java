@@ -15,7 +15,7 @@ import java.util.logging.Logger;
 public class CheckRuleThread implements Runnable {
 
     private RuleList rules;
-    ActionHandler handler;
+    private ActionHandler handler;
 
     public CheckRuleThread() {
       rules = RuleList.getRuleList();
@@ -34,7 +34,7 @@ public class CheckRuleThread implements Runnable {
 
                 // Codice per controllare la lista
                 System.out.println("Controllo lista...");
-                if(!rules.getArrayList().isEmpty()){
+                if(!rules.isEmpty()){
                 for (Rule r : rules) {
                     if (r.ruleIsValid() && r.isVerifiedRule()) {
                         r.fire();

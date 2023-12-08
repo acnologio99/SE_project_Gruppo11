@@ -5,14 +5,12 @@
 package SE_project2023;
 
 import SE_project2023.Action.AudioAction;
-import SE_project2023.Action.FileAction;
 import SE_project2023.Action.MessageBoxAction;
 import SE_project2023.Regole.Rule;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -55,6 +53,7 @@ public class FileHandlerTest {
     }
     
     @Test
+    //testing AudioHandler with chain
     public void testFireActionChain() {
         System.out.println("fireActionChain");
         

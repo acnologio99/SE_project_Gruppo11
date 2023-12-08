@@ -4,10 +4,7 @@ import SE_project2023.Action.Action;
 import SE_project2023.Trigger.Trigger;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Observable;
-import java.util.Observer;
 
 /**
  *
@@ -36,8 +33,11 @@ public class Rule extends Observable implements Serializable {
 
     }
 
-    public void setSleep(Long sleep) {
+    public void setSleep(Long sleep){
+        if(sleep > 0)
         this.sleep = sleep;
+        else
+            throw new IllegalArgumentException("Sleep must be a positive value");
     }
 
     //Getter
@@ -134,12 +134,12 @@ public class Rule extends Observable implements Serializable {
     public void fire() {
 
         action.fire();
-        this.setChanged();
-        this.notifyObservers();
         if (!(sleep == 0)) {
             wakeUp = LocalDateTime.now().plusSeconds(sleep);
             System.out.print(wakeUp);
         }
+        this.setChanged();
+        this.notifyObservers();
 
     }
 
@@ -147,5 +147,11 @@ public class Rule extends Observable implements Serializable {
         return LocalDateTime.now().compareTo(wakeUp) >= 0;
     }
 
-    /*this method attaches the observers to the rule*/
+   
+    public LocalDateTime getWakeUpTime() {
+        return wakeUp;
+    }
+    
+    
+    
 }

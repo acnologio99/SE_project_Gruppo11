@@ -6,6 +6,7 @@ package SE_project2023.Action;
 
 
 
+import SE_project2023.Regole.Rule;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import org.junit.Before;
@@ -65,6 +66,11 @@ public class MessageBoxActionTest {
         boolean expResult = false;
         boolean result = instance.isFired();
         assertEquals(expResult, result);
+        
+        Rule r = new Rule();
+        r.setAction(instance);
+        r.fire();
+        assertTrue(instance.isFired());
 
        
 
