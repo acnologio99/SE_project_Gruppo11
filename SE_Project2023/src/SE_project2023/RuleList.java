@@ -139,7 +139,7 @@ public class RuleList extends Observable implements Observer, Serializable, Iter
     @Override
     public void update(Observable o, Object arg) {
         setChanged();
-        notifyObservers();
+        notifyObservers(arg);
     }
 
     @Override

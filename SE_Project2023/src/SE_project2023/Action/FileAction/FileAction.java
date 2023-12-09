@@ -74,7 +74,7 @@ public class FileAction implements Action, Serializable {
 
         if (this.destinationPath != null) {
             if (this.destinationPath.lastIndexOf("\\") == (this.destinationPath.length() - 1)) {
-                this.destinationPath += "\\" + file.getName();
+                this.destinationPath += file.getName();
             }
         }
 

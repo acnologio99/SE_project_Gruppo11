@@ -4,10 +4,8 @@
  */
 package SE_project2023;
 
+import SE_project2023.Action.Action;
 import SE_project2023.Action.MessageBoxAction;
-import SE_project2023.Regole.Rule;
-import java.util.Observable;
-import java.util.Observer;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 
@@ -16,38 +14,37 @@ import javafx.scene.control.Alert;
  * @author chris
  */
 public class MessageHandler extends ActionHandler {
-    
+
     public MessageHandler(ActionHandler next) {
         super(next);
-        
-        
-        
+
+
+
     }
 
     @Override
-    public boolean fireAction(Rule r) {
-        System.out.println(r.getAction() instanceof MessageBoxAction);
-        if(!(r.getAction() instanceof MessageBoxAction) && next!=null){
-            
-            System.out.println("dentro");
-            next.fireAction(r);
-       
+    public boolean fireAction(Action a) {
+        System.out.println(a instanceof MessageBoxAction);
+        if(!(a instanceof MessageBoxAction) && next!=null){
+
+            next.fireAction(a);
+
         }else {
-        MessageBoxAction act = (MessageBoxAction) r.getAction();
+        MessageBoxAction act = (MessageBoxAction) a;
         Platform.runLater(() -> {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Information Dialog");
         alert.setHeaderText(null);
         alert.setContentText(act.getMsg());
         alert.showAndWait();
-        });}    
+        });}
     return true;
     }
 
-    
 
-   
-    
-    
-    
+
+
+
+
+
 }

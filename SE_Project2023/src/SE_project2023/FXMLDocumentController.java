@@ -35,7 +35,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 /**
  *
@@ -115,7 +114,7 @@ public class FXMLDocumentController implements Initializable, Observer, Serializ
         }
     }
 });
-     
+
         rules.addObserver(this);
 
     }
@@ -135,7 +134,7 @@ public class FXMLDocumentController implements Initializable, Observer, Serializ
             if (b == ButtonType.OK) {
                 rules.removeAll(tableView.getSelectionModel().getSelectedItems());
                 ruleList.removeAll(tableView.getSelectionModel().getSelectedItems());
-                
+
             }
         }
 
@@ -200,6 +199,12 @@ public class FXMLDocumentController implements Initializable, Observer, Serializ
 
     @Override
     public void update(Observable o, Object arg) {
-        tableView.refresh();
+        if(arg == null)
+            tableView.refresh();
+        else {
+            tableView.refresh();
+            Rule r = (Rule)arg;
+            ActionHandlerFactory.createActionHandler().fireAction(r.getAction());
+        }
     }
 }

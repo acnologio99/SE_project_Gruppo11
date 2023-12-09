@@ -9,9 +9,11 @@ import SE_project2023.Action.Strategy.FileAction;
 import SE_project2023.Action.Strategy.StrategyFactory;
 import java.io.File;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
@@ -103,31 +105,17 @@ public class FXMLActionController implements Initializable{
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        //Action Factory 
-        StrategyFactory sf = new StrategyFactory();
-        creators.put("TextBox Action", () -> new MessageBoxAction(textMessage.getText()));
-        creators.put("Audio Action", () -> new AudioAction(audioText.getText()));
-        creators.put("File Action", () -> new FileAction(sourcePath.getText(), destPath.getText(), sf.getStrategy(((ToggleButton) fileChoices.getSelectedToggle()).getId().split("Toggle")[0])));
-        creators.put("Append Action", () -> new FileAppendAction(sourcePath.getText(), textMessage2.getText()));
-        creators.put("Program Action", () -> new ProgramAction(sourcePathExe.getText(), Arrays.asList(commandsField.getText())));
+        //Action Factory
+
         HashSet<Action> actions = new HashSet();
 
         actionList = FXCollections.observableArrayList(actions);
         r = RuleList.getRuleList();
 
-        anchorPanes.put("TextBox Action", textPane);
-        anchorPanes.put("Audio Action", audioPane);
-        anchorPanes.put("File Action", filePane);
-        anchorPanes.put("Append Action", appendPane);
-        anchorPanes.put("Program Action", programPane);
+        populateCreator();
+        populatePanes();
+        populateListView();
 
-        actionListView.getItems().addAll(
-                "TextBox Action",
-                "Audio Action",
-                "File Action",
-                "Append Action",
-                "Program Action"
-        );
 
         // Aggiungi un listener per gestire la selezione della ListView
         actionListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -141,6 +129,7 @@ public class FXMLActionController implements Initializable{
 
         menuExec = new MenuExecutor();
 
+
     }
 
     private void handleSelection(String selectedAction) {
@@ -149,8 +138,11 @@ public class FXMLActionController implements Initializable{
 
     @FXML
     private void doneAction(ActionEvent event) {
-        Action a = creators.get(actionListView.getSelectionModel().getSelectedItem()).create();
-        r.getLast().setAction(a);
+        if(!actionListView.getSelectionModel().getSelectedItems().isEmpty()){
+            Action a = creators.get(actionListView.getSelectionModel().getSelectedItem()).create();
+            r.getLast().setAction(a);
+        }
+
         cancelAction(event);
     }
 
@@ -225,7 +217,32 @@ public class FXMLActionController implements Initializable{
             sourcePathExe.setText(file.toString());
         }
     }
+    }
 
-    
+    private void populateCreator() {
+        StrategyFactory sf = new StrategyFactory();
+        creators.put("TextBox Action", () -> new MessageBoxAction(textMessage.getText()));
+        creators.put("Audio Action", () -> new AudioAction(audioText.getText()));
+        creators.put("File Action", () -> new FileAction(sourcePath1.getText(), destPath.getText(),sf.getStrategy(((ToggleButton) fileChoices.getSelectedToggle()).getId().split("Toggle")[0])));
+        creators.put("Append Action",() ->  new FileAppendAction(sourcePath.getText(), textMessage2.getText()));
+        creators.put("Program Action",() ->  new ProgramAction(sourcePathExe.getText(), Arrays.asList(commandsField.getText())));
+    }
+
+    private void populatePanes() {
+        anchorPanes.put("TextBox Action", textPane);
+        anchorPanes.put("Audio Action", audioPane);
+        anchorPanes.put("File Action", filePane);
+        anchorPanes.put("Append Action", appendPane);
+        anchorPanes.put("Program Action", programPane);
+    }
+    private void populateListView(){
+        actionListView.getItems().addAll(
+                "TextBox Action",
+                "Audio Action",
+                "File Action",
+                "Append Action",
+                "Program Action"
+        );
+    }
 
 }

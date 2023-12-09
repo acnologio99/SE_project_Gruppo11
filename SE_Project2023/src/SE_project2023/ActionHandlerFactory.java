@@ -4,7 +4,7 @@
  */
 package SE_project2023;
 
-import SE_project2023.Regole.Rule;
+import SE_project2023.Action.Action;
 
 /**
  *
@@ -13,35 +13,36 @@ import SE_project2023.Regole.Rule;
 public class ActionHandlerFactory {
     private static ActionHandlerFactory actionHandlerFactory = null;
     private ActionHandler catchAll;
-    
-    private ActionHandlerFactory() {
-        
-        class NestedCatchAllHandler extends ActionHandler {
+
+
+    public static ActionHandler createActionHandler(){
+
+
+     class NestedCatchAllHandler extends ActionHandler { //Handler innestato che cattura tutte le richieste non verificate.
             public NestedCatchAllHandler(ActionHandler next) {
                 super(next);
             }
 
             @Override
-            public boolean fireAction(Rule r) {
+            public boolean fireAction(Action a) {
                 return false;
             }
         }
         catchAll = new NestedCatchAllHandler(null);
 
     }
-    
+
     public static ActionHandlerFactory getInstance() {
         if (actionHandlerFactory == null) {
             actionHandlerFactory = new ActionHandlerFactory();
         }
         return actionHandlerFactory;
     }
-    
+
     /*public ActionHandler createActionHandler(ActionHandler acHandl) {
-        
+
         ActionHandler acHandl = new MessageHandler(catchAll);
         return new AudioHandler(msg);
-        
+
     }*/
 }
-
