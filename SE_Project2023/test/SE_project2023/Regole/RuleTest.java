@@ -5,15 +5,15 @@
 package SE_project2023.Regole;
 
 import SE_project2023.Action.*;
+import SE_project2023.Tool.FireOnceVerified;
+import SE_project2023.Tool.SleepVerified;
+import SE_project2023.Trigger.DayOfMonthTrigger;
 import SE_project2023.Trigger.TimeTrigger;
 import SE_project2023.Trigger.Trigger;
 import java.time.LocalTime;
 import java.util.Observable;
 import java.util.Observer;
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -22,32 +22,25 @@ import static org.junit.Assert.*;
  * @author emanu
  */
 public class RuleTest {
-    
-    Rule r;
-    
-    public RuleTest() {}
-    
-    @BeforeClass
-    public static void setUpClass() {
+
+    private Rule r;
+
+    public RuleTest() {
     }
-    
-    @AfterClass
-    public static void tearDownClass() {
-    }
-    
+
     @Before
     public void setUp() {
         r = new Rule();
     }
-    
+
     @Test(expected = IllegalArgumentException.class)
     public void testSetSleep() {
         System.out.println("setSleep");
         long sleep = -1;
-        r.setSleep(sleep); //expected IllegalArgumentException with negative value of sleep
+        r.setSleep(sleep); //expected IllegalArgumentException dato che ho inserito un valore negativo per la sleep
 
     }
-    
+
     /**
      * Test of setAction and getAction method, of class Rule.
      */
@@ -66,8 +59,8 @@ public class RuleTest {
     @Test
     public void testSetGetTrigger() {
         System.out.println("setTrigger and getTrigger");
-        Trigger expResult = new TimeTrigger(LocalTime.now());
-        r.setTrigger(new TimeTrigger(LocalTime.now()));
+        Trigger expResult = new DayOfMonthTrigger(3);
+        r.setTrigger(expResult);
         Trigger result = r.getTrigger();
         assertEquals(expResult, result);
     }
@@ -95,6 +88,7 @@ public class RuleTest {
         String result = r.getName();
         assertEquals(expResult, result);
     }
+
     /**
      * Test of ruleIsValid method, of class Rule.
      */
@@ -118,6 +112,7 @@ public class RuleTest {
         result = r.ruleIsValid();
         assertTrue(result);
     }
+
     /**
      * Test of isVerifiedRule method, of class Rule.
      */
@@ -125,27 +120,43 @@ public class RuleTest {
     public void testIsVerifiedRule() {
         System.out.println("isVerifiedRule");
         r.setAction(new MessageBoxAction("Test"));
-        r.setTrigger(new TriggerForTest()); //Trigger is verified and the rule is active expected True
+        r.setTrigger(new TriggerForTest()); //Trigger è verificato e la regola è attiva expected True
         r.getTrigger().isVerified();
         boolean result = r.isVerifiedRule();
         assertTrue(result);
         r.deactive();
         result = r.isVerifiedRule();
-        assertFalse(result); //Trigger is verified but the rule is not active expected False
+        assertFalse(result); //Trigger è verificato ma la regola non è attivata, expected false     
 
     }
+    
+     @Test
+    public void testIsVerifiedRuleFireOnce() {
+        System.out.println("isVerifiedRuleFireOnce");
+        r.setAction(new MessageBoxAction("Test"));
+        r.setTrigger(new TriggerForTest()); //Trigger è verificato e la regola è attiva
+        r.setVerifiedTool(new FireOnceVerified());
+        boolean result = r.isVerifiedRule();
+        assertTrue(result); //Trigger è verificato ma l'azione non è stata ancora eseguita, expected True
+        r.fire();
+        assertFalse(r.isVerifiedRule()); //L'azione è stata eseguita, siccome lo status è impostato su FireOnce la regola non è più verificata
+        //e non dovrà essere eseguita al prossimo controllo
+    }
+
     @Test
     public void testActiveDeactive() {
         System.out.println("deactive");
-        assertTrue(r.getStatus());//by default the rule is active
-        r.deactive(); //deactive the rule, status = false
+        assertTrue(r.getStatus());//di default la regola è attiva
+        r.deactive(); //deactive rule, status = false
         assertFalse(r.getStatus());
     }
-     /**
+
+    /**
      * Test of fire method, of class Rule.
-     * */
+     *
+     */
     @Test
-     public void testFire() {
+    public void testFire() {
         System.out.println("fire");
         r.setAction(new MessageBoxAction("test"));
         assertFalse(r.getAction().isFired()); //rule not fired, expected false
@@ -155,18 +166,21 @@ public class RuleTest {
         r.setSleep(sleep);
         r.setAction(new MessageBoxAction("test"));
         r.fire();
-        assertTrue(r.getAction().isFired() && r.getWakeUp().getMinute()!=0); //action is fired one, and wakeUp time is setted.
-     }
-     @Test(expected = NullPointerException.class)
+        assertTrue(r.getAction().isFired() && r.getWakeUp().getMinute() != 0); //action is fired one, and wakeUp time is setted.
+    }
+
+    @Test(expected = NullPointerException.class)
     public void testFireNoAction() {
         System.out.println("fire no action");
         r.fire();
     }
 
     @Test
-    public void observableTest(){
+    public void observableTest() {
         class InnerObserver implements Observer {
+
             boolean observed = false;
+
             @Override
             public void update(Observable o, Object arg) {
                 observed = true;
@@ -174,21 +188,10 @@ public class RuleTest {
         }
         InnerObserver obs = new InnerObserver();
         r.addObserver(obs);
-        assertFalse(obs.observed); //observed should be false becouse r didn't update.
+        assertFalse(obs.observed); //observed deve essere falso perchè la regola non si è aggiornata.
         r.deactive();
-        assertTrue(obs.observed); //observed is true becouse r updated.
+        assertTrue(obs.observed); //observed deve essere vero dato che la regola si è aggiornata.
     }
 
 
-    @Test
-    public void testGetSleep() {
-        System.out.println("getSleep");
-        Rule instance = new Rule();
-        long expResult = 0;
-        long result = instance.getSleep();
-        assertTrue(expResult == result);
-        
-    }
-
-    
 }

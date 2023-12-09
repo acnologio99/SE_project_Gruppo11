@@ -10,6 +10,8 @@ import SE_project2023.Trigger.Trigger;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Optional;
@@ -64,6 +66,7 @@ public class FXMLDocumentController implements Initializable, Observer, Serializ
     private TableColumn<Rule, String> sleepCln;
     @FXML
     private VBox rootScene;
+    private List<Rule> list;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -71,8 +74,12 @@ public class FXMLDocumentController implements Initializable, Observer, Serializ
         LoadService load = new LoadService();
         load.start();
         //inizializzazione Liste
+        list = new ArrayList<>();
         load.setOnSucceeded(e -> {
-            ruleList = FXCollections.observableArrayList(rules.getArrayList());
+            for(Rule r : rules){
+                list.add(r);
+            }
+            ruleList = FXCollections.observableArrayList(list);
             tableView.setItems(ruleList);
         });
 

@@ -34,7 +34,7 @@ public class AudioHandlerTest {
     /**
      * Test of fireAction method, of class FileHandler.
      */
-    @Test(expected=ClassCastException.class)
+    @Test(expected = ClassCastException.class)
     public void testFireAction() {
         System.out.println("fireAction");
         
@@ -44,14 +44,17 @@ public class AudioHandlerTest {
            instance.fireAction(r); //javafx test, allert with sound
         });
         try {
-            Thread.sleep(5000); 
+            Thread.sleep(2000); 
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        
         r.setAction(new MessageBoxAction("Test"));
-        instance.fireAction(r); //rule with a differenct Action but without "next" nullPointer expected
+        instance.fireAction(r); //rule with a differenct Action but without "next" ClassCastException expected
+        //Nella catena questo non può accadere dato che è presente un Handler Catch All.
     }
+    /**
+     * Test di una regola con una AudioAction all'interno della catena.
+     */
     
     @Test
     public void testFireActionChain() {
@@ -68,6 +71,7 @@ public class AudioHandlerTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        
         
         
     }

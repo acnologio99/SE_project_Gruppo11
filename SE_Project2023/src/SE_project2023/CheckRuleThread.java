@@ -19,7 +19,7 @@ public class CheckRuleThread implements Runnable {
 
     public CheckRuleThread() {
      rules = RuleList.getRuleList();
-     handler = ActionHandlerFactory.createActionHandler();;
+    
     }
 
     @Override
@@ -38,7 +38,7 @@ public class CheckRuleThread implements Runnable {
                 for (Rule r : rules) {
                     if (r.ruleIsValid() && r.isVerifiedRule()) {
                         r.fire();
-                        handler.fireAction(r);
+
                     }
                     else ;
                 }

@@ -28,8 +28,8 @@ public class AudioHandler extends ActionHandler {
 
             next.fireAction(r);
         } else {
-            Platform.runLater(() -> {
             AudioAction act = (AudioAction) r.getAction();
+            Platform.runLater(() -> {
             File file = new File(act.getPath());
 
             Media media = new Media(file.toURI().toString());

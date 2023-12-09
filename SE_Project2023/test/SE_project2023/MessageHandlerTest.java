@@ -45,13 +45,14 @@ public class MessageHandlerTest {
            instance.fireAction(r); //javafx test, allert with same "test" message.
         });
         try {
-            Thread.sleep(5000); 
+            Thread.sleep(2000); 
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         
         r.setAction(new AudioAction());
         instance.fireAction(r); //rule with a differenct Action but without "next" ClassCastException expected
+        //Nella catena questo non può accadere dato che è presente un Handler Catch All.
     }
     
      @Test
@@ -65,7 +66,7 @@ public class MessageHandlerTest {
            handler.fireAction(r); //expected to show the allert
         });
         try {
-            Thread.sleep(5000); 
+            Thread.sleep(2000); 
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

@@ -6,6 +6,8 @@ package SE_project2023;
 
 import SE_project2023.Action.MessageBoxAction;
 import SE_project2023.Regole.Rule;
+import java.util.Observable;
+import java.util.Observer;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 
@@ -13,10 +15,11 @@ import javafx.scene.control.Alert;
  *
  * @author chris
  */
-public class MessageHandler extends ActionHandler  {
+public class MessageHandler extends ActionHandler {
     
     public MessageHandler(ActionHandler next) {
         super(next);
+        
         
         
     }
@@ -40,6 +43,8 @@ public class MessageHandler extends ActionHandler  {
         });}    
     return true;
     }
+
+    
 
    
     
