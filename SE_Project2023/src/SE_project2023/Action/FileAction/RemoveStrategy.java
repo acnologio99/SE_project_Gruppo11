@@ -15,7 +15,6 @@ public class RemoveStrategy implements FileStrategy, Serializable {
 
     @Override
     public void execute(File file, String sourcePath, String destinationPath) {
-        System.out.println(file.getPath());
         if (file.delete()) {
             System.out.println("File cancellato con successo");
         } else {

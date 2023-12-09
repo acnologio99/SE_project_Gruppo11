@@ -2,10 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/UnitTests/JUnit4TestClass.java to edit this template
  */
-package SE_project2023.Action.FileAction;
+package SE_project2023.Action;
 
 import java.io.File;
-import java.io.IOException;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import org.junit.After;
@@ -25,11 +24,9 @@ public class FileActionTest {
     }
 
     FileAction a;
-    File file;
 
     @BeforeClass
     public static void setUpClass() {
-        
     }
 
     @AfterClass
@@ -37,15 +34,12 @@ public class FileActionTest {
     }
 
     @Before
-    public void setUp() throws IOException {
+    public void setUp() {
         a = new FileAction();
-        file = new File("data\\doc.txt");
-        file.createNewFile();
     }
 
     @After
     public void tearDown() {
-        file.delete();
     }
 
     /**
@@ -93,28 +87,31 @@ public class FileActionTest {
         JFXPanel jfxPanel = new JFXPanel();
 
         Platform.runLater(() -> {
-            a.setSourcePath(file.getPath());
-            a.setDestinationPath("\\");
+            a.setSourcePath("C:\\Users\\emanu\\Desktop\\doc.txt");
+            a.setDestinationPath("C:\\Users\\emanu\\Downloads\\doc.txt");
             System.out.println("move");
-            a.setFileStrategy(new MoveStrategy());
+            a.setAction("move");
             a.fire();
-            assertFalse(file.exists());
-            file = new File(a.getDestinationPath());
-            assertTrue(file.exists());
+            File f = new File(a.getSourcePath());
+            assertFalse(f.exists());
+            f = new File(a.getDestinationPath());
+            assertTrue(f.exists());
 
-            a.setSourcePath(file.getPath());
-            a.setDestinationPath(".\\data\\");
+            a.setSourcePath("C:\\Users\\emanu\\Downloads\\doc.txt");
+            a.setDestinationPath("C:\\Users\\emanu\\Desktop\\doc.txt");
             System.out.println("copy");
-            a.setFileStrategy(new CopyStrategy());
+            a.setAction("copy");
             a.fire();
-            assertTrue(file.exists());
-            assertTrue(file.exists());
+            f = new File(a.getSourcePath());
+            assertTrue(f.exists());
+            f = new File(a.getDestinationPath());
+            assertTrue(f.exists());
 
             System.out.println("remove");
-            a.setFileStrategy(new RemoveStrategy());
+            a.setAction("remove");
             a.fire();
-            file = new File(a.getSourcePath());
-            assertFalse(file.exists());
+            f = new File(a.getDestinationPath());
+            assertFalse(f.exists());
         });
         try {
             Thread.sleep(5000); //devo aspettare che il metodo viene richiamato sul thread e che abbia il tempo di eseguire il test
@@ -153,20 +150,8 @@ public class FileActionTest {
     @Test
     public void testToString() {
         System.out.println("toString");
-        String expResult = "source : null; destination : null";
+        String expResult = "FileAction : source : null; destination : null";
         String result = a.toString();
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of setFileStrategy and getFileStrategy methods, of class FileAction.
-     */
-    @Test
-    public void testSetGetFileStrategy() {
-        System.out.println("setFileStrategy and getFileStrategy");
-        FileStrategy expResult = new CopyStrategy();
-        a.setFileStrategy(expResult);
-        FileStrategy result = a.getFileStrategy();
         assertEquals(expResult, result);
     }
 

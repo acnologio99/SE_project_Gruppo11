@@ -4,7 +4,6 @@
  */
 package SE_project2023;
 
-import SE_project2023.Action.Action;
 import SE_project2023.Regole.Rule;
 
 /**
@@ -20,6 +19,6 @@ public abstract class ActionHandler {
     
     
     
-public abstract boolean fireAction(Action a);        
+public abstract boolean fireAction(Rule r);        
     
 }

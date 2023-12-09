@@ -16,9 +16,9 @@ import javafx.scene.media.MediaPlayer;
  *
  * @author chris
  */
-public class AudioHandler extends ActionHandler {
+public class FileHandler extends ActionHandler {
 
-    public AudioHandler(ActionHandler next) {
+    public FileHandler(ActionHandler next) {
         super(next);
     }
 

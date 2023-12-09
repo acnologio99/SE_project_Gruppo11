@@ -17,17 +17,17 @@ import static org.junit.Assert.*;
  *
  * @author chris
  */
-public class AudioHandlerTest {
+public class FileHandlerTest {
     
-    private AudioHandler instance;
+    private FileHandler instance;
     private Rule r;
     
-    public AudioHandlerTest() {
+    public FileHandlerTest() {
     }
     
     @Before
     public void setUp() {
-        instance = new AudioHandler(null);
+        instance = new FileHandler(null);
         r = new Rule();
     }
 

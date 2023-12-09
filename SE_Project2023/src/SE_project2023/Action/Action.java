@@ -5,7 +5,6 @@
 package SE_project2023.Action;
 
 import java.io.Serializable;
-import javafx.beans.Observable;
 
 /**
  *

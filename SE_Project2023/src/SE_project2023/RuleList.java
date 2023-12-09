@@ -32,7 +32,7 @@ public class RuleList extends Observable implements Observer, Serializable, Iter
     private List<Rule> rules;
 
     private RuleList() {
-        rules = new ArrayList<>();
+        rules = new ArrayList<Rule>();
 
     }
 
@@ -44,14 +44,19 @@ public class RuleList extends Observable implements Observer, Serializable, Iter
         return ruleList;
     }
 
-    public int size() {
-        return rules.size();
+    public List<Rule> getArrayList() {
+        return rules;
     }
 
+    public int size() {
+        return rules.size();
+        
+    }
+    
     public boolean isEmpty() {
         return rules.isEmpty();
     }
-
+    
     public boolean removeAll(Collection c) {
         Boolean a = rules.removeAll(c);
         this.setChanged();
@@ -74,77 +79,71 @@ public class RuleList extends Observable implements Observer, Serializable, Iter
         rules.remove(rules.size() - 1);
         this.setChanged();
         this.notifyObservers();
-
+        
     }
-
-    public Rule get(int index) {
+    
+    public Rule get(int index){
         Rule r = rules.get(index);
         this.setChanged();
         this.notifyObservers();
-
+        
         return r;
     }
 
-    public boolean remove(Rule r) {
+    public boolean remove(Rule r){
         boolean rmv = rules.remove(r);
         this.setChanged();
         this.notifyObservers();
         return rmv;
     }
-
-    public void clear() {
-        rules.clear();
-        this.setChanged();
-        this.notifyObservers();
-    }
-
+    
     public void saveRules(String filename) {
-        File file = new File(filename);
-        if (!file.exists()) {
-            try {
-                file.createNewFile(); // Crea un nuovo file se non esiste
-            } catch (IOException ex) {
-                Logger.getLogger(RuleList.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        
-        
         try (ObjectOutputStream objectOut = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(filename)))) {
 
             objectOut.writeObject(rules);
 
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(RuleList.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(RuleList.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException e) {
+            e.printStackTrace();
+            // Gestione dell'eccezione durante il salvataggio delle regole
         }
     }
 
-    public void loadRules(String filename) {
-        try (ObjectInputStream objectIn = new ObjectInputStream(new BufferedInputStream(new FileInputStream(filename)))) {
-            List<Rule> l = (List<Rule>) objectIn.readObject(); // Leggi la lista delle regole
-            for (Rule r : l) {
-                this.add(r);
+    public void loadRules(String filename){
+        try {
+            File file = new File(filename);
+            if (!file.exists()) {
+                // Se il file non esiste, crea un nuovo file con il nome specificato
+                file.createNewFile();
             }
-        } catch (FileNotFoundException e) {
-            // Se il file non esiste, esce senza fare nulla
-            return;
-        } catch (EOFException eof) {
-            // Gestisci l'EOFException se necessario
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace(); // Gestisci altre eccezioni
+
+            try (ObjectInputStream objectIn = new ObjectInputStream(new BufferedInputStream(new FileInputStream(file)))) {
+                try {
+                    List<Rule> l = (List<Rule>) objectIn.readObject(); //lista d'appoggio in modo da poter osservare di nuovo tutte le regole.
+                    for (Rule r : l) {
+                        this.add(r);
+                    }
+                } catch (EOFException e) {
+                }
+                
+            } catch (EOFException eof) {
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
     @Override
     public void update(Observable o, Object arg) {
         setChanged();
-        notifyObservers(arg);
+        notifyObservers();
     }
 
     @Override
-    public Iterator<Rule> iterator() {
+     public Iterator<Rule> iterator() {
         return rules.iterator();
     }
+
 
 }

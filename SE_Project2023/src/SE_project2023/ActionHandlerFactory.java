@@ -4,31 +4,33 @@
  */
 package SE_project2023;
 
-import SE_project2023.Action.Action;
+import SE_project2023.Regole.Rule;
 
 /**
  *
- @author chris*/
+ * @author chris
+ */
 public class ActionHandlerFactory {
-
-
+    
+    
     public static ActionHandler createActionHandler(){
-
-
-     class NestedCatchAllHandler extends ActionHandler { //Handler innestato che cattura tutte le richieste non verificate.
+     
+       
+     class NestedCatchAllHandler extends ActionHandler { //Handler innestato che cattura tutte le richieste non vrificate.
             public NestedCatchAllHandler(ActionHandler next) {
                 super(next);
             }
-
+           
             @Override
-            public boolean fireAction(Action a) {
+            public boolean fireAction(Rule r) {
                 return false;
             }
      }
-
-
+        
+        
      ActionHandler catchAll = new NestedCatchAllHandler(null);
      ActionHandler msg =new MessageHandler(catchAll);
-     return new AudioHandler(msg);
+     ActionHandler aud = new AudioHandler(msg);
+     return new ProgramHandler(aud);
     }
 }

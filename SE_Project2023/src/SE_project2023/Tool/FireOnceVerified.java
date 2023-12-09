@@ -15,7 +15,6 @@ public class FireOnceVerified implements VerifiedTool{
     public FireOnceVerified() {
     }
     
-    @Override
     public boolean verified(Rule r){
             return !r.getAction().isFired();
        }

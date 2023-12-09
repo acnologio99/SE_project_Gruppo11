@@ -4,45 +4,39 @@
  */
 package SE_project2023;
 
-import SE_project2023.Action.MessageBoxAction;
+import SE_project2023.Action.ProgramAction;
 import SE_project2023.Regole.Rule;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 
 /**
  *
- * @author chris
+ * @author cauro
  */
-public class MessageHandler extends ActionHandler  {
-    
-    public MessageHandler(ActionHandler next) {
-        super(next);
-        
-        
-    }
+public class ProgramHandler extends ActionHandler {
 
+    public ProgramHandler(ActionHandler next) {
+        super(next);
+    }
+    
     @Override
     public boolean fireAction(Rule r) {
-        System.out.println(r.getAction() instanceof MessageBoxAction);
-        if(!(r.getAction() instanceof MessageBoxAction) && next!=null){
+        if(!(r.getAction() instanceof ProgramAction) && next!=null){
             
             System.out.println("dentro");
             next.fireAction(r);
        
         }else {
-        MessageBoxAction act = (MessageBoxAction) r.getAction();
+        ProgramAction act = (ProgramAction) r.getAction();
         Platform.runLater(() -> {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Information Dialog");
         alert.setHeaderText(null);
-        alert.setContentText(act.getMsg());
+        alert.setContentText(act.getOutput());
         alert.showAndWait();
         });}    
     return true;
     }
 
-   
-    
-    
     
 }

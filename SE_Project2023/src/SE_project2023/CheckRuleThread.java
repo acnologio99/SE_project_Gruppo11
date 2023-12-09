@@ -15,16 +15,17 @@ import java.util.logging.Logger;
 public class CheckRuleThread implements Runnable {
 
     private RuleList rules;
+    private ActionHandler handler;
 
     public CheckRuleThread() {
      rules = RuleList.getRuleList();
-
+     handler = ActionHandlerFactory.createActionHandler();;
     }
 
     @Override
     public void run() {
         while (true) {
-
+            
             try {
                 Thread.sleep(10000); // 10 secondi (10000 millisecondi)
             } catch (InterruptedException ex) {
@@ -37,13 +38,15 @@ public class CheckRuleThread implements Runnable {
                 for (Rule r : rules) {
                     if (r.ruleIsValid() && r.isVerifiedRule()) {
                         r.fire();
-
+                        handler.fireAction(r);
                     }
                     else ;
                 }
              }
-
-
+            
+                
         }
     }
 }
+
+
