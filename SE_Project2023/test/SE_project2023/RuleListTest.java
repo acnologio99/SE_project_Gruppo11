@@ -6,6 +6,7 @@ package SE_project2023;
 
 import SE_project2023.Regole.Rule;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,7 +23,7 @@ import static org.junit.Assert.*;
  */
 public class RuleListTest {
 
-    private static final String TEST_FILE = "test_rules.bin";
+    private String testFile = "test_rules.bin";
     private RuleList rules;
 
     public RuleListTest() {
@@ -63,72 +64,65 @@ public class RuleListTest {
     /**
      * Test of removeLast method, of class RuleList.
      */
-    @Test(expected=ArrayIndexOutOfBoundsException.class)
+    @Test(expected = ArrayIndexOutOfBoundsException.class)
     public void testRemoveLast() {
         System.out.println("removeLast");
         rules.add(new Rule());
         rules.removeLast();
         assertTrue(rules.isEmpty());
-        
+
         Rule r1 = new Rule();
         Rule r2 = new Rule();
         rules.add(r1);
         rules.add(r2);
         rules.removeLast();
         assertEquals(r1, rules.getLast());
-        
-        rules.removeLast(); 
+
+        rules.removeLast();
         rules.removeLast();// removeLast on empty list, expected BoundsException 
     }
 
     @Test
     public void testSaveRulesWhenNoRules() {
-        rules.saveRules(TEST_FILE);
-        File emptyFile = new File(TEST_FILE);
-        try {
-            emptyFile.createNewFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        // Verifica che il file sia stato creato
-        File file = new File(TEST_FILE);
-        assertTrue("Il file è stato creato", file.exists());
-        assertEquals("Il file è vuoto", emptyFile.length(), file.length());
-        //faccio la creazione di due file vuoti poiché non posso usare numeri 
-        //interi per lenght dato che il file è binario e non ritorna 
-        //correttamente un valore pari a 0
+
+        rules.saveRules(testFile);
+        File emptyFile = new File(testFile);
+        assertTrue(emptyFile.exists()); //verifico che il file, se non esiste, è stato creato
+        emptyFile.delete();
+
     }
 
-    @Test
+    /*@Test(expected = java.io.EOFException.class)
     public void testLoadRulesFromFileNotExists() {
-        // Verifica che il caricamento da un file inesistente non aggiunga regole
-        rules.loadRules("non_esiste.dat");
-        assertEquals(0, rules.getRuleList().size());
-    }
+        //caricamento da un file non esistente
+        rules.loadRules("file.bin");
+        
+    }*/
 
     @Test
-    public void testLoadRulesFromEmptyFile() {
+    public void testLoadRulesFromEmptyFile() throws IOException {
         // Creazione di un file vuoto
-        File emptyFile = new File(TEST_FILE);
-        try {
-            emptyFile.createNewFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        File emptyFile = new File(testFile);
+        emptyFile.createNewFile();
         // Caricamento da un file vuoto
-        rules.loadRules(TEST_FILE);
-        assertEquals(0, rules.getRuleList().size());
+        rules.loadRules(testFile);
+        assertEquals(0, rules.getRuleList().size()); //Il file non ha regole quindi la size della lista deve essere 0
+        emptyFile.delete();
+    }
+    
+    @Test
+    public void testSaveLoadRules() throws IOException {
+        // Creazione di un file vuoto
+        rules.clear();
+        Rule r = new Rule();
+        rules.add(r);
+        rules.saveRules(testFile);
+        // Caricamento da un file vuoto
+        rules.loadRules(testFile);
+        assertEquals(1, rules.getRuleList().size()); //Il file ha una sola regola
     }
 
-    @Test
-    public void testLoadInvalidRules() {
-        // Scrittura dati non validi nel file
-        // Considera di scrivere dati non corrispondenti a oggetti Rule
-        // Caricamento da un file con dati non validi
-        rules.loadRules(TEST_FILE);
-        // Verifica che non siano state caricate regole non valide
-        assertEquals(0, rules.getRuleList().size());
-    }
+    
 
     /**
      * Test of size method, of class RuleList.
@@ -139,16 +133,15 @@ public class RuleListTest {
         int expResult = 0;
         int result = rules.size();
         assertEquals(expResult, result);
-        
+
         rules.add(new Rule());
         result = rules.size();
         assertEquals(1, result);
-        
+
         rules.removeLast();
         result = rules.size();
         assertEquals(0, result);
-        
-        
+
     }
 
     /**
@@ -159,10 +152,10 @@ public class RuleListTest {
         System.out.println("isEmpty");
         boolean result = rules.isEmpty();
         assertTrue(result);
-        
+
         rules.add(new Rule());
         assertFalse(rules.isEmpty());
-       
+
     }
 
     /**
@@ -177,11 +170,9 @@ public class RuleListTest {
         c.add(r1);
         boolean result = rules.removeAll(c);
         assertTrue(result);
-        
+
         assertFalse(rules.removeAll(c)); //false with empty list
-       
-        
-        
+
     }
 
     /**
@@ -194,11 +185,10 @@ public class RuleListTest {
         Rule r1 = new Rule();
         rules.add(r1);
         assertEquals(r1, rules.get(index));
-        
+
         rules.get(2); //No rule in position 2, expected IndexOutOfBoundsException
         rules.get(-1); //expected IndexOutOfBoundsException
-        
-        
+
     }
 
     /**

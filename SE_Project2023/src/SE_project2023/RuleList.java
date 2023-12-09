@@ -6,6 +6,7 @@ import java.io.BufferedOutputStream;
 import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -17,6 +18,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -41,7 +44,7 @@ public class RuleList extends Observable implements Observer, Serializable, Iter
         return ruleList;
     }
 
-    //***HO RIMOSSO GET RULELIST***///
+    
     public int size() {
         return rules.size();
     }
@@ -89,16 +92,25 @@ public class RuleList extends Observable implements Observer, Serializable, Iter
         this.notifyObservers();
         return rmv;
     }
+    
+    public void clear(){
+        rules.clear();
+        this.setChanged();
+        this.notifyObservers();
+    }
+    
+    
 
     public void saveRules(String filename) {
         try (ObjectOutputStream objectOut = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(filename)))) {
 
             objectOut.writeObject(rules);
 
-        } catch (IOException e) {
-            e.printStackTrace();
-            // Gestione dell'eccezione durante il salvataggio delle regole
-        }
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(RuleList.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(RuleList.class.getName()).log(Level.SEVERE, null, ex);
+        } 
     }
 
     public void loadRules(String filename) {
