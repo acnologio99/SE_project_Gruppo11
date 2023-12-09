@@ -4,8 +4,8 @@
  */
 package SE_project2023;
 
+import SE_project2023.Action.Action;
 import SE_project2023.Action.MessageBoxAction;
-import SE_project2023.Regole.Rule;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 
@@ -22,15 +22,14 @@ public class MessageHandler extends ActionHandler  {
     }
 
     @Override
-    public boolean fireAction(Rule r) {
-        System.out.println(r.getAction() instanceof MessageBoxAction);
-        if(!(r.getAction() instanceof MessageBoxAction) && next!=null){
+    public boolean fireAction(Action a) {
+        System.out.println(a instanceof MessageBoxAction);
+        if(!(a instanceof MessageBoxAction) && next!=null){
             
-            System.out.println("dentro");
-            next.fireAction(r);
+            next.fireAction(a);
        
         }else {
-        MessageBoxAction act = (MessageBoxAction) r.getAction();
+        MessageBoxAction act = (MessageBoxAction) a;
         Platform.runLater(() -> {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Information Dialog");

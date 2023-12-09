@@ -9,10 +9,6 @@ package SE_project2023.Action.FileAction;
  * @author emanu
  */
 public class StrategyFactory {
-
-    public StrategyFactory() {
-    }
-
     public FileStrategy getStrategy(String action) {
         switch (action) {
             case "copy":

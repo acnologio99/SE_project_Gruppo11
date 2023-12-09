@@ -4,7 +4,7 @@
  */
 package SE_project2023;
 
-import SE_project2023.Regole.Rule;
+import SE_project2023.Action.Action;
 
 /**
  *
@@ -16,13 +16,13 @@ public class ActionHandlerFactory {
     public static ActionHandler createActionHandler(){
      
        
-     class NestedCatchAllHandler extends ActionHandler { //Handler innestato che cattura tutte le richieste non vrificate.
+     class NestedCatchAllHandler extends ActionHandler { //Handler innestato che cattura tutte le richieste non verificate.
             public NestedCatchAllHandler(ActionHandler next) {
                 super(next);
             }
            
             @Override
-            public boolean fireAction(Rule r) {
+            public boolean fireAction(Action a) {
                 return false;
             }
      }

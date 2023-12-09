@@ -4,6 +4,7 @@
  */
 package SE_project2023;
 
+import SE_project2023.Action.Action;
 import SE_project2023.Action.AudioAction;
 import SE_project2023.Action.MessageBoxAction;
 import SE_project2023.Regole.Rule;
@@ -20,7 +21,7 @@ import static org.junit.Assert.*;
 public class MessageHandlerTest {
     
     private MessageHandler instance;
-    private Rule r;
+    private Action a;
     
     public MessageHandlerTest() {
     }
@@ -28,7 +29,6 @@ public class MessageHandlerTest {
     @Before
     public void setUp() {
         instance = new MessageHandler(null);
-        r = new Rule();
         
     }
 
@@ -39,10 +39,10 @@ public class MessageHandlerTest {
     public void testFireAction() {
         System.out.println("fireAction");
         
-        r.setAction(new MessageBoxAction("test"));
+        a = new MessageBoxAction("test");
         JFXPanel jfxPanel = new JFXPanel();
          Platform.runLater(() -> {
-           instance.fireAction(r); //javafx test, allert with same "test" message.
+           instance.fireAction(a); //javafx test, allert with same "test" message.
         });
         try {
             Thread.sleep(5000); 
@@ -50,19 +50,19 @@ public class MessageHandlerTest {
             e.printStackTrace();
         }
         
-        r.setAction(new AudioAction());
-        instance.fireAction(r); //rule with a differenct Action but without "next" ClassCastException expected
+        a= new AudioAction();
+        instance.fireAction(a); //rule with a differenct Action but without "next" ClassCastException expected
     }
     
      @Test
     public void testFireActionChain() {
         System.out.println("fireActionChain");
         
-        r.setAction(new MessageBoxAction("Test"));
+        a = new MessageBoxAction("Test");
         ActionHandler handler = ActionHandlerFactory.createActionHandler();
         JFXPanel jfxPanel = new JFXPanel();
          Platform.runLater(() -> {
-           handler.fireAction(r); //expected to show the allert
+           handler.fireAction(a); //expected to show the allert
         });
         try {
             Thread.sleep(5000); 

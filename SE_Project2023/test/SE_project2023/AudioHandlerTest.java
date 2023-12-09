@@ -4,6 +4,7 @@
  */
 package SE_project2023;
 
+import SE_project2023.Action.Action;
 import SE_project2023.Action.AudioAction;
 import SE_project2023.Action.MessageBoxAction;
 import SE_project2023.Regole.Rule;
@@ -20,7 +21,7 @@ import static org.junit.Assert.*;
 public class AudioHandlerTest {
     
     private AudioHandler instance;
-    private Rule r;
+    private Action a;
     
     public AudioHandlerTest() {
     }
@@ -28,7 +29,7 @@ public class AudioHandlerTest {
     @Before
     public void setUp() {
         instance = new AudioHandler(null);
-        r = new Rule();
+        a = new AudioAction();
     }
 
     /**
@@ -38,10 +39,10 @@ public class AudioHandlerTest {
     public void testFireAction() {
         System.out.println("fireAction");
         
-        r.setAction(new AudioAction("./data/song01.wav"));
+        a=new AudioAction("./data/song01.wav");
         JFXPanel jfxPanel = new JFXPanel();
          Platform.runLater(() -> {
-           instance.fireAction(r); //javafx test, allert with sound
+           instance.fireAction(a); //javafx test, allert with sound
         });
         try {
             Thread.sleep(5000); 
@@ -49,19 +50,19 @@ public class AudioHandlerTest {
             e.printStackTrace();
         }
         
-        r.setAction(new MessageBoxAction("Test"));
-        instance.fireAction(r); //rule with a differenct Action but without "next" nullPointer expected
+        a=new MessageBoxAction("Test");
+        instance.fireAction(a); //rule with a differenct Action but without "next" nullPointer expected
     }
     
     @Test
     public void testFireActionChain() {
         System.out.println("fireActionChain");
         
-        r.setAction(new AudioAction("./data/song01.wav"));
+        a=new AudioAction("./data/song01.wav");
         ActionHandler handler = ActionHandlerFactory.createActionHandler();
         JFXPanel jfxPanel = new JFXPanel();
          Platform.runLater(() -> {
-           handler.fireAction(r); //expected to play the sound
+           handler.fireAction(a); //expected to play the sound
         });
         try {
             Thread.sleep(5000); 

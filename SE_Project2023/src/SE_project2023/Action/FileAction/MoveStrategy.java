@@ -17,13 +17,10 @@ import java.nio.file.StandardCopyOption;
  */
 public class MoveStrategy implements FileStrategy, Serializable {
 
-    public MoveStrategy() {
-    }
-
     @Override
     public void execute(File file, String sourcePath, String destinationPath) {
         try {
-            System.out.println("File spostato in : "+
+            System.out.println(
                     Files.copy(Paths.get(sourcePath),
                             Paths.get(destinationPath), StandardCopyOption.REPLACE_EXISTING));
             file.delete();

@@ -4,8 +4,8 @@
  */
 package SE_project2023;
 
+import SE_project2023.Action.Action;
 import SE_project2023.Action.AudioAction;
-import SE_project2023.Regole.Rule;
 import java.io.File;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
@@ -23,13 +23,14 @@ public class AudioHandler extends ActionHandler {
     }
 
     @Override
-    public boolean fireAction(Rule r) {
-        if (!(r.getAction() instanceof AudioAction) && next != null) {
+    public boolean fireAction(Action a) {
+        if (!(a instanceof AudioAction) && next != null) {
 
-            next.fireAction(r);
+            next.fireAction(a);
         } else {
+            AudioAction act = (AudioAction) a;
             Platform.runLater(() -> {
-            AudioAction act = (AudioAction) r.getAction();
+            
             File file = new File(act.getPath());
 
             Media media = new Media(file.toURI().toString());

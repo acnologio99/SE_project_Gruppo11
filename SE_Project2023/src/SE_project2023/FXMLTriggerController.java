@@ -75,21 +75,19 @@ public class FXMLTriggerController implements Initializable {
     private LocalTime temp;
     private ObservableList<Trigger> triggerList;
     private RuleList r;
-    private Map<String, TriggerCreator> creators = new HashMap<>();
-    private HashMap<String, AnchorPane> anchorPanes = new HashMap<>();
+    private final Map<String, TriggerCreator> creators = new HashMap<>();
+    private final HashMap<String, AnchorPane> anchorPanes = new HashMap<>();
     private MenuExecutor menuExec;
 
     /**
      * Initializes the controller class.
+     * @param url
+     * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
-        creators.put("Time Trigger", () -> new TimeTrigger(temp));
-        creators.put("Day of Week Trigger", () -> new DayOfWeekTrigger(daysOfWeek.getSelectionModel().getSelectedItem()));
-        creators.put("Day of Month Trigger", () -> new DayOfMonthTrigger(Integer.parseInt(daysOfMonth.getValue())));
-        creators.put("Day of Year Trigger", () -> new DayOfYearTrigger(datePicker.getValue()));
-        creators.put("File Trigger", () -> new FileSizeTrigger(new File(fileSource.getText()), Integer.parseInt(fileSizeField.getText())));
+        populateCreator();
         /*Inizializzazione di un observable list*/
         HashSet<Trigger> triggers = new HashSet();
         triggerList = FXCollections.observableArrayList(triggers);
@@ -99,7 +97,7 @@ public class FXMLTriggerController implements Initializable {
         /*Popola le timebox con i valori delle ore e dei minuti*/
         populateComboBox(timeComboBox1,0, 24);
         populateComboBox(timeComboBox2,0, 60);
-        populateComboBox(daysOfMonth, 1 , 32);
+        populateComboBox(daysOfMonth,1, 32);
         
         /* Settiamo il FileSizeField con solo valori numerici*/
         fileSizeField.setPromptText("KiloBytes Unit");
@@ -111,19 +109,9 @@ public class FXMLTriggerController implements Initializable {
         });
         
         /*Aggiungiamo alla ListView dei trigger i nomi dei vari tipi di trigger*/
-        triggerListView.getItems().addAll(
-                "Time Trigger",
-                "Day of Week Trigger",
-                "Day of Month Trigger",
-                "Day of Year Trigger",
-                "File Trigger"
-        );
+        populateListView();
 
-        anchorPanes.put("Time Trigger", comboBoxPane);
-        anchorPanes.put("Day of Week Trigger", dayOfWeekPane);
-        anchorPanes.put("Day of Month Trigger", dayOfMonthPane);
-        anchorPanes.put("Day of Year Trigger", dayOfYearPane);
-        anchorPanes.put("File Trigger", fileSizePane);
+        populatePanes();
 
         /*Popolamento Lista giorni della settimana*/
         daysOfWeek.getItems().addAll(Arrays.asList(DayOfWeek.values()));
@@ -156,10 +144,10 @@ public class FXMLTriggerController implements Initializable {
 
     @FXML
     private void doneTrigger(ActionEvent event) {
-        
-        Trigger t = creators.get(triggerListView.getSelectionModel().getSelectedItem()).create();
-        r.getLast().setTrigger(t);
-
+        if(!triggerListView.getSelectionModel().getSelectedItems().isEmpty()){
+            Trigger t = creators.get(triggerListView.getSelectionModel().getSelectedItem()).create();
+            r.getLast().setTrigger(t);
+        }
         Node sourceNode = (Node) event.getSource();
         Stage stage = (Stage) sourceNode.getScene().getWindow();
         stage.close();// Chiudi la finestra corrente             
@@ -204,6 +192,31 @@ public class FXMLTriggerController implements Initializable {
             }
         
 
+    }
+    
+    private void populateCreator() {
+        creators.put("Time Trigger", () -> new TimeTrigger(temp));
+        creators.put("Day of Week Trigger", () -> new DayOfWeekTrigger(daysOfWeek.getSelectionModel().getSelectedItem()));
+        creators.put("Day of Month Trigger", () -> new DayOfMonthTrigger(Integer.parseInt(daysOfMonth.getValue())));
+        creators.put("Day of Year Trigger", () -> new DayOfYearTrigger(datePicker.getValue()));
+        creators.put("File Trigger", () -> new FileSizeTrigger(new File(fileSource.getText()), Integer.parseInt(fileSizeField.getText())));;
+    }
+
+    private void populatePanes() {
+        anchorPanes.put("Time Trigger", comboBoxPane);
+        anchorPanes.put("Day of Week Trigger", dayOfWeekPane);
+        anchorPanes.put("Day of Month Trigger", dayOfMonthPane);
+        anchorPanes.put("Day of Year Trigger", dayOfYearPane);
+        anchorPanes.put("File Trigger", fileSizePane);
+    }
+    private void populateListView(){
+        triggerListView.getItems().addAll(
+                "Time Trigger",
+                "Day of Week Trigger",
+                "Day of Month Trigger",
+                "Day of Year Trigger",
+                "File Trigger"
+        );
     }
 }
 
