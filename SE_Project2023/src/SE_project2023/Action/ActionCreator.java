@@ -2,12 +2,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
  */
-package SE_project2023.Regole;
+package SE_project2023.Action;
 
 /**
  *
- * @author chris
+ * @author giova
  */
-public interface Observer {
-    public void update();
+public interface ActionCreator {
+    public Action create();
 }

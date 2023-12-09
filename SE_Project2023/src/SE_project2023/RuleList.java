@@ -44,9 +44,14 @@ public class RuleList extends Observable implements Observer, Serializable, Iter
         return ruleList;
     }
 
-    
+
     public int size() {
         return rules.size();
+    }
+
+    public int size() {
+        return rules.size();
+
     }
 
     public boolean isEmpty() {
@@ -78,7 +83,7 @@ public class RuleList extends Observable implements Observer, Serializable, Iter
 
     }
 
-    public Rule get(int index) {
+    public Rule get(int index){
         Rule r = rules.get(index);
         this.setChanged();
         this.notifyObservers();
@@ -86,20 +91,20 @@ public class RuleList extends Observable implements Observer, Serializable, Iter
         return r;
     }
 
-    public boolean remove(Rule r) {
+    public boolean remove(Rule r){
         boolean rmv = rules.remove(r);
         this.setChanged();
         this.notifyObservers();
         return rmv;
     }
-    
+
     public void clear(){
         rules.clear();
         this.setChanged();
         this.notifyObservers();
     }
-    
-    
+
+
 
     public void saveRules(String filename) {
         try (ObjectOutputStream objectOut = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(filename)))) {
@@ -110,10 +115,10 @@ public class RuleList extends Observable implements Observer, Serializable, Iter
             Logger.getLogger(RuleList.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(RuleList.class.getName()).log(Level.SEVERE, null, ex);
-        } 
+        }
     }
 
-    public void loadRules(String filename) {
+    public void loadRules(String filename){
         try {
             File file = new File(filename);
             if (!file.exists()) {
@@ -122,7 +127,6 @@ public class RuleList extends Observable implements Observer, Serializable, Iter
             }
 
             try (ObjectInputStream objectIn = new ObjectInputStream(new BufferedInputStream(new FileInputStream(file)))) {
-
                 try {
                     List<Rule> l = (List<Rule>) objectIn.readObject(); //lista d'appoggio in modo da poter osservare di nuovo tutte le regole.
                     for (Rule r : l) {
@@ -131,13 +135,12 @@ public class RuleList extends Observable implements Observer, Serializable, Iter
                 } catch (EOFException e) {
                 }
 
+            } catch (EOFException eof) {
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
-
             }
         } catch (IOException e) {
             e.printStackTrace();
-
         }
     }
 
@@ -148,8 +151,9 @@ public class RuleList extends Observable implements Observer, Serializable, Iter
     }
 
     @Override
-    public Iterator<Rule> iterator() {
+     public Iterator<Rule> iterator() {
         return rules.iterator();
     }
+
 
 }

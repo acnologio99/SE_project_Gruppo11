@@ -166,7 +166,6 @@ public class FXMLRuleController implements Initializable {
         Node sourceNode = (Node) event.getSource();
         Stage stage = (Stage) sourceNode.getScene().getWindow();
 
-        r.getLast().setFlag(true);
         if (fireOnceRadio.isSelected()){
             FireOnceVerified f= new FireOnceVerified();
             r.getLast().setVerifiedTool(f);
@@ -190,8 +189,7 @@ public class FXMLRuleController implements Initializable {
         Stage stage = (Stage) sourceNode.getScene().getWindow();
 
         RuleList r = RuleList.getRuleList();
-        
-        r.getLast().setFlag(false);
+        r.getLast().setAction(null);
         // Chiudi la finestra corrente
         stage.close();
     }

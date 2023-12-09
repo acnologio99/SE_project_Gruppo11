@@ -5,7 +5,6 @@
 package SE_project2023;
 
 import SE_project2023.Action.AudioAction;
-import SE_project2023.Action.FileAction;
 import SE_project2023.Regole.Rule;
 import java.io.File;
 import javafx.application.Platform;
@@ -46,7 +45,6 @@ public class AudioHandler extends ActionHandler {
             alert.showAndWait();
 
             mediaPlayer.stop();
-            
             });}
         return true;
     }

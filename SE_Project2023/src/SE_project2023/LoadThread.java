@@ -12,7 +12,7 @@ public class LoadThread implements Runnable {
 
     @Override
     public void run() {
-        RuleList.getRuleList().loadRules("rules.bin");
-    }
-    
+            RuleList.getRuleList().loadRules("rules.bin");
+        }
 }
+    

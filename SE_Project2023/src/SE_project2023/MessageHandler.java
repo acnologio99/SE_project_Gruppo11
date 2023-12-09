@@ -4,12 +4,8 @@
  */
 package SE_project2023;
 
-import SE_project2023.Action.Action;
-import SE_project2023.Action.FileAction;
 import SE_project2023.Action.MessageBoxAction;
 import SE_project2023.Regole.Rule;
-import java.util.Observable;
-import java.util.Observer;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 
@@ -33,7 +29,7 @@ public class MessageHandler extends ActionHandler  {
             System.out.println("dentro");
             next.fireAction(r);
        
-        }else{
+        }else {
         MessageBoxAction act = (MessageBoxAction) r.getAction();
         Platform.runLater(() -> {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);

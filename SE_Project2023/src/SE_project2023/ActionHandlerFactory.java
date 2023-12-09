@@ -14,9 +14,9 @@ public class ActionHandlerFactory {
     
     
     public static ActionHandler createActionHandler(){
-        
+     
+       
      class NestedCatchAllHandler extends ActionHandler { //Handler innestato che cattura tutte le richieste non vrificate.
-
             public NestedCatchAllHandler(ActionHandler next) {
                 super(next);
             }
@@ -32,5 +32,4 @@ public class ActionHandlerFactory {
      ActionHandler msg =new MessageHandler(catchAll);
      return new AudioHandler(msg);
     }
-    
 }

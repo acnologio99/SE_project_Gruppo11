@@ -10,8 +10,6 @@ import SE_project2023.Trigger.Trigger;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Optional;
@@ -30,6 +28,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
@@ -66,8 +65,6 @@ public class FXMLDocumentController implements Initializable, Observer, Serializ
     @FXML
     private VBox rootScene;
 
-    private List<Rule> list;
-
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
@@ -75,11 +72,7 @@ public class FXMLDocumentController implements Initializable, Observer, Serializ
         load.start();
         //inizializzazione Liste
         load.setOnSucceeded(e -> {
-            list = new ArrayList<>(); //Lista d'appoggio per inserire le regole dopo il caricamento
-            for (Rule r : rules) {
-                list.add(r);
-            }
-            ruleList = FXCollections.observableArrayList(list);
+            ruleList = FXCollections.observableArrayList(rules.getArrayList());
             tableView.setItems(ruleList);
         });
 
@@ -95,9 +88,27 @@ public class FXMLDocumentController implements Initializable, Observer, Serializ
         });
         sleepCln.setCellValueFactory(cellData -> {
             long sleep = cellData.getValue().getSleep(); // Assume che "isStatus()" sia il metodo che restituisce il booleano dalla classe Rule
-            return new SimpleStringProperty(sleep > 0 ? "On" : "Off");
+            return new SimpleStringProperty(sleep>0 ? "On" : "Off");
         });
-
+        tableView.setRowFactory(row -> new TableRow<Rule>() {
+            @Override
+            protected void updateItem(Rule r, boolean empty) {
+            super.updateItem(r, empty);
+                if (r == null || empty) {
+                setStyle(""); // Se l'elemento è vuoto o la riga è vuota, non impostare uno stile
+            } else {
+            // Imposta il colore della riga in base al tipo dell'elemento
+            if (r.getAction().isFired()) {
+                setStyle("-fx-background-color: lightgreen;");
+            } else if (!r.getAction().isFired()) {
+                setStyle("-fx-background-color: lightblue;");
+            } else {
+                setStyle(""); // Altri tipi possono avere uno stile diverso o nessuno
+            }
+        }
+    }
+});
+     
         rules.addObserver(this);
 
     }
@@ -117,7 +128,7 @@ public class FXMLDocumentController implements Initializable, Observer, Serializ
             if (b == ButtonType.OK) {
                 rules.removeAll(tableView.getSelectionModel().getSelectedItems());
                 ruleList.removeAll(tableView.getSelectionModel().getSelectedItems());
-
+                
             }
         }
 
@@ -183,6 +194,5 @@ public class FXMLDocumentController implements Initializable, Observer, Serializ
     @Override
     public void update(Observable o, Object arg) {
         tableView.refresh();
-        
     }
 }
