@@ -4,8 +4,8 @@
  */
 package SE_project2023.Action;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -15,12 +15,17 @@ import static org.junit.Assert.*;
  * @author cauro
  */
 public class ProgramActionTest {
-    
+    ProgramAction instance;
+    ArrayList<String> commands;
     public ProgramActionTest() {
     }
     
     @Before
     public void setUp() {
+        commands=new ArrayList<>();
+        commands.add("1");
+        instance = new ProgramAction("",commands);
+        
     }
 
     /**
@@ -29,12 +34,10 @@ public class ProgramActionTest {
     @Test
     public void testIsFired() {
         System.out.println("isFired");
-        ProgramAction instance = null;
+
         boolean expResult = false;
         boolean result = instance.isFired();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -42,18 +45,16 @@ public class ProgramActionTest {
      */
     @Test
     public void testFire() {
-        String programPath = "C:\\Users\\cauro\\OneDrive\\Documenti\\NetBeansProjects\\JavaFXApplication5\\createfile.exe";
-        List<String> commandLineArgs = Arrays.asList("1");
+        instance.setProgramPath(".\\data\\createfile.exe");
 
-        ProgramAction programAction = new ProgramAction(programPath, commandLineArgs);
-        programAction.fire();
+        instance.fire();
 
         // Verifica che l'azione sia stata eseguita con successo
-        assertTrue(programAction.isFired());
+        assertTrue(instance.isFired());
 
         // Verifica che ci sia stato output
-        assertNotNull(programAction.getOutput());
-        assertTrue(!programAction.getOutput().isEmpty());
+        assertNotNull(instance.getOutput());
+        assertTrue(!instance.getOutput().isEmpty());
     }
     
       
@@ -63,63 +64,47 @@ public class ProgramActionTest {
     @Test
     public void testGetProgramPath() {
         System.out.println("getProgramPath");
-        ProgramAction instance = null;
-        String expResult = "";
+        instance.setProgramPath("cia");
+        String expResult = "cia";
         String result = instance.getProgramPath();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
      * Test of setProgramPath method, of class ProgramAction.
      */
-    @Test
-    public void testSetProgramPath() {
-        System.out.println("setProgramPath");
-        String programPath = "";
-        ProgramAction instance = null;
-        instance.setProgramPath(programPath);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
+    
 
     /**
      * Test of add method, of class ProgramAction.
      */
-    @Test
+    @Test(expected = UnsupportedOperationException.class)
     public void testAdd() {
         System.out.println("add");
-        ProgramAction instance = null;
+
         instance.add();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
      * Test of remove method, of class ProgramAction.
      */
-    @Test
+    @Test(expected = UnsupportedOperationException.class)
     public void testRemove() {
-        System.out.println("remove");
-        ProgramAction instance = null;
+         System.out.println("remove");
+
         instance.remove();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
      * Test of getChild method, of class ProgramAction.
      */
-    @Test
+    @Test(expected = UnsupportedOperationException.class)
     public void testGetChild() {
         System.out.println("getChild");
-        ProgramAction instance = null;
+
         Action expResult = null;
         Action result = instance.getChild();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
     
 }

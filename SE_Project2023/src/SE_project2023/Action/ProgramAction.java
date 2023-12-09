@@ -56,7 +56,9 @@ public class ProgramAction implements Action {
         System.out.println("Program output: " + output); // Stampa l'output per verificare se è stato catturato correttamente
 
     } catch (IOException e) {
-        e.printStackTrace();
+        System.out.println(output="Attenzione! Il programma selezionato non è un eseguibile (.exe)");
+        isFired=true;
+
     }
 }
 

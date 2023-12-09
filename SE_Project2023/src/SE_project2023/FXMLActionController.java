@@ -209,9 +209,6 @@ public class FXMLActionController implements Initializable{
     @FXML
     private void execAction(ActionEvent event) {
         FileChooser fil_chooser = new FileChooser();
-        fil_chooser.getExtensionFilters()
-                .add(new FileChooser.ExtensionFilter("Program Files",
-                        "*.exe"));
         File file = fil_chooser.showOpenDialog(new Stage());
         if (file != null) {
             sourcePathExe.setText(file.toString());
