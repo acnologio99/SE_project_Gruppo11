@@ -10,8 +10,10 @@ import java.time.LocalDate;
  *
  * @author giova
  */
-public class DayOfYearTrigger implements Trigger{
+public class DayOfYearTrigger implements Trigger {
+
     LocalDate date;
+
     @Override
     public boolean isVerified() {
         return LocalDate.now().equals(date);
@@ -20,5 +22,10 @@ public class DayOfYearTrigger implements Trigger{
     public DayOfYearTrigger(LocalDate date) {
         this.date = date;
     }
-    
+
+    @Override
+    public String toString() {
+        return "DayOfYearTrigger: " + date;
+    }
+
 }

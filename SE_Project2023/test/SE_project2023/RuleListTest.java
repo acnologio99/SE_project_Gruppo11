@@ -50,8 +50,8 @@ public class RuleListTest {
         System.out.println("add");
         Rule r = new Rule();
         rules.add(r);
-        assertEquals(r, rules.getLast()); //the new rule is equal to the last i the list
-        rules.add(null); //expected NullPointerException
+        assertEquals(r, rules.getLast()); // the new rule is equal to the last i the list
+        rules.add(null); // expected NullPointerException
     }
 
     /**
@@ -92,41 +92,42 @@ public class RuleListTest {
     public void testSaveRulesWhenNoRules() {
         file.delete();
         rules.saveRules(testFile);
-        assertTrue(file.exists()); //verifico che il file, se non esiste, è stato creato
+        assertTrue(file.exists()); // verifico che il file, se non esiste, è stato creato
     }
 
     @Test
     public void testLoadRulesFromFileNotExists() {
-        //caricamento da un file non esistente
+        // caricamento da un file non esistente
         File f = new File("testFake.bin");
         f.delete();
-        rules.loadRules("testFake.bin"); //la load gestisce internamente l'eccezione nel caso il file non esiste con return;
-        //il file verrà creato nella save.
+        rules.loadRules("testFake.bin"); // la load gestisce internamente l'eccezione nel caso il file non esiste con
+                                         // return;
+        // il file verrà creato nella save.
 
     }
 
     @Test
     public void testLoadRulesFromEmptyFile() throws IOException {
         // Creazione di un file vuoto
-        //file.delete() è nella tearDown quindi sono sicuro che il file non esista.
+        // file.delete() è nella tearDown quindi sono sicuro che il file non esista.
         file.createNewFile();
         // Caricamento da un file vuoto
         rules.loadRules(testFile);
-        assertEquals(0, rules.size()); //Il file non ha regole quindi la size della lista deve essere 0
+        assertEquals(0, rules.size()); // Il file non ha regole quindi la size della lista deve essere 0
     }
 
     @Test
     public void testSaveLoadRules() throws IOException {
         // Creazione di un file vuoto
-        //rules.clear() è nella tearDown(), sono sicuro che rules non abbia regole.
+        // rules.clear() è nella tearDown(), sono sicuro che rules non abbia regole.
 
         Rule r = new Rule();
         rules.add(r);
         rules.saveRules(testFile);
         // Caricamento da un file con 1 regola
-        rules.clear(); //pulisco la lista in modo da testare se effettivamente ha aggiunto una regola
+        rules.clear(); // pulisco la lista in modo da testare se effettivamente ha aggiunto una regola
         rules.loadRules(testFile);
-        assertEquals(1, rules.size()); //Il file ha una sola regola quindi la dimensione della vista deve essere 1
+        assertEquals(1, rules.size()); // Il file ha una sola regola quindi la dimensione della vista deve essere 1
     }
 
     /**
@@ -176,7 +177,7 @@ public class RuleListTest {
         boolean result = rules.removeAll(c);
         assertTrue(result);
 
-        assertFalse(rules.removeAll(c)); //false with empty list
+        assertFalse(rules.removeAll(c)); // false with empty list
 
     }
 
@@ -191,8 +192,8 @@ public class RuleListTest {
         rules.add(r1);
         assertEquals(r1, rules.get(index));
 
-        rules.get(2); //No rule in position 2, expected IndexOutOfBoundsException
-        rules.get(-1); //expected IndexOutOfBoundsException
+        rules.get(2); // No rule in position 2, expected IndexOutOfBoundsException
+        rules.get(-1); // expected IndexOutOfBoundsException
 
     }
 
@@ -204,19 +205,20 @@ public class RuleListTest {
         System.out.println("remove");
         Rule r = new Rule();
         rules.add(r);
-        assertEquals(1, rules.size()); //aggiungo una regola quindi la size è 1.
+        assertEquals(1, rules.size()); // aggiungo una regola quindi la size è 1.
 
         boolean res = rules.remove(r);
-        assertTrue(res); //mi assicuro che la remove sia andata a buon fine
-        assertEquals(0, rules.size()); //dopo aver rimosso, la size devo essere 0, inoltre essendo la regola soltanto una,
-        //sono sicuro che abbia rimosso proprio quella regola.
+        assertTrue(res); // mi assicuro che la remove sia andata a buon fine
+        assertEquals(0, rules.size()); // dopo aver rimosso, la size devo essere 0, inoltre essendo la regola soltanto
+                                       // una,
+        // sono sicuro che abbia rimosso proprio quella regola.
 
         Rule r1 = new Rule();
-        res = rules.remove(r1); //provo a rimuovere una regola non presente nella lista
-        assertFalse(res); //la remove non deve andare a buon fine
+        res = rules.remove(r1); // provo a rimuovere una regola non presente nella lista
+        assertFalse(res); // la remove non deve andare a buon fine
 
         res = rules.remove(null);
-        assertFalse(res); //la remove non deve andare a buon fine
+        assertFalse(res); // la remove non deve andare a buon fine
 
     }
 
@@ -237,18 +239,20 @@ public class RuleListTest {
             }
         }
         InnerObserver obs = new InnerObserver();
-        rules.addObserver(obs); //aggiungo la classe innestata come osservatore di rules.
-        assertFalse(obs.observed); //observed deve essere falso perchè non ho fatto nessun update.
-        
+        rules.addObserver(obs); // aggiungo la classe innestata come osservatore di rules.
+        assertFalse(obs.observed); // observed deve essere falso perchè non ho fatto nessun update.
+
         Rule r = new Rule();
-        rules.add(r); //aggiungo una regola alla lista, ora observed deve diventare true. 
-        assertTrue(obs.observed); //observed is true becouse r updated.
-        
-        //inoltre la lista osserva anche la regola e, ogni volta che una regola si aggiorna, comunica il cambiamento anche a chi osserva la lista.
-       obs.observed = false;
-       r.deactive();
-       assertTrue(obs.observed); //la regola è passata da "attiva" ad "inattiva", observed deve tornare a true perchè la lista ha comunicato il cambiamento.
-        
+        rules.add(r); // aggiungo una regola alla lista, ora observed deve diventare true.
+        assertTrue(obs.observed); // observed is true becouse r updated.
+
+        // inoltre la lista osserva anche la regola e, ogni volta che una regola si
+        // aggiorna, comunica il cambiamento anche a chi osserva la lista.
+        obs.observed = false;
+        r.deactive();
+        assertTrue(obs.observed); // la regola è passata da "attiva" ad "inattiva", observed deve tornare a true
+                                  // perchè la lista ha comunicato il cambiamento.
+
     }
 
     /**
@@ -260,11 +264,12 @@ public class RuleListTest {
         Rule r = new Rule();
         rules.add(r);
         List<Rule> l = new ArrayList<>();
-        assertEquals(1,rules.size());
-        for(Rule r1 : rules){
+        assertEquals(1, rules.size());
+        for (Rule r1 : rules) {
             l.add(r1);
         }
-        assertEquals(l.size(),rules.size()); //dopo il for each, siccome iterando su rules ho aggiunto una regola in list, la loro size deve essere uguale.
+        assertEquals(l.size(), rules.size()); // dopo il for each, siccome iterando su rules ho aggiunto una regola in
+                                              // list, la loro size deve essere uguale.
     }
 
 }

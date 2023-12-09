@@ -4,8 +4,9 @@
  */
 package SE_project2023.Action;
 
+import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -15,8 +16,11 @@ import static org.junit.Assert.*;
  * @author cauro
  */
 public class ProgramActionTest {
+    
     ProgramAction instance;
     ArrayList<String> commands;
+    File file = new File("nuovo_file.txt");
+    
     public ProgramActionTest() {
     }
     
@@ -25,7 +29,11 @@ public class ProgramActionTest {
         commands=new ArrayList<>();
         commands.add("1");
         instance = new ProgramAction("",commands);
-        
+    }
+    
+    @After
+    public void tearDown() {
+        file.delete();
     }
 
     /**
@@ -51,6 +59,7 @@ public class ProgramActionTest {
 
         // Verifica che l'azione sia stata eseguita con successo
         assertTrue(instance.isFired());
+        assertNotNull(file);
 
         // Verifica che ci sia stato output
         assertNotNull(instance.getOutput());
@@ -69,11 +78,6 @@ public class ProgramActionTest {
         String result = instance.getProgramPath();
         assertEquals(expResult, result);
     }
-
-    /**
-     * Test of setProgramPath method, of class ProgramAction.
-     */
-    
 
     /**
      * Test of add method, of class ProgramAction.

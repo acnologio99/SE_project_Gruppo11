@@ -7,12 +7,10 @@ package SE_project2023;
 import SE_project2023.Action.Action;
 import SE_project2023.Action.AudioAction;
 import SE_project2023.Action.MessageBoxAction;
-import SE_project2023.Regole.Rule;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -41,38 +39,35 @@ public class MessageHandlerTest {
 
         a = new MessageBoxAction("test");
         JFXPanel jfxPanel = new JFXPanel();
-         Platform.runLater(() -> {
-           instance.fireAction(a); //javafx test, allert with same "test" message.
+        Platform.runLater(() -> {
+            instance.fireAction(a); // javafx test, allert with same "test" message.
         });
         try {
-            Thread.sleep(2000);
+            Thread.sleep(7000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-        a= new AudioAction();
-        instance.fireAction(a); //rule with a differenct Action but without "next" ClassCastException expected
+        a = new AudioAction();
+        instance.fireAction(a); // rule with a differenct Action but without "next" ClassCastException expected
     }
 
-     @Test
+    @Test
     public void testFireActionChain() {
         System.out.println("fireActionChain");
 
         a = new MessageBoxAction("Test");
         ActionHandler handler = ActionHandlerFactory.createActionHandler();
         JFXPanel jfxPanel = new JFXPanel();
-         Platform.runLater(() -> {
-           handler.fireAction(a); //expected to show the allert
+        Platform.runLater(() -> {
+            handler.fireAction(a); // expected to show the allert
         });
         try {
-            Thread.sleep(2000);
+            Thread.sleep(7000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-
     }
-
-
 
 }

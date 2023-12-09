@@ -107,9 +107,9 @@ public class RuleList extends Observable implements Observer, Serializable, Iter
                 Logger.getLogger(RuleList.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        
-        
-        try (ObjectOutputStream objectOut = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(filename)))) {
+
+        try (ObjectOutputStream objectOut = new ObjectOutputStream(
+                new BufferedOutputStream(new FileOutputStream(filename)))) {
 
             objectOut.writeObject(rules);
 
@@ -121,7 +121,8 @@ public class RuleList extends Observable implements Observer, Serializable, Iter
     }
 
     public void loadRules(String filename) {
-        try (ObjectInputStream objectIn = new ObjectInputStream(new BufferedInputStream(new FileInputStream(filename)))) {
+        try (ObjectInputStream objectIn = new ObjectInputStream(
+                new BufferedInputStream(new FileInputStream(filename)))) {
             List<Rule> l = (List<Rule>) objectIn.readObject(); // Leggi la lista delle regole
             for (Rule r : l) {
                 this.add(r);

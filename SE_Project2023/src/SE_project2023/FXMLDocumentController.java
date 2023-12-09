@@ -72,48 +72,50 @@ public class FXMLDocumentController implements Initializable, Observer, Serializ
 
         LoadService load = new LoadService();
         load.start();
-        //inizializzazione Liste
+        // inizializzazione Liste
         list = new ArrayList<>();
         load.setOnSucceeded(e -> {
-            for(Rule r : rules){
+            for (Rule r : rules) {
                 list.add(r);
             }
             ruleList = FXCollections.observableArrayList(list);
             tableView.setItems(ruleList);
         });
 
-        //setting selezione multipla
+        // setting selezione multipla
         tableView.getSelectionModel().setSelectionMode(javafx.scene.control.SelectionMode.MULTIPLE);
-        //setting View
+        // setting View
         nameCln.setCellValueFactory(new PropertyValueFactory<>("Name"));
         actionCln.setCellValueFactory(new PropertyValueFactory<>("Action"));
         triggerCln.setCellValueFactory(new PropertyValueFactory<>("Trigger"));
         statusCln.setCellValueFactory(cellData -> {
-            boolean status = cellData.getValue().getStatus(); // Assume che "isStatus()" sia il metodo che restituisce il booleano dalla classe Rule
+            boolean status = cellData.getValue().getStatus(); // Assume che "isStatus()" sia il metodo che restituisce
+                                                              // il booleano dalla classe Rule
             return new SimpleStringProperty(status ? "On" : "Off");
         });
         sleepCln.setCellValueFactory(cellData -> {
-            long sleep = cellData.getValue().getSleep(); // Assume che "isStatus()" sia il metodo che restituisce il booleano dalla classe Rule
-            return new SimpleStringProperty(sleep>0 ? "On" : "Off");
+            long sleep = cellData.getValue().getSleep(); // Assume che "isStatus()" sia il metodo che restituisce il
+                                                         // booleano dalla classe Rule
+            return new SimpleStringProperty(sleep > 0 ? "On" : "Off");
         });
         tableView.setRowFactory(row -> new TableRow<Rule>() {
             @Override
             protected void updateItem(Rule r, boolean empty) {
-            super.updateItem(r, empty);
+                super.updateItem(r, empty);
                 if (r == null || empty) {
-                setStyle(""); // Se l'elemento è vuoto o la riga è vuota, non impostare uno stile
-            } else {
-            // Imposta il colore della riga in base al tipo dell'elemento
-            if (r.getAction().isFired()) {
-                setStyle("-fx-background-color: lightgreen;");
-            } else if (!r.getAction().isFired()) {
-                setStyle("-fx-background-color: lightblue;");
-            } else {
-                setStyle(""); // Altri tipi possono avere uno stile diverso o nessuno
+                    setStyle(""); // Se l'elemento è vuoto o la riga è vuota, non impostare uno stile
+                } else {
+                    // Imposta il colore della riga in base al tipo dell'elemento
+                    if (r.getAction().isFired()) {
+                        setStyle("-fx-background-color: lightgreen;");
+                    } else if (!r.getAction().isFired()) {
+                        setStyle("-fx-background-color: lightblue;");
+                    } else {
+                        setStyle(""); // Altri tipi possono avere uno stile diverso o nessuno
+                    }
+                }
             }
-        }
-    }
-});
+        });
 
         rules.addObserver(this);
 
@@ -199,11 +201,11 @@ public class FXMLDocumentController implements Initializable, Observer, Serializ
 
     @Override
     public void update(Observable o, Object arg) {
-        if(arg == null)
+        if (arg == null)
             tableView.refresh();
         else {
             tableView.refresh();
-            Rule r = (Rule)arg;
+            Rule r = (Rule) arg;
             ActionHandlerFactory.createActionHandler().fireAction(r.getAction());
         }
     }

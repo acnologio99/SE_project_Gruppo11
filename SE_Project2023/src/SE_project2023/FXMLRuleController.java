@@ -85,13 +85,15 @@ public class FXMLRuleController implements Initializable {
         sleepPicker.setVisible(false);
         daysPicker.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("\\d*")) {
-                // Se il nuovo testo non contiene solo cifre, reimposta il testo con il vecchio valore
+                // Se il nuovo testo non contiene solo cifre, reimposta il testo con il vecchio
+                // valore
                 daysPicker.setText(oldValue);
             }
         });
         minutesPicker.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("\\d*")) {
-                // Se il nuovo testo non contiene solo cifre, reimposta il testo con il vecchio valore
+                // Se il nuovo testo non contiene solo cifre, reimposta il testo con il vecchio
+                // valore
                 minutesPicker.setText(oldValue);
             }
         });
@@ -105,20 +107,19 @@ public class FXMLRuleController implements Initializable {
 
             Parent root = loader.load();
             rootScene.setDisable(true);
-            
-            
+
             Stage stage = new Stage();
             stage.setTitle("Action");
             stage.setScene(new Scene(root));
             stage.addEventHandler(WindowEvent.ANY,
                     new EventHandler<WindowEvent>() {
-                @Override
-                public void handle(WindowEvent event) {
-                    if (r.getLast().getAction() != null) {
-                        actionTxt.setText("Azione inserita");
-                    }
-                }
-            });
+                        @Override
+                        public void handle(WindowEvent event) {
+                            if (r.getLast().getAction() != null) {
+                                actionTxt.setText("Azione inserita");
+                            }
+                        }
+                    });
             stage.showAndWait();
             rootScene.setDisable(false);
         } catch (IOException e) {
@@ -140,13 +141,13 @@ public class FXMLRuleController implements Initializable {
             stage.setScene(new Scene(root));
             stage.addEventHandler(WindowEvent.ANY,
                     new EventHandler<WindowEvent>() {
-                @Override
-                public void handle(WindowEvent event) {
-                    if (r.getLast().getTrigger() != null) {
-                        triggerTxt.setText("Trigger inserito");
-                    }
-                }
-            });
+                        @Override
+                        public void handle(WindowEvent event) {
+                            if (r.getLast().getTrigger() != null) {
+                                triggerTxt.setText("Trigger inserito");
+                            }
+                        }
+                    });
 
             stage.showAndWait();
             rootScene.setDisable(false);
@@ -158,23 +159,25 @@ public class FXMLRuleController implements Initializable {
 
     @FXML
     private void confirmRule(ActionEvent event) {
-        //ruleList.add(r);
+        // ruleList.add(r);
 
-        //alertShow("Inserimento", "", "Regola correttamente inserita", Alert.AlertType.INFORMATION);
+        // alertShow("Inserimento", "", "Regola correttamente inserita",
+        // Alert.AlertType.INFORMATION);
         r.getLast().setName(ruleName.getText());
 
         Node sourceNode = (Node) event.getSource();
         Stage stage = (Stage) sourceNode.getScene().getWindow();
 
-        if (fireOnceRadio.isSelected()){
-            FireOnceVerified f= new FireOnceVerified();
+        if (fireOnceRadio.isSelected()) {
+            FireOnceVerified f = new FireOnceVerified();
             r.getLast().setVerifiedTool(f);
-        }else if (sleepRadio.isSelected()) {
-            SleepVerified s= new SleepVerified();
+        } else if (sleepRadio.isSelected()) {
+            SleepVerified s = new SleepVerified();
             r.getLast().setVerifiedTool(s);
-            r.getLast().setSleep(24 * 60 * (Long.parseLong(daysPicker.getText())) + (Long.parseLong(minutesPicker.getText())));
-        }else{
-            FireMultipleVerified m= new FireMultipleVerified();
+            r.getLast().setSleep(
+                    24 * 60 * (Long.parseLong(daysPicker.getText())) + (Long.parseLong(minutesPicker.getText())));
+        } else {
+            FireMultipleVerified m = new FireMultipleVerified();
             r.getLast().setVerifiedTool(m);
         }
         // Chiudi la finestra corrente
@@ -193,7 +196,6 @@ public class FXMLRuleController implements Initializable {
         // Chiudi la finestra corrente
         stage.close();
     }
-
 
     @FXML
     private void sleepPick(ActionEvent event) {

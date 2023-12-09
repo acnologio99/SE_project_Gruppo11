@@ -70,7 +70,7 @@ public class FXMLTriggerController implements Initializable {
     private TextField fileSource;
     @FXML
     private TextField fileSizeField;
-    
+
     private int flagTrigger;
     private LocalTime temp;
     private ObservableList<Trigger> triggerList;
@@ -81,45 +81,50 @@ public class FXMLTriggerController implements Initializable {
 
     /**
      * Initializes the controller class.
+     * 
      * @param url
      * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+
         populateCreator();
-        /*Inizializzazione di un observable list*/
+        /* Inizializzazione di un observable list */
         HashSet<Trigger> triggers = new HashSet();
         triggerList = FXCollections.observableArrayList(triggers);
-        /*Prendiamo una regola temporanea a cui aggiungere il trigger*/
+        /* Prendiamo una regola temporanea a cui aggiungere il trigger */
         r = RuleList.getRuleList();
-        
-        /*Popola le timebox con i valori delle ore e dei minuti*/
-        populateComboBox(timeComboBox1,0, 24);
-        populateComboBox(timeComboBox2,0, 60);
-        populateComboBox(daysOfMonth,1, 32);
-        
-        /* Settiamo il FileSizeField con solo valori numerici*/
+
+        /* Popola le timebox con i valori delle ore e dei minuti */
+        populateComboBox(timeComboBox1, 0, 24);
+        populateComboBox(timeComboBox2, 0, 60);
+        populateComboBox(daysOfMonth, 1, 32);
+
+        /* Settiamo il FileSizeField con solo valori numerici */
         fileSizeField.setPromptText("KiloBytes Unit");
         fileSizeField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("\\d*")) {
-                // Se il nuovo testo non contiene solo cifre, reimposta il testo con il vecchio valore
+                // Se il nuovo testo non contiene solo cifre, reimposta il testo con il vecchio
+                // valore
                 fileSizeField.setText(oldValue);
             }
         });
-        
-        /*Aggiungiamo alla ListView dei trigger i nomi dei vari tipi di trigger*/
+
+        /* Aggiungiamo alla ListView dei trigger i nomi dei vari tipi di trigger */
         populateListView();
 
         populatePanes();
 
-        /*Popolamento Lista giorni della settimana*/
+        /* Popolamento Lista giorni della settimana */
         daysOfWeek.getItems().addAll(Arrays.asList(DayOfWeek.values()));
-        
-        /*La variabile temp per l'inizializzazione del trigger viene impostata di default all'orario attuale*/
+
+        /*
+         * La variabile temp per l'inizializzazione del trigger viene impostata di
+         * default all'orario attuale
+         */
         temp = LocalTime.of(LocalTime.now().getHour(), LocalTime.now().getMinute());
 
-        /*Settiamo i valori delle ComboBox all'orario attuale e Giorno corrente*/
+        /* Settiamo i valori delle ComboBox all'orario attuale e Giorno corrente */
         timeComboBox1.setPromptText(Integer.toString(LocalTime.now().getHour()));
         timeComboBox2.setPromptText(Integer.toString(LocalTime.now().getMinute()));
         DayOfWeek currentDayOfWeek = LocalDate.now().getDayOfWeek();
@@ -128,8 +133,11 @@ public class FXMLTriggerController implements Initializable {
         daysOfMonth.setValue(Integer.toString(LocalDate.now().getDayOfMonth()));
         daysOfMonth.setPromptText(Integer.toString(LocalDate.now().getDayOfMonth()));
         datePicker.setValue(LocalDate.now());
-        /*Listener aggiunto per la gestione della visibilità degli elementi dell'interfaccia,
-        chiama una funzione che setta la visibilità a TRUE*/
+        /*
+         * Listener aggiunto per la gestione della visibilità degli elementi
+         * dell'interfaccia,
+         * chiama una funzione che setta la visibilità a TRUE
+         */
         triggerListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 handleTriggerSelection(newValue); // Gestisci la selezione dell'opzione
@@ -144,13 +152,13 @@ public class FXMLTriggerController implements Initializable {
 
     @FXML
     private void doneTrigger(ActionEvent event) {
-        if(!triggerListView.getSelectionModel().getSelectedItems().isEmpty()){
+        if (!triggerListView.getSelectionModel().getSelectedItems().isEmpty()) {
             Trigger t = creators.get(triggerListView.getSelectionModel().getSelectedItem()).create();
             r.getLast().setTrigger(t);
         }
         Node sourceNode = (Node) event.getSource();
         Stage stage = (Stage) sourceNode.getScene().getWindow();
-        stage.close();// Chiudi la finestra corrente             
+        stage.close();// Chiudi la finestra corrente
     }
 
     @FXML
@@ -160,20 +168,23 @@ public class FXMLTriggerController implements Initializable {
         stage.close();
     }
 
-
-    private void populateComboBox(ComboBox<String> comboBox,int start, int pop) {
-        while(start<pop){
+    private void populateComboBox(ComboBox<String> comboBox, int start, int pop) {
+        while (start < pop) {
             String formattedTime = String.format("%02d", start);
             comboBox.getItems().add(formattedTime);
             start++;
         }
     }
-    
+
     @FXML
     private void timePick1(ActionEvent event) {
-        /*Gestito negli if per evitare il lancio di eccezioni al "primo click" di selezione.
-        Scegliendo l'orario da una sola delle due ComboBox disponibili, il valore dell'altra ComboBox
-        è impostato al valore dell'orario corrente*/
+        /*
+         * Gestito negli if per evitare il lancio di eccezioni al "primo click" di
+         * selezione.
+         * Scegliendo l'orario da una sola delle due ComboBox disponibili, il valore
+         * dell'altra ComboBox
+         * è impostato al valore dell'orario corrente
+         */
         if (timeComboBox1.getValue() == null) {
             temp = LocalTime.of((LocalTime.now().getHour()), Integer.parseInt(timeComboBox2.getValue()));
         } else if (timeComboBox2.getValue() == null) {
@@ -185,21 +196,23 @@ public class FXMLTriggerController implements Initializable {
 
     @FXML
     private void selectFile(ActionEvent event) {
-            FileChooser fil_chooser = new FileChooser();
-            File file = fil_chooser.showOpenDialog(new Stage());
-            if (file != null) {
-                fileSource.setText(file.toString());
-            }
-        
+        FileChooser fil_chooser = new FileChooser();
+        File file = fil_chooser.showOpenDialog(new Stage());
+        if (file != null) {
+            fileSource.setText(file.toString());
+        }
 
     }
     
     private void populateCreator() {
         creators.put("Time Trigger", () -> new TimeTrigger(temp));
-        creators.put("Day of Week Trigger", () -> new DayOfWeekTrigger(daysOfWeek.getSelectionModel().getSelectedItem()));
+        creators.put("Day of Week Trigger",
+                () -> new DayOfWeekTrigger(daysOfWeek.getSelectionModel().getSelectedItem()));
         creators.put("Day of Month Trigger", () -> new DayOfMonthTrigger(Integer.parseInt(daysOfMonth.getValue())));
         creators.put("Day of Year Trigger", () -> new DayOfYearTrigger(datePicker.getValue()));
-        creators.put("File Trigger", () -> new FileSizeTrigger(new File(fileSource.getText()), Integer.parseInt(fileSizeField.getText())));;
+        creators.put("File Trigger",
+                () -> new FileSizeTrigger(new File(fileSource.getText()), Integer.parseInt(fileSizeField.getText())));
+        ;
     }
 
     private void populatePanes() {
@@ -209,24 +222,13 @@ public class FXMLTriggerController implements Initializable {
         anchorPanes.put("Day of Year Trigger", dayOfYearPane);
         anchorPanes.put("File Trigger", fileSizePane);
     }
-    private void populateListView(){
+
+    private void populateListView() {
         triggerListView.getItems().addAll(
                 "Time Trigger",
                 "Day of Week Trigger",
                 "Day of Month Trigger",
                 "Day of Year Trigger",
-                "File Trigger"
-        );
+                "File Trigger");
     }
 }
-
-
-
-
-
-
-
-
-
-
-

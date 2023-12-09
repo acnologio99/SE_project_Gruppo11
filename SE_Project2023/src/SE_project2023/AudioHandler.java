@@ -6,11 +6,10 @@ package SE_project2023;
 
 import SE_project2023.Action.Action;
 import SE_project2023.Action.AudioAction;
-import java.io.File;
+import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
+import javafx.util.Duration;
 
 /**
  *
@@ -30,23 +29,26 @@ public class AudioHandler extends ActionHandler {
         } else {
             AudioAction act = (AudioAction) a;
             Platform.runLater(() -> {
-
-            File file = new File(act.getPath());
-
-            Media media = new Media(file.toURI().toString());
-
-            final MediaPlayer mediaPlayer = new MediaPlayer(media);
-            mediaPlayer.play();
-
-            Alert alert;
-            alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Reminder");
-            alert.setHeaderText(null);
-            alert.setContentText("Playing choosen audio...");
-            alert.showAndWait();
-
-            mediaPlayer.stop();
-            });}
+                
+                Alert alert;
+                alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Reminder");
+                alert.setHeaderText(null);
+                alert.setContentText("Playing choosen audio...");
+                
+                Duration duration = Duration.seconds(9);
+                PauseTransition transition = new PauseTransition(duration);
+                transition.setOnFinished(event -> {
+                    if (alert.isShowing()) {
+                        alert.close();
+                    }
+                });
+                transition.play();
+                
+                alert.showAndWait();
+                act.stopClip();
+            });
+        }
         return true;
     }
 

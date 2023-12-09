@@ -10,7 +10,8 @@ import java.io.File;
  *
  * @author giova
  */
-public class FileSizeTrigger implements Trigger{
+public class FileSizeTrigger implements Trigger {
+
     File file;
     int Dimension;
 
@@ -18,10 +19,14 @@ public class FileSizeTrigger implements Trigger{
         this.file = file;
         this.Dimension = Dimension;
     }
-    
+
     @Override
     public boolean isVerified() {
-        return (file.length()/1024)>=Dimension;
+        return (file.length() / 1024) >= Dimension;
     }
-    
+
+    @Override
+    public String toString() {
+        return "FileSizeTrigger: " + "file= " + file + ", dimensione= " + Dimension;
+    }
 }

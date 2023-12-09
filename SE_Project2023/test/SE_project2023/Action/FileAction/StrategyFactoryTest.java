@@ -17,6 +17,8 @@ import static org.junit.Assert.*;
  */
 public class StrategyFactoryTest {
     
+    StrategyFactory instance;
+    
     public StrategyFactoryTest() {
     }
     
@@ -30,6 +32,7 @@ public class StrategyFactoryTest {
     
     @Before
     public void setUp() {
+        instance = new StrategyFactory();
     }
     
     @After
@@ -39,16 +42,24 @@ public class StrategyFactoryTest {
     /**
      * Test of getStrategy method, of class StrategyFactory.
      */
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void testGetStrategy() {
         System.out.println("getStrategy");
-        String action = "";
-        StrategyFactory instance = new StrategyFactory();
-        FileStrategy expResult = null;
+        
+        String action = "copy";
         FileStrategy result = instance.getStrategy(action);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertTrue(result instanceof CopyStrategy);
+        
+        action = "move";
+        result = instance.getStrategy(action);
+        assertTrue(result instanceof MoveStrategy);
+        
+        action = "remove";
+        result = instance.getStrategy(action);
+        assertTrue(result instanceof RemoveStrategy);
+        
+        action = "";
+        result = instance.getStrategy(action);
     }
     
 }

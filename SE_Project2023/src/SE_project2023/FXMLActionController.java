@@ -5,18 +5,14 @@
 package SE_project2023;
 
 import SE_project2023.Action.*;
-import SE_project2023.Action.Strategy.FileAction;
-import SE_project2023.Action.Strategy.StrategyFactory;
+import SE_project2023.Action.FileAction.FileAction;
+import SE_project2023.Action.FileAction.StrategyFactory;
 import java.io.File;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -40,7 +36,7 @@ import javafx.stage.Stage;
  *
  * @author giova
  */
-public class FXMLActionController implements Initializable{
+public class FXMLActionController implements Initializable {
 
     ObservableList<Action> actionList;
     RuleList r;
@@ -98,15 +94,14 @@ public class FXMLActionController implements Initializable{
     private TextField sourcePathExe;
 
     private Map<String, ActionCreator> creators = new HashMap<>();
-    private MenuExecutor menuExec; //invoker for commands
+    private MenuExecutor menuExec; // invoker for commands
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        //Action Factory
-
+        // Action Factory
         HashSet<Action> actions = new HashSet();
 
         actionList = FXCollections.observableArrayList(actions);
@@ -115,7 +110,6 @@ public class FXMLActionController implements Initializable{
         populateCreator();
         populatePanes();
         populateListView();
-
 
         // Aggiungi un listener per gestire la selezione della ListView
         actionListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -129,7 +123,6 @@ public class FXMLActionController implements Initializable{
 
         menuExec = new MenuExecutor();
 
-
     }
 
     private void handleSelection(String selectedAction) {
@@ -138,11 +131,10 @@ public class FXMLActionController implements Initializable{
 
     @FXML
     private void doneAction(ActionEvent event) {
-        if(!actionListView.getSelectionModel().getSelectedItems().isEmpty()){
+        if (!actionListView.getSelectionModel().getSelectedItems().isEmpty()) {
             Action a = creators.get(actionListView.getSelectionModel().getSelectedItem()).create();
             r.getLast().setAction(a);
         }
-
         cancelAction(event);
     }
 
@@ -155,25 +147,8 @@ public class FXMLActionController implements Initializable{
 
     @FXML
     private void audioAction(ActionEvent event) {
-        // get the file selected
-        // create a File chooser
-        FileChooser fil_chooser = new FileChooser();
-        fil_chooser.getExtensionFilters()
-                .add(new FileChooser.ExtensionFilter("Audio Files",
-                        "*.mp3", "*.wav", "*.flac", "*.aac"));
-        File file = fil_chooser.showOpenDialog(new Stage());
-        if (file != null) {
-            audioText.setText(file.toString());
-        }
-
-    }
-
-    private void fileAction(ActionEvent event, TextField source) {
-        FileChooser fil_chooser = new FileChooser();
-        File file = fil_chooser.showOpenDialog(new Stage());
-        if (file != null) {
-            source.setText(file.toString());
-        }
+        chooser(new FileChooser.ExtensionFilter("Audio Files", "*.wav", "*.aiff", "*.au"),
+                audioText);
     }
 
     @FXML
@@ -187,12 +162,12 @@ public class FXMLActionController implements Initializable{
 
     @FXML
     private void fileSetAction(ActionEvent event) {
-        fileAction(event, sourcePath1);
+        chooser(null, sourcePath1);
     }
 
     @FXML
     private void fileAppendAction(ActionEvent event) {
-        fileAction(event, sourcePath);
+        chooser(null, sourcePath);
     }
 
     @FXML
@@ -208,21 +183,29 @@ public class FXMLActionController implements Initializable{
 
     @FXML
     private void execAction(ActionEvent event) {
+        chooser(null, sourcePathExe);
+    }
+
+    private void chooser(FileChooser.ExtensionFilter ef, TextField tf) {
         FileChooser fil_chooser = new FileChooser();
+        if (ef != null) {
+            fil_chooser.getExtensionFilters().add(ef);
+        }
         File file = fil_chooser.showOpenDialog(new Stage());
         if (file != null) {
-            sourcePathExe.setText(file.toString());
+            tf.setText(file.toString());
         }
     }
-    
 
     private void populateCreator() {
         StrategyFactory sf = new StrategyFactory();
         creators.put("TextBox Action", () -> new MessageBoxAction(textMessage.getText()));
         creators.put("Audio Action", () -> new AudioAction(audioText.getText()));
-        creators.put("File Action", () -> new FileAction(sourcePath1.getText(), destPath.getText(),sf.getStrategy(((ToggleButton) fileChoices.getSelectedToggle()).getId().split("Toggle")[0])));
-        creators.put("Append Action",() ->  new FileAppendAction(sourcePath.getText(), textMessage2.getText()));
-        creators.put("Program Action",() ->  new ProgramAction(sourcePathExe.getText(), Arrays.asList(commandsField.getText())));
+        creators.put("File Action", () -> new FileAction(sourcePath1.getText(), destPath.getText(),
+                sf.getStrategy(((ToggleButton) fileChoices.getSelectedToggle()).getId().split("Toggle")[0])));
+        creators.put("Append Action", () -> new FileAppendAction(sourcePath.getText(), textMessage2.getText()));
+        creators.put("Program Action",
+                () -> new ProgramAction(sourcePathExe.getText(), Arrays.asList(commandsField.getText())));
     }
 
     private void populatePanes() {
@@ -232,14 +215,14 @@ public class FXMLActionController implements Initializable{
         anchorPanes.put("Append Action", appendPane);
         anchorPanes.put("Program Action", programPane);
     }
-    private void populateListView(){
+
+    private void populateListView() {
         actionListView.getItems().addAll(
                 "TextBox Action",
                 "Audio Action",
                 "File Action",
                 "Append Action",
-                "Program Action"
-        );
+                "Program Action");
     }
 
 }

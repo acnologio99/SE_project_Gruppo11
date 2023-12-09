@@ -10,15 +10,22 @@ import java.time.LocalDate;
  *
  * @author giova
  */
-public class DayOfMonthTrigger implements Trigger{
+public class DayOfMonthTrigger implements Trigger {
+
     private int dOM;
 
     public DayOfMonthTrigger(int d) {
-        this.dOM=d;
+        this.dOM = d;
     }
+
     @Override
     public boolean isVerified() {
-        return LocalDate.now().getDayOfMonth()==dOM;
+        return LocalDate.now().getDayOfMonth() == dOM;
     }
-    
+
+    @Override
+    public String toString() {
+        return "DayOfMonthTrigger: " + dOM;
+    }
+
 }

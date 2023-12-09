@@ -6,7 +6,6 @@ package SE_project2023;
 
 import SE_project2023.Action.Action;
 import SE_project2023.Action.ProgramAction;
-import SE_project2023.Regole.Rule;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 

@@ -116,7 +116,7 @@ public class MessageBoxActionTest {
     public void testToString() {
         System.out.println("toString");
 
-        String expResult = "ActionMessageBox: ";
+        String expResult = "messaggio: ";
         String result = instance.toString();
         assertEquals(expResult, result);
 

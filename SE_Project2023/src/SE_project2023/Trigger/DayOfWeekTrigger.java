@@ -11,7 +11,8 @@ import java.time.LocalDate;
  *
  * @author giova
  */
-public class DayOfWeekTrigger implements Trigger{
+public class DayOfWeekTrigger implements Trigger {
+
     DayOfWeek dOW;
 
     @Override
@@ -22,5 +23,10 @@ public class DayOfWeekTrigger implements Trigger{
     public DayOfWeekTrigger(DayOfWeek dOW) {
         this.dOW = dOW;
     }
-    
+
+    @Override
+    public String toString() {
+        return "DayOfWeekTrigger: " + dOW;
+    }
+
 }

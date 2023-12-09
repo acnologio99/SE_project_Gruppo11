@@ -5,21 +5,19 @@
 package SE_project2023;
 
 import SE_project2023.Action.Action;
-import SE_project2023.Regole.Rule;
 
 /**
  *
  * @author chris
  */
 public abstract class ActionHandler {
+
     ActionHandler next;
 
     public ActionHandler(ActionHandler next) {
         this.next = next;
     }
-    
-    
-    
-public abstract boolean fireAction(Action a);        
-    
+
+    public abstract boolean fireAction(Action a); 
+
 }

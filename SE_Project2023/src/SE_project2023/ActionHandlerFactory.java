@@ -8,14 +8,14 @@ import SE_project2023.Action.Action;
 
 /**
  *
- @author chris*/
+ * @author chris
+ */
 public class ActionHandlerFactory {
 
+    public static ActionHandler createActionHandler() {
 
-    public static ActionHandler createActionHandler(){
-
-
-     class NestedCatchAllHandler extends ActionHandler { //Handler innestato che cattura tutte le richieste non verificate.
+        class NestedCatchAllHandler extends ActionHandler { // Handler innestato che cattura tutte le richieste non
+                                                            // verificate.
             public NestedCatchAllHandler(ActionHandler next) {
                 super(next);
             }
@@ -24,11 +24,11 @@ public class ActionHandlerFactory {
             public boolean fireAction(Action a) {
                 return false;
             }
-     }
+        }
 
-
-     ActionHandler catchAll = new NestedCatchAllHandler(null);
-     ActionHandler msg =new MessageHandler(catchAll);
-     return new AudioHandler(msg);
+        ActionHandler catchAll = new NestedCatchAllHandler(null);
+        ActionHandler msg = new MessageHandler(catchAll);
+        ActionHandler prog = new ProgramHandler(msg);
+        return new AudioHandler(prog);
     }
 }

@@ -18,33 +18,26 @@ public class MessageHandler extends ActionHandler {
     public MessageHandler(ActionHandler next) {
         super(next);
 
-
-
     }
 
     @Override
     public boolean fireAction(Action a) {
         System.out.println(a instanceof MessageBoxAction);
-        if(!(a instanceof MessageBoxAction) && next!=null){
+        if (!(a instanceof MessageBoxAction) && next != null) {
 
             next.fireAction(a);
 
-        }else {
-        MessageBoxAction act = (MessageBoxAction) a;
-        Platform.runLater(() -> {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Information Dialog");
-        alert.setHeaderText(null);
-        alert.setContentText(act.getMsg());
-        alert.showAndWait();
-        });}
-    return true;
+        } else {
+            MessageBoxAction act = (MessageBoxAction) a;
+            Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Information Dialog");
+                alert.setHeaderText(null);
+                alert.setContentText(act.getMsg());
+                alert.showAndWait();
+            });
+        }
+        return true;
     }
-
-
-
-
-
-
 
 }

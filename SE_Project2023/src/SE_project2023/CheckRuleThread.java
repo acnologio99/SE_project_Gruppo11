@@ -17,8 +17,7 @@ public class CheckRuleThread implements Runnable {
     private RuleList rules;
 
     public CheckRuleThread() {
-     rules = RuleList.getRuleList();
-
+        rules = RuleList.getRuleList();
     }
 
     @Override
@@ -31,19 +30,15 @@ public class CheckRuleThread implements Runnable {
                 Logger.getLogger(CheckRuleThread.class.getName()).log(Level.SEVERE, null, ex);
             }
 
-                // Codice per controllare la lista
-                System.out.println("Controllo lista...");
-                if(!rules.isEmpty()){
+            // Codice per controllare la lista
+            System.out.println("Controllo lista...");
+            if (!rules.isEmpty()) {
                 for (Rule r : rules) {
                     if (r.ruleIsValid() && r.isVerifiedRule()) {
                         r.fire();
-
-                    }
-                    else ;
+                    } else ;
                 }
-             }
-
-
+            }
         }
     }
 }

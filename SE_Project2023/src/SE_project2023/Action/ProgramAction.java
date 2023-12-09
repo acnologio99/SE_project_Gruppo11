@@ -16,10 +16,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProgramAction implements Action {
+
     private String programPath;
     private List<String> commandLineArgs;
     private boolean isFired = false;
     private String output;
+
     public ProgramAction(String programPath, List<String> commandLineArgs) {
         this.programPath = programPath;
         this.commandLineArgs = commandLineArgs;
@@ -30,7 +32,6 @@ public class ProgramAction implements Action {
         return isFired;
     }
 
-
     public void fire() {
         ProcessBuilder processBuilder = new ProcessBuilder();
         List<String> command = new ArrayList<>(commandLineArgs);
@@ -38,35 +39,36 @@ public class ProgramAction implements Action {
 
         processBuilder.command(command);
 
-         try {
-        Process process = processBuilder.start();
-        isFired = true;
+        try {
+            Process process = processBuilder.start();
+            isFired = true;
 
-        InputStream inputStream = process.getInputStream();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+            InputStream inputStream = process.getInputStream();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 
-        StringBuilder outputBuilder = new StringBuilder(); // Salva l'output del processo in una stringa
-        String line;
-        while ((line = reader.readLine()) != null) {
-            outputBuilder.append(line).append("\n");
+            StringBuilder outputBuilder = new StringBuilder(); // Salva l'output del processo in una stringa
+            String line;
+            while ((line = reader.readLine()) != null) {
+                outputBuilder.append(line).append("\n");
+            }
+            output = outputBuilder.toString(); // Memorizza l'output nel membro output della classe
+
+            System.out.println("Program executed successfully.");
+            System.out.println("Program output: " + output); // Stampa l'output per verificare se è stato catturato
+                                                             // correttamente
+
+        } catch (IOException e) {
+            System.out.println(output = "Attenzione! Il programma selezionato non è un eseguibile (.exe)");
+            isFired = true;
+
         }
-        output = outputBuilder.toString(); // Memorizza l'output nel membro output della classe
-
-        System.out.println("Program executed successfully.");
-        System.out.println("Program output: " + output); // Stampa l'output per verificare se è stato catturato correttamente
-
-    } catch (IOException e) {
-        System.out.println(output="Attenzione! Il programma selezionato non è un eseguibile (.exe)");
-        isFired=true;
-
     }
-}
 
     public String getOutput() {
         return output;
     }
 
-   public String getProgramPath() {
+    public String getProgramPath() {
         return programPath;
     }
 
@@ -74,19 +76,28 @@ public class ProgramAction implements Action {
         this.programPath = programPath;
     }
 
-
     @Override
     public void add() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from
+                                                                       // nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public void remove() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from
+                                                                       // nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public Action getChild() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from
+                                                                       // nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
+
+    @Override
+    public String toString() {
+        return "ProgramAction: " + "programPath= " + programPath;
+    }
+    
+    
 }

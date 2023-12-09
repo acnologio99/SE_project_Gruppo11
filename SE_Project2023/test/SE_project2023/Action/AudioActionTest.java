@@ -1,7 +1,5 @@
 package SE_project2023.Action;
 
-import javafx.application.Platform;
-import javafx.embed.swing.JFXPanel;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -66,17 +64,14 @@ public class AudioActionTest {
      */
     @Test
     public void testFire() {
-        JFXPanel jfxPanel = new JFXPanel();
         System.out.println("fire");
         boolean expResult = false;
         boolean result = a.isFired();
         assertEquals(expResult, result);
 
-        Platform.runLater(() -> {
-            a.setPath("data/song02.wav");
-            a.fire();
-            assertTrue(a.isFired());
-        });
+        a.setPath("data/song02.wav");
+        a.fire();
+        assertTrue(a.isFired());
         try {
             Thread.sleep(5000);
         } catch (InterruptedException e) {
@@ -92,7 +87,7 @@ public class AudioActionTest {
     public void testToString() {
         System.out.println("toString");
         AudioAction instance = new AudioAction();
-        String expResult = "ActionAudio : null";
+        String expResult = "Audio : null";
         String result = instance.toString();
         assertEquals(expResult, result);
     }

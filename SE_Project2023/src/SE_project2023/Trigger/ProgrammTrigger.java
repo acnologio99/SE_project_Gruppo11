@@ -8,7 +8,8 @@ package SE_project2023.Trigger;
  *
  * @author cauro
  */
-public class ProgrammTrigger implements Trigger{
+public class ProgrammTrigger implements Trigger {
+
     private String path;
 
     public ProgrammTrigger(String path) {
@@ -27,5 +28,10 @@ public class ProgrammTrigger implements Trigger{
     public boolean isVerified() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-    
+
+    @Override
+    public String toString() {
+        return "ProgrammTrigger: " + "path= " + path;
+    }
+
 }

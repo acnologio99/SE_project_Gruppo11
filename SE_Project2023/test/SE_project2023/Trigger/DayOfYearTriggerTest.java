@@ -5,7 +5,6 @@
 package SE_project2023.Trigger;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;

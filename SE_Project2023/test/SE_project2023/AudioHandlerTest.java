@@ -7,12 +7,10 @@ package SE_project2023;
 import SE_project2023.Action.Action;
 import SE_project2023.Action.AudioAction;
 import SE_project2023.Action.MessageBoxAction;
-import SE_project2023.Regole.Rule;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -39,20 +37,22 @@ public class AudioHandlerTest {
     public void testFireAction() {
         System.out.println("fireAction");
 
-        a=new AudioAction("./data/song01.wav");
+        a = new AudioAction("./data/song01.wav");
         JFXPanel jfxPanel = new JFXPanel();
-         Platform.runLater(() -> {
-           instance.fireAction(a); //javafx test, allert with sound
+        Platform.runLater(() -> {
+            a.fire();
+            instance.fireAction(a); // javafx test, allert with sound
         });
         try {
-            Thread.sleep(2000);
+            Thread.sleep(10000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-        a=new MessageBoxAction("Test");
-        instance.fireAction(a); //rule with a differenct Action but without "next" nullPointer expected
+        a = new MessageBoxAction("Test");
+        instance.fireAction(a); // rule with a differenct Action but without "next" nullPointer expected
     }
+
     /**
      * Test di una regola con una AudioAction all'interno della catena.
      */
@@ -61,19 +61,18 @@ public class AudioHandlerTest {
     public void testFireActionChain() {
         System.out.println("fireActionChain");
 
-        a=new AudioAction("./data/song01.wav");
+        a = new AudioAction("./data/song01.wav");
         ActionHandler handler = ActionHandlerFactory.createActionHandler();
         JFXPanel jfxPanel = new JFXPanel();
-         Platform.runLater(() -> {
-           handler.fireAction(a); //expected to play the sound
+        Platform.runLater(() -> {
+            a.fire();
+            handler.fireAction(a); // expected to play the sound
         });
         try {
-            Thread.sleep(5000);
+            Thread.sleep(10000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-
 
     }
 
