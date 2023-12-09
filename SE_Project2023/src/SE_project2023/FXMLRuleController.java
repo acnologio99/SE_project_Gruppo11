@@ -178,7 +178,7 @@ public class FXMLRuleController implements Initializable {
             r.getLast().setVerifiedTool(m);
         }
         // Chiudi la finestra corrente
-        
+        r.getLast().setFlag(true);
         stage.close();
         rootScene.setDisable(false);
     }
@@ -189,7 +189,7 @@ public class FXMLRuleController implements Initializable {
         Stage stage = (Stage) sourceNode.getScene().getWindow();
 
         RuleList r = RuleList.getRuleList();
-        r.getLast().setAction(null);
+        r.getLast().setFlag(false);
         // Chiudi la finestra corrente
         stage.close();
     }

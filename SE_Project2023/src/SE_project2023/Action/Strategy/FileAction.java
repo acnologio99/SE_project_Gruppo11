@@ -1,4 +1,4 @@
-package SE_project2023.Action.FileAction;
+package SE_project2023.Action.Strategy;
 
 import SE_project2023.Action.Action;
 import java.io.File;
@@ -74,7 +74,7 @@ public class FileAction implements Action, Serializable {
 
         if (this.destinationPath != null) {
             if (this.destinationPath.lastIndexOf("\\") == (this.destinationPath.length() - 1)) {
-                this.destinationPath += file.getName();
+                this.destinationPath += "\\" + file.getName();
             }
         }
 

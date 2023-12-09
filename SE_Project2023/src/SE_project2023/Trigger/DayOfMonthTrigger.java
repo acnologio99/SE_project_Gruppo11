@@ -11,7 +11,7 @@ import java.time.LocalDate;
  * @author giova
  */
 public class DayOfMonthTrigger implements Trigger{
-    int dOM;
+    private int dOM;
 
     public DayOfMonthTrigger(int d) {
         this.dOM=d;
