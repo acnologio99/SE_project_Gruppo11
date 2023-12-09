@@ -38,7 +38,6 @@ import javafx.stage.Stage;
  */
 public class FXMLActionController implements Initializable {
 
-
     ObservableList<Action> actionList;
     RuleList r;
     HashMap<String, AnchorPane> anchorPanes = new HashMap<>();
@@ -93,9 +92,10 @@ public class FXMLActionController implements Initializable {
     private Button execFileButton1;
     @FXML
     private TextField sourcePathExe;
-    
+
     private Map<String, ActionCreator> creators = new HashMap<>();
     private MenuExecutor menuExec; //invoker for commands
+
     /**
      * Initializes the controller class.
      */
@@ -105,11 +105,11 @@ public class FXMLActionController implements Initializable {
         StrategyFactory sf = new StrategyFactory();
         creators.put("TextBox Action", () -> new MessageBoxAction(textMessage.getText()));
         creators.put("Audio Action", () -> new AudioAction(audioText.getText()));
-        creators.put("File Action", () -> new FileAction(sourcePath.getText(), destPath.getText(),sf.getStrategy(((ToggleButton) fileChoices.getSelectedToggle()).getId().split("Toggle")[0])));
-        creators.put("Append Action",() ->  new FileAppendAction(sourcePath.getText(), textMessage2.getText()));
-        creators.put("Program Action",() ->  new ProgramAction(sourcePathExe.getText(), Arrays.asList(commandsField.getText())));
+        creators.put("File Action", () -> new FileAction(sourcePath1.getText(), destPath.getText(), sf.getStrategy(((ToggleButton) fileChoices.getSelectedToggle()).getId().split("Toggle")[0])));
+        creators.put("Append Action", () -> new FileAppendAction(sourcePath.getText(), textMessage2.getText()));
+        creators.put("Program Action", () -> new ProgramAction(sourcePathExe.getText(), Arrays.asList(commandsField.getText())));
         HashSet<Action> actions = new HashSet();
-        
+
         actionList = FXCollections.observableArrayList(actions);
         r = RuleList.getRuleList();
 
@@ -133,16 +133,13 @@ public class FXMLActionController implements Initializable {
                 handleSelection(newValue); // Gestisci la selezione dell'opzione
             }
         });
-        
 
-
-        menuExec = new MenuExecutor(); 
-       
+        menuExec = new MenuExecutor();
 
     }
 
     private void handleSelection(String selectedAction) {
-         menuExec.execute(new SwitchCommand(anchorPanes, selectedAction)); 
+        menuExec.execute(new SwitchCommand(anchorPanes, selectedAction));
     }
 
     @FXML
@@ -181,6 +178,7 @@ public class FXMLActionController implements Initializable {
             source.setText(file.toString());
         }
     }
+
     @FXML
     private void chooseFolder(ActionEvent event) {
         DirectoryChooser dir_chooser = new DirectoryChooser();
@@ -189,14 +187,17 @@ public class FXMLActionController implements Initializable {
             destPath.setText(selectedDirectory.toString());
         }
     }
+
     @FXML
     private void fileSetAction(ActionEvent event) {
         fileAction(event, sourcePath1);
     }
+
     @FXML
     private void fileAppendAction(ActionEvent event) {
         fileAction(event, sourcePath);
     }
+
     @FXML
     private void toggleHandle(ActionEvent event) {
         if (removeToggle.isSelected()) {
@@ -210,15 +211,14 @@ public class FXMLActionController implements Initializable {
 
     @FXML
     private void execAction(ActionEvent event) {
-         FileChooser fil_chooser = new FileChooser();
+        FileChooser fil_chooser = new FileChooser();
         fil_chooser.getExtensionFilters()
                 .add(new FileChooser.ExtensionFilter("Program Files",
                         "*.exe"));
         File file = fil_chooser.showOpenDialog(new Stage());
         if (file != null) {
             sourcePathExe.setText(file.toString());
+        }
     }
-    }
-   
 
 }

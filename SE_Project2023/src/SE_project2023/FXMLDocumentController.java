@@ -33,7 +33,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 /**
  *
@@ -88,27 +87,27 @@ public class FXMLDocumentController implements Initializable, Observer, Serializ
         });
         sleepCln.setCellValueFactory(cellData -> {
             long sleep = cellData.getValue().getSleep(); // Assume che "isStatus()" sia il metodo che restituisce il booleano dalla classe Rule
-            return new SimpleStringProperty(sleep>0 ? "On" : "Off");
+            return new SimpleStringProperty(sleep > 0 ? "On" : "Off");
         });
         tableView.setRowFactory(row -> new TableRow<Rule>() {
             @Override
             protected void updateItem(Rule r, boolean empty) {
-            super.updateItem(r, empty);
+                super.updateItem(r, empty);
                 if (r == null || empty) {
-                setStyle(""); // Se l'elemento è vuoto o la riga è vuota, non impostare uno stile
-            } else {
-            // Imposta il colore della riga in base al tipo dell'elemento
-            if (r.getAction().isFired()) {
-                setStyle("-fx-background-color: lightgreen;");
-            } else if (!r.getAction().isFired()) {
-                setStyle("-fx-background-color: lightblue;");
-            } else {
-                setStyle(""); // Altri tipi possono avere uno stile diverso o nessuno
+                    setStyle(""); // Se l'elemento è vuoto o la riga è vuota, non impostare uno stile
+                } else {
+                    // Imposta il colore della riga in base al tipo dell'elemento
+                    if (r.getAction().isFired()) {
+                        setStyle("-fx-background-color: lightgreen;");
+                    } else if (!r.getAction().isFired()) {
+                        setStyle("-fx-background-color: lightblue;");
+                    } else {
+                        setStyle(""); // Altri tipi possono avere uno stile diverso o nessuno
+                    }
+                }
             }
-        }
-    }
-});
-     
+        });
+
         rules.addObserver(this);
 
     }
@@ -128,7 +127,7 @@ public class FXMLDocumentController implements Initializable, Observer, Serializ
             if (b == ButtonType.OK) {
                 rules.removeAll(tableView.getSelectionModel().getSelectedItems());
                 ruleList.removeAll(tableView.getSelectionModel().getSelectedItems());
-                
+
             }
         }
 

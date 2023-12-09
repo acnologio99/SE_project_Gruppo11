@@ -16,11 +16,14 @@ import java.nio.file.StandardCopyOption;
  * @author emanu
  */
 public class CopyStrategy implements FileStrategy, Serializable {
+
+    public CopyStrategy() {
+    }
     
     @Override
     public void execute(File file, String sourcePath, String destinationPath) {
         try {
-            System.out.println(
+            System.out.println("File copiato in : "+
                     Files.copy(Paths.get(sourcePath),
                             Paths.get(destinationPath), StandardCopyOption.REPLACE_EXISTING));
 

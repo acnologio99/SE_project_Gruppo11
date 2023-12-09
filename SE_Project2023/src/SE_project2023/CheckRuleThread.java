@@ -18,35 +18,31 @@ public class CheckRuleThread implements Runnable {
     private ActionHandler handler;
 
     public CheckRuleThread() {
-     rules = RuleList.getRuleList();
-     handler = ActionHandlerFactory.createActionHandler();;
+        rules = RuleList.getRuleList();
+        handler = ActionHandlerFactory.createActionHandler();;
     }
 
     @Override
     public void run() {
         while (true) {
-            
+
             try {
                 Thread.sleep(10000); // 10 secondi (10000 millisecondi)
             } catch (InterruptedException ex) {
                 Logger.getLogger(CheckRuleThread.class.getName()).log(Level.SEVERE, null, ex);
             }
 
-                // Codice per controllare la lista
-                System.out.println("Controllo lista...");
-                if(!rules.isEmpty()){
+            // Codice per controllare la lista
+            System.out.println("Controllo lista...");
+            if (!rules.isEmpty()) {
                 for (Rule r : rules) {
                     if (r.ruleIsValid() && r.isVerifiedRule()) {
                         r.fire();
                         handler.fireAction(r);
-                    }
-                    else ;
+                    } else ;
                 }
-             }
-            
-                
+            }
+
         }
     }
 }
-
-

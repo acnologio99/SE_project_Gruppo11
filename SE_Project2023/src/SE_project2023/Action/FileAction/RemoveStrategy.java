@@ -13,6 +13,9 @@ import java.io.Serializable;
  */
 public class RemoveStrategy implements FileStrategy, Serializable {
 
+    public RemoveStrategy() {
+    }
+
     @Override
     public void execute(File file, String sourcePath, String destinationPath) {
         if (file.delete()) {
