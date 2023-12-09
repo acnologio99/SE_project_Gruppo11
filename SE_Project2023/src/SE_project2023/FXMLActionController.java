@@ -217,7 +217,7 @@ public class FXMLActionController implements Initializable{
             sourcePathExe.setText(file.toString());
         }
     }
-    }
+    
 
     private void populateCreator() {
         StrategyFactory sf = new StrategyFactory();

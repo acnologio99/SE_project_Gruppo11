@@ -8,11 +8,8 @@ import SE_project2023.Action.Action;
 
 /**
  *
- * @author chris
- */
+ @author chris*/
 public class ActionHandlerFactory {
-    private static ActionHandlerFactory actionHandlerFactory = null;
-    private ActionHandler catchAll;
 
 
     public static ActionHandler createActionHandler(){
@@ -27,22 +24,11 @@ public class ActionHandlerFactory {
             public boolean fireAction(Action a) {
                 return false;
             }
-        }
-        catchAll = new NestedCatchAllHandler(null);
+     }
 
+
+     ActionHandler catchAll = new NestedCatchAllHandler(null);
+     ActionHandler msg =new MessageHandler(catchAll);
+     return new AudioHandler(msg);
     }
-
-    public static ActionHandlerFactory getInstance() {
-        if (actionHandlerFactory == null) {
-            actionHandlerFactory = new ActionHandlerFactory();
-        }
-        return actionHandlerFactory;
-    }
-
-    /*public ActionHandler createActionHandler(ActionHandler acHandl) {
-
-        ActionHandler acHandl = new MessageHandler(catchAll);
-        return new AudioHandler(msg);
-
-    }*/
 }
