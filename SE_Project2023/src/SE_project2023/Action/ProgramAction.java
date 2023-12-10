@@ -55,7 +55,7 @@ public class ProgramAction implements Action {
 
             System.out.println("Program executed successfully.");
             System.out.println("Program output: " + output); // Stampa l'output per verificare se è stato catturato
-                                                             // correttamente
+            // correttamente
 
         } catch (IOException e) {
             System.out.println(output = "Attenzione! Il programma selezionato non è un eseguibile (.exe)");
@@ -79,25 +79,24 @@ public class ProgramAction implements Action {
     @Override
     public void add() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from
-                                                                       // nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        // nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public void remove() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from
-                                                                       // nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        // nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public Action getChild() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from
-                                                                       // nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        // nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public String toString() {
         return "ProgramAction: " + "programPath= " + programPath;
     }
-    
-    
+
 }

@@ -9,6 +9,7 @@ import SE_project2023.Action.AudioAction;
 import SE_project2023.Action.MessageBoxAction;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -32,6 +33,9 @@ public class AudioHandlerTest {
 
     /**
      * Test of fireAction method, of class FileHandler.
+     *  iene testato che l'azione viene effettivamente visualizzata, inoltre ritorna true se l'azione è stata eseguita correttamente.
+     * Il test è prettamente legato a JavaFx in quanto utlizza la libreria Platform.
+     * Si testa che l'azione AudioHandler venga effettivamente visualizzata con un'allert quando si utilizza JavaFx.
      */
     @Test(expected = ClassCastException.class)
     public void testFireAction() {
@@ -41,16 +45,17 @@ public class AudioHandlerTest {
         JFXPanel jfxPanel = new JFXPanel();
         Platform.runLater(() -> {
             a.fire();
-            instance.fireAction(a); // javafx test, allert with sound
+            boolean res=instance.fireAction(a); // javafx test, allert che accompagna il suono
+            assertTrue(res); // se l'handler viene eseguito correttamente ritorna true.
         });
         try {
-            Thread.sleep(10000);
+            Thread.sleep(7000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
         a = new MessageBoxAction("Test");
-        instance.fireAction(a); // rule with a differenct Action but without "next" nullPointer expected
+        instance.fireAction(a); // Azione diversa ma con next = null, ClassCastException expected.
     }
 
     /**
@@ -66,10 +71,11 @@ public class AudioHandlerTest {
         JFXPanel jfxPanel = new JFXPanel();
         Platform.runLater(() -> {
             a.fire();
-            handler.fireAction(a); // expected to play the sound
+            boolean res = handler.fireAction(a); // testo il funzionamento dell'azione nella catena, visivamente deve mostrare un allert.
+            assertTrue(res);
         });
         try {
-            Thread.sleep(10000);
+            Thread.sleep(7000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

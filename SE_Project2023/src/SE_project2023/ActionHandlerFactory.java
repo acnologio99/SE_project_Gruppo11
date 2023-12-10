@@ -7,7 +7,8 @@ package SE_project2023;
 import SE_project2023.Action.Action;
 
 /**
- *
+ * Factory della chain of responsability con un Handler innestato per gestire tutte le richieste
+ * che gli handler precedenti non possono catturare.
  * @author chris
  */
 public class ActionHandlerFactory {
@@ -26,7 +27,7 @@ public class ActionHandlerFactory {
             }
         }
 
-        ActionHandler catchAll = new NestedCatchAllHandler(null);
+        ActionHandler catchAll = new NestedCatchAllHandler(null); //Costruzione della catena.
         ActionHandler msg = new MessageHandler(catchAll);
         ActionHandler prog = new ProgramHandler(msg);
         return new AudioHandler(prog);

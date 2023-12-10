@@ -10,7 +10,7 @@ import javafx.application.Platform;
 import javafx.scene.control.Alert;
 
 /**
- *
+ * Handler della catena che gestisce MessageBoxAction mostrano un'allert con il messaggio contenuto nell'azione.
  * @author chris
  */
 public class MessageHandler extends ActionHandler {

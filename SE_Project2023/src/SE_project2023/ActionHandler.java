@@ -7,7 +7,8 @@ package SE_project2023;
 import SE_project2023.Action.Action;
 
 /**
- *
+ * Classe astratta per la chain of responsability delle azioni.
+ * Viene usata dal controller per gestire la visibilità di allert o componenti javafx.
  * @author chris
  */
 public abstract class ActionHandler {

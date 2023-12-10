@@ -9,6 +9,7 @@ import SE_project2023.Action.AudioAction;
 import SE_project2023.Action.MessageBoxAction;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -32,6 +33,9 @@ public class MessageHandlerTest {
 
     /**
      * Test of fireAction method, of class MessageHandler.
+     * Viene testato che l'azione viene effettivamente visualizzata, inoltre ritorna true se l'azione è stata eseguita correttamente.
+     * Il test è prettamente legato a JavaFx in quanto utlizza la libreria Platform.
+     * Si testa che l'azione MessageBox venga effettivamente visualizzata con un'allert quando si utilizza JavaFx.
      */
     @Test(expected = ClassCastException.class)
     public void testFireAction() {
@@ -40,16 +44,18 @@ public class MessageHandlerTest {
         a = new MessageBoxAction("test");
         JFXPanel jfxPanel = new JFXPanel();
         Platform.runLater(() -> {
-            instance.fireAction(a); // javafx test, allert with same "test" message.
+            boolean res = instance.fireAction(a); // javafx test, allert con "test" message
+            assertTrue(res); //se l'handler viene eseguito correttamente ritorna true.
         });
         try {
             Thread.sleep(7000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+       
 
         a = new AudioAction();
-        instance.fireAction(a); // rule with a differenct Action but without "next" ClassCastException expected
+        instance.fireAction(a); // rule con un'azione diversa che ha next=null, ClassCastException expected
     }
 
     @Test
@@ -60,7 +66,8 @@ public class MessageHandlerTest {
         ActionHandler handler = ActionHandlerFactory.createActionHandler();
         JFXPanel jfxPanel = new JFXPanel();
         Platform.runLater(() -> {
-            handler.fireAction(a); // expected to show the allert
+            boolean res = handler.fireAction(a); //Viene testato il comportamento nell chainOfResponsability
+            assertTrue(res);
         });
         try {
             Thread.sleep(7000);

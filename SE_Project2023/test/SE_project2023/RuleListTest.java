@@ -8,7 +8,6 @@ import SE_project2023.Regole.Rule;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -34,13 +33,17 @@ public class RuleListTest {
     public void setUp() {
         rules = RuleList.getRuleList();
         file = new File(testFile);
+
     }
 
     @After
     public void tearDown() {
-        rules.clear();
         file.delete();
+        rules.clear();
+       
     }
+    
+ 
 
     /**
      * Test of add method, of class RuleList.
@@ -50,7 +53,7 @@ public class RuleListTest {
         System.out.println("add");
         Rule r = new Rule();
         rules.add(r);
-        assertEquals(r, rules.getLast()); // the new rule is equal to the last i the list
+        assertEquals(r, rules.getLast()); // la nuova regola deve essere uguale all'ultima nella lista
         rules.add(null); // expected NullPointerException
     }
 
@@ -85,12 +88,11 @@ public class RuleListTest {
         assertEquals(r1, rules.getLast());
 
         rules.removeLast();
-        rules.removeLast();// removeLast on empty list, expected BoundsException
+        rules.removeLast();// removeLast su una lista vuota, expected BoundsException
     }
 
     @Test
     public void testSaveRulesWhenNoRules() {
-        file.delete();
         rules.saveRules(testFile);
         assertTrue(file.exists()); // verifico che il file, se non esiste, è stato creato
     }
@@ -110,7 +112,6 @@ public class RuleListTest {
     public void testLoadRulesFromEmptyFile() throws IOException {
         // Creazione di un file vuoto
         // file.delete() è nella tearDown quindi sono sicuro che il file non esista.
-        file.createNewFile();
         // Caricamento da un file vuoto
         rules.loadRules(testFile);
         assertEquals(0, rules.size()); // Il file non ha regole quindi la size della lista deve essere 0

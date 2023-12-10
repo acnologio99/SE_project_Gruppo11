@@ -36,20 +36,20 @@ public class MessageBoxActionTest {
     public void testGetSetMsg() {
         System.out.println("getsetMsg");
 
-        /* first test case expected msg*/
+        /* primo caso di text, expected msg*/
         String msg = "Helloo";
         instance.setMsg(msg);
         String expResult = "Helloo";
         String result = instance.getMsg();
         assertEquals(expResult, result);
 
-        /*second test case expected "" when msg is null*/
+        /*secondo caso di test, expected "" quando msg è null*/
         msg = null;
         instance.setMsg(msg);
         result = instance.getMsg();
         assertEquals("", result);
 
-        /*third case with constructor*/
+        /*terzo caso*/
         MessageBoxAction instance2 = new MessageBoxAction(null);
         result = instance.getMsg();
         assertEquals("",result);

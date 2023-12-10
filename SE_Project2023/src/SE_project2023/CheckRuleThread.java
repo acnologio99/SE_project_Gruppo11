@@ -9,7 +9,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
+ * Thread utilizzato per effetturare il controllo periodico sulle regole.
  * @author chris
  */
 public class CheckRuleThread implements Runnable {
@@ -34,8 +34,8 @@ public class CheckRuleThread implements Runnable {
             System.out.println("Controllo lista...");
             if (!rules.isEmpty()) {
                 for (Rule r : rules) {
-                    if (r.ruleIsValid() && r.isVerifiedRule()) {
-                        r.fire();
+                    if (r.ruleIsValid() && r.isVerifiedRule()) { //Se la regola è valida ovvero se ha sia azione che trigger, e se le condizioni 
+                        r.fire();                                //per cui deve essere eseguita sono verificate (come la sleep, o il trigger) allora questa viene eseguita.   
                     } else ;
                 }
             }

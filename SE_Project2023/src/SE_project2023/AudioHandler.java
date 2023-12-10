@@ -36,7 +36,7 @@ public class AudioHandler extends ActionHandler {
                 alert.setHeaderText(null);
                 alert.setContentText("Playing choosen audio...");
                 
-                Duration duration = Duration.seconds(9);
+                Duration duration = Duration.seconds(9);    //L'allert dura 9 secondi dopodichè si chiude automaticamente.
                 PauseTransition transition = new PauseTransition(duration);
                 transition.setOnFinished(event -> {
                     if (alert.isShowing()) {

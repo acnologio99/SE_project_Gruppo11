@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.Observable;
 
 /**
- *
+ * La regola è Osservabile in quanto principalmente deve comunicare tutti i suoi aggiornamenti a RuleList.
  * @author emanu
  */
 public class Rule extends Observable implements Serializable {
@@ -16,11 +16,11 @@ public class Rule extends Observable implements Serializable {
     private String name;
     private Action action;
     private Trigger trigger;
-    private boolean status = true;
-    private boolean flag = false; //CREARE O NO LA REGOLA
-    private long sleep = 0;
-    private LocalDateTime wakeUp;
-    private VerifiedTool vT;
+    private boolean status = true; //Indica se è attiva o disattiva
+    private boolean flag = false; //Indica se la regola è valida oppure no
+    private long sleep = 0; //Indica se la regola è in sleep e per quanto tempo
+    private LocalDateTime wakeUp; // Indica quando dovrà risvegliarsi.
+    private VerifiedTool vT; //Ogni volta che la regola viene controllata ha bisogno di un controllo diverso in base al suo stato.
 
     //Costruttori
     public Rule() {
@@ -120,7 +120,8 @@ public class Rule extends Observable implements Serializable {
     public String toString() {
         return "Rule : " + name + "; Action : " + action + "; Trigger : " + trigger + "; Status : " + status;
     }
-
+    
+    // La regola, per essere eseguita, deve verificare condizioni diverse in base allo stato in cui si trova.
     public boolean isVerifiedRule() {
         if (!action.isFired()) {
             return trigger.isVerified() && status;

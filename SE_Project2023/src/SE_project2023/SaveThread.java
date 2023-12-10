@@ -8,7 +8,9 @@ import java.util.Observable;
 import java.util.Observer;
 
 /**
- *
+ * SaveThread è un thread di salvataggio che richiama la funzione "saveRules" di RuleList.
+ * Il thread è Observer in quanto salva automaticamente ogni volta che c'è un cambiamento nella lista (RuleList)
+ * e di conseguenza anche ogni volta che c'è un cambiamento nelle regole sottostanti.
  * @author chris
  */
 public class SaveThread implements Runnable, Observer {
@@ -17,7 +19,7 @@ public class SaveThread implements Runnable, Observer {
 
     public SaveThread() {
         rules = RuleList.getRuleList();
-        rules.addObserver(this);
+        rules.addObserver(this); //Diventa Observer di RuleList
 
     }
 
@@ -29,7 +31,7 @@ public class SaveThread implements Runnable, Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        this.run(); //Save every time the ruleList gets an update.
+        this.run(); //Ogni volta che RuleList o una regola si aggiornano, il thread salva.
     }
 
 }

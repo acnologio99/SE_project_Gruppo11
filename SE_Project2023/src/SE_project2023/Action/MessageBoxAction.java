@@ -10,10 +10,9 @@ import java.io.Serializable;
  *
  * @author chris
  */
-public class MessageBoxAction implements Action , Serializable{
+public class MessageBoxAction implements Action, Serializable {
 
     private String msg;
-
     private Boolean isFired = false;
 
     public MessageBoxAction(String msg) {
@@ -44,8 +43,8 @@ public class MessageBoxAction implements Action , Serializable{
 
     @Override
     public void fire() {
+        System.out.println(this.msg); //Stampa il messaggio a video.
         this.isFired = true;
-        System.out.println("Ciaooo");
     }
 
     @Override

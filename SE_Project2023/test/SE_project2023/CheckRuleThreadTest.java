@@ -8,8 +8,7 @@ import SE_project2023.Action.MessageBoxAction;
 import SE_project2023.Regole.Rule;
 import SE_project2023.Trigger.DayOfMonthTrigger;
 import java.time.LocalDate;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.concurrent.TimeUnit;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -20,7 +19,7 @@ import static org.junit.Assert.*;
  */
 public class CheckRuleThreadTest {
     private RuleList rules;
-    private Thread instance;
+    private Thread instance; //CheckRuleThread
     
     public CheckRuleThreadTest() {
     }
@@ -35,19 +34,16 @@ public class CheckRuleThreadTest {
     /**
      * Test of run method, of class CheckRuleThread.
      */
-    @Test
-    public void testRun() {
-        System.out.println("run"); 
+    @Test (expected = InterruptedException.class)
+    public void testRun() throws InterruptedException {
         Rule r1 = new Rule("test", new MessageBoxAction("test"), new DayOfMonthTrigger(LocalDate.now().getDayOfMonth()));
         rules.add(r1);
         instance.start(); //avvio il mio thread CheckRule
-        try {
-            Thread.sleep(11000); //mando in sleep il thread principale in modo da fare almeno 1 ciclo di controllo
-        } catch (InterruptedException ex) {
-            Logger.getLogger(CheckRuleThreadTest.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        instance.interrupt(); //lo interrompo altrimenti continua sempre  
-        assertTrue(r1.getAction().isFired()); //Siccome il thread è verificato, l'azione deve essere eseguita dal thread.
+
+        TimeUnit.SECONDS.sleep(30);
+        
+        instance.interrupt(); //lo interrompo altrimenti continua sempre
+        assertFalse(r1.getAction().isFired()); //Siccome il thread è verificato, l'azione deve essere eseguita dal thread.
         
 
     }

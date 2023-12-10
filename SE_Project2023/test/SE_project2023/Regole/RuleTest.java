@@ -5,14 +5,14 @@
 package SE_project2023.Regole;
 
 import SE_project2023.Action.*;
+import SE_project2023.Tool.FireOnceVerified;
+import SE_project2023.Tool.VerifiedTool;
 import SE_project2023.Trigger.TimeTrigger;
 import SE_project2023.Trigger.Trigger;
 import java.time.LocalTime;
 import java.util.Observable;
 import java.util.Observer;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -22,17 +22,10 @@ import static org.junit.Assert.*;
  */
 public class RuleTest {
     
-    Rule r;
+    private Rule r;
     
     public RuleTest() {}
     
-    @BeforeClass
-    public static void setUpClass() {
-    }
-    
-    @AfterClass
-    public static void tearDownClass() {
-    }
     
     @Before
     public void setUp() {
@@ -43,7 +36,7 @@ public class RuleTest {
     public void testSetSleep() {
         System.out.println("setSleep");
         long sleep = -1;
-        r.setSleep(sleep); //expected IllegalArgumentException with negative value of sleep
+        r.setSleep(sleep); //expected IllegalArgumentException con valore sleep negativo.
 
     }
     
@@ -101,19 +94,22 @@ public class RuleTest {
     public void testRuleIsValid() {
         System.out.println("ruleIsValid");
         r.setAction(null);
-        r.setTrigger(null); //Action and trigger = null expected False
+        r.setTrigger(null); //Action e trigger = null expected False
         boolean result = r.ruleIsValid();
         assertFalse(result);
+        
         r.setAction(new MessageBoxAction("Test"));
-        r.setTrigger(null); //Trigger = null but Action setted expected False
+        r.setTrigger(null); //Trigger = null ma Action!=null expected False
         result = r.ruleIsValid();
         assertFalse(result);
+        
         r.setAction(null);
-        r.setTrigger(new TimeTrigger(LocalTime.now())); //Action = null but Trigger setted expected False
+        r.setTrigger(new TimeTrigger(LocalTime.now())); //Action = null ma Trigger !=null expected False
         result = r.ruleIsValid();
         assertFalse(result);
+        
         r.setAction(new MessageBoxAction("Test"));
-        r.setTrigger(new TimeTrigger(LocalTime.now())); //Action and trigger setted expected True
+        r.setTrigger(new TimeTrigger(LocalTime.now())); //Action and trigger !=null expected True
         r.setFlag(true);
         result = r.ruleIsValid();
         assertTrue(result);
@@ -125,20 +121,31 @@ public class RuleTest {
     public void testIsVerifiedRule() {
         System.out.println("isVerifiedRule");
         r.setAction(new MessageBoxAction("Test"));
-        r.setTrigger(new TriggerForTest()); //Trigger is verified and the rule is active expected True
+        r.setTrigger(new TriggerForTest()); //Trigger è verificato e la regola è attiva expected True
         r.getTrigger().isVerified();
         boolean result = r.isVerifiedRule();
         assertTrue(result);
+        
         r.deactive();
         result = r.isVerifiedRule();
-        assertFalse(result); //Trigger is verified but the rule is not active expected False
+        assertFalse(result); //Trigger è verificato ma la regola non è attiva expected False
+        
+        r.active();
+        VerifiedTool fireOnce = new FireOnceVerified();
+        r.setVerifiedTool(fireOnce); //imposto lo stato a fireOnce
+        result = r.isVerifiedRule();
+        assertTrue(result); //L'azione non è stata eseguita, ma la regola è attiva e il trigger verificato. La regola deve essere eseguita.
+        
+        r.fire();
+        result = r.isVerifiedRule();
+        assertFalse(result); //L'azione è stata eseguita, non deve essere eseguita di nuovo dato che lo stato è FireOnce, expectedFalse.
 
     }
     @Test
     public void testActiveDeactive() {
         System.out.println("deactive");
-        assertTrue(r.getStatus());//by default the rule is active
-        r.deactive(); //deactive the rule, status = false
+        assertTrue(r.getStatus());//di default la regola è attiva
+        r.deactive(); //disattivo la regola, status = false
         assertFalse(r.getStatus());
     }
      /**
@@ -148,14 +155,15 @@ public class RuleTest {
      public void testFire() {
         System.out.println("fire");
         r.setAction(new MessageBoxAction("test"));
-        assertFalse(r.getAction().isFired()); //rule not fired, expected false
+        assertFalse(r.getAction().isFired()); //regola non eseguita, expected false
+        
         r.fire();
-        assertTrue(r.getAction().isFired()); //action is fired, expected true
+        assertTrue(r.getAction().isFired()); //l'azione è stata eseguita, expected true
         long sleep = 10;
         r.setSleep(sleep);
         r.setAction(new MessageBoxAction("test"));
         r.fire();
-        assertTrue(r.getAction().isFired() && r.getWakeUp().getMinute()!=0); //action is fired one, and wakeUp time is setted.
+        assertTrue(r.getAction().isFired() && r.getWakeUp().getMinute()!=0); //action è fire one, and wakeUp time è impostato
      }
      @Test(expected = NullPointerException.class)
     public void testFireNoAction() {
@@ -174,9 +182,10 @@ public class RuleTest {
         }
         InnerObserver obs = new InnerObserver();
         r.addObserver(obs);
-        assertFalse(obs.observed); //observed should be false becouse r didn't update.
+        
+        assertFalse(obs.observed); //observed deve essere falso perchè r non si è aggiornata.
         r.deactive();
-        assertTrue(obs.observed); //observed is true becouse r updated.
+        assertTrue(obs.observed); //observed deve essere true perchè r si è aggiornata.
     }
 
 
@@ -193,12 +202,3 @@ public class RuleTest {
     
 }
 
-class TriggerForTest implements Trigger {
-
-    //class for test the isVerified() rule 
-    
-    @Override
-    public boolean isVerified() {
-        return true;
-    }
-}

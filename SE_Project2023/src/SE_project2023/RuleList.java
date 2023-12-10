@@ -22,13 +22,21 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * La lista è sia Observable che Observer. E' un Observer in quanto riceve tutti
+ * i cambiamenti delle regole che essa contiene. E' Observable in quanto
+ * comunica tutti i cambiamenti delle regole al suo interno anche all'esterno.
+ * La proprietà di Observable viene utilizzata col controller per permettere di
+ * aggiornare gli elementi sottostanti nella tableView.
+ *
+ * E' Serializable per essere salvata su file. E' Iterable in quanto contiene
+ * una Lista sottostante che non vogliamo venga restituita esplicitamente.
  *
  * @author emanu
  */
 public class RuleList extends Observable implements Observer, Serializable, Iterable<Rule> {
 
-    private static RuleList ruleList = null;
-
+    private static RuleList ruleList = null; //La RuleList viene implementata come Singleton in quanto deve essere l'unico punto
+    // d'accesso per manipolare le regole e non deve essere creata ogni volta nuovamente.
     private List<Rule> rules;
 
     private RuleList() {
@@ -45,7 +53,7 @@ public class RuleList extends Observable implements Observer, Serializable, Iter
     }
 
     public int size() {
-        return rules.size();
+        return rules.size();    //I metodi richiamano i metodi della lista sottostante in modo da non doverla restituire esplicitamente.
     }
 
     public boolean isEmpty() {
@@ -54,7 +62,7 @@ public class RuleList extends Observable implements Observer, Serializable, Iter
 
     public boolean removeAll(Collection c) {
         Boolean a = rules.removeAll(c);
-        this.setChanged();
+        this.setChanged();      //Notifica del cambiamento tutti gli Observer
         this.notifyObservers();
         return a;
     }
@@ -98,6 +106,7 @@ public class RuleList extends Observable implements Observer, Serializable, Iter
         this.notifyObservers();
     }
 
+    //Funzione di salvataggio della lista, se il file non esiste lo crea
     public void saveRules(String filename) {
         File file = new File(filename);
         if (!file.exists()) {
@@ -119,7 +128,9 @@ public class RuleList extends Observable implements Observer, Serializable, Iter
             Logger.getLogger(RuleList.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
+    //Funzione di caricamento della lista, usa una lista d'appoggio per caricare le regole che poi verranno aggiunte
+    //a Rules in modo tale da poterle osservare tutte nuovamente anche dopo il caricamento.
     public void loadRules(String filename) {
         try (ObjectInputStream objectIn = new ObjectInputStream(
                 new BufferedInputStream(new FileInputStream(filename)))) {
@@ -136,13 +147,15 @@ public class RuleList extends Observable implements Observer, Serializable, Iter
             e.printStackTrace(); // Gestisci altre eccezioni
         }
     }
-
+    
+    //Il metodo update comunica agli Observer che la lista si è aggiornata quando questa riceve un aggiornamento dalle regole che osserva.
     @Override
     public void update(Observable o, Object arg) {
         setChanged();
         notifyObservers(arg);
     }
-
+    
+    //L'iteratore restituito è quello di rules, in questo modo è possibile eseguire i cicli iterando direttamente su RuleList.
     @Override
     public Iterator<Rule> iterator() {
         return rules.iterator();

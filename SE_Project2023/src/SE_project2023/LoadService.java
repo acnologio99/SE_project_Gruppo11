@@ -8,7 +8,8 @@ import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 
 /**
- *
+ * Service che utilizza il thread per caricare gli elementi salvati su file nella lista.
+ * Aspetta che quest'ultimo finisca in modo da essere sicuro che gli elementi RuleList sia popolata.
  * @author chris
  */
 public class LoadService extends Service {
