@@ -208,6 +208,8 @@ public class FXMLActionController implements Initializable {
         params.put("File Action", new ArrayList<>(Arrays.asList(sourcePath1.getText(), destPath.getText(),
                 ((ToggleButton) fileChoices.getSelectedToggle()).getId().split("Toggle")[0])));
         params.put("Append Action", new ArrayList<>(Arrays.asList(sourcePath.getText(), textMessage2.getText())));
+        if(commandsField.getText().isEmpty())
+            commandsField.setText(" ");
         params.put("Program Action",
                 new ArrayList<>(Arrays.asList(sourcePathExe.getText(), commandsField.getText())));
     }

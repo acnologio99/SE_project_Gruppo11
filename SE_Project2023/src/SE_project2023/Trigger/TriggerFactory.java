@@ -37,7 +37,7 @@ public class TriggerFactory {
             }
         switch (selected){
             case "Time Trigger":
-                return new TimeTrigger(LocalTime.parse(creators.get(selected).get(0), DateTimeFormatter.ISO_DATE));
+                return new TimeTrigger(LocalTime.of(Integer.parseInt(creators.get(selected).get(0)), Integer.parseInt(creators.get(selected).get(1))));
             case "Day of Week Trigger":
                 return new DayOfWeekTrigger(DayOfWeek.valueOf(creators.get(selected).get(0)));
             case "Day of Month Trigger":

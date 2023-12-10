@@ -128,7 +128,6 @@ public class FXMLTriggerController implements Initializable {
 
         /* Aggiungiamo alla ListView dei trigger i nomi dei vari tipi di trigger */
         populateListView();
-
         populatePanes();
 
         /* Popolamento Lista giorni della settimana */
@@ -143,6 +142,8 @@ public class FXMLTriggerController implements Initializable {
         /* Settiamo i valori delle ComboBox all'orario attuale e Giorno corrente */
         timeComboBox1.setPromptText(Integer.toString(LocalTime.now().getHour()));
         timeComboBox2.setPromptText(Integer.toString(LocalTime.now().getMinute()));
+        timeComboBox1.setValue(Integer.toString(LocalTime.now().getHour()));
+        timeComboBox2.setValue(Integer.toString(LocalTime.now().getMinute()));
         DayOfWeek currentDayOfWeek = LocalDate.now().getDayOfWeek();
         int selectedIndex = currentDayOfWeek.getValue() - 1; // Indice inizia da 0
         daysOfWeek.getSelectionModel().select(selectedIndex);
@@ -175,7 +176,7 @@ public class FXMLTriggerController implements Initializable {
 
     @FXML
     private void doneTrigger(ActionEvent event) {
-        if (!triggerListView.getSelectionModel().getSelectedItems().isEmpty()&& filePickerIsEmpty()) {
+        if (!triggerListView.getSelectionModel().getSelectedItems().isEmpty()) {
             populateCreator();
             Trigger t = new TriggerFactory(triggerListView.getSelectionModel().getSelectedItem(), (HashMap) params).create();
             rules.getLast().setTrigger(t);
@@ -199,24 +200,6 @@ public class FXMLTriggerController implements Initializable {
             String formattedTime = String.format("%02d", start);
             comboBox.getItems().add(formattedTime);
             start++;
-        }
-    }
-
-    @FXML
-    private void timePick1(ActionEvent event) {
-        /*
-         * Gestito negli if per evitare il lancio di eccezioni al "primo click" di
-         * selezione.
-         * Scegliendo l'orario da una sola delle due ComboBox disponibili, il valore
-         * dell'altra ComboBox
-         * è impostato al valore dell'orario corrente
-         */
-        if (timeComboBox1.getValue() == null) {
-            temp = LocalTime.of((LocalTime.now().getHour()), Integer.parseInt(timeComboBox2.getValue()));
-        } else if (timeComboBox2.getValue() == null) {
-            temp = LocalTime.of(Integer.parseInt(timeComboBox1.getValue()), LocalTime.now().getMinute());
-        } else {
-            temp = LocalTime.of(Integer.parseInt(timeComboBox1.getValue()), Integer.parseInt(timeComboBox2.getValue()));
         }
     }
 
@@ -250,7 +233,7 @@ public class FXMLTriggerController implements Initializable {
     //al momento della costruzione.
     
     private void populateCreator() {
-        params.put("Time Trigger", new ArrayList<>(Arrays.asList(temp.toString())));
+        params.put("Time Trigger", new ArrayList<>(Arrays.asList(timeComboBox1.getValue(),timeComboBox2.getValue())));
         params.put("Day of Week Trigger",new ArrayList<>(Arrays.asList(daysOfWeek.getSelectionModel().getSelectedItem().toString())));
         params.put("Day of Month Trigger",new ArrayList<>(Arrays.asList(daysOfMonth.getValue())));
         params.put("Day of Year Trigger",new ArrayList<>(Arrays.asList(datePicker.getValue().toString())));
@@ -276,10 +259,6 @@ public class FXMLTriggerController implements Initializable {
                 "Day of Year Trigger",
                 "File Trigger",
                 "File in a Dir Trigger");
-    }
-
-    private boolean filePickerIsEmpty() {
-        return (fileSourceDir.getText().isEmpty()|| !fileSourceSize.getText().isEmpty() && fileSizeField.getText().isEmpty());
     }
 
     
