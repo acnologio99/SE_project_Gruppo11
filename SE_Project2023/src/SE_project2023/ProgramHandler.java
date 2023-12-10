@@ -18,25 +18,22 @@ public class ProgramHandler extends ActionHandler {
     public ProgramHandler(ActionHandler next) {
         super(next);
     }
-    
+
     @Override
     public boolean fireAction(Action a) {
-        if(!(a instanceof ProgramAction) && next!=null){
-            
+        if (!(a instanceof ProgramAction) && next != null) {
+
             System.out.println("dentro");
             next.fireAction(a);
-       
-        }else {
-        ProgramAction act = (ProgramAction) a;
-        Platform.runLater(() -> {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Information Dialog");
-        alert.setHeaderText(null);
-        alert.setContentText(act.getOutput());
-        alert.showAndWait();
-        });}    
-    return true;
+
+        } else {
+            ProgramAction act = (ProgramAction) a;
+            Platform.runLater(() -> {
+                Alert alert = AlertUtil.informationAlert("Information Dialog", act.getOutput());
+                alert.showAndWait();
+            });
+        }
+        return true;
     }
 
-    
 }

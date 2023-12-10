@@ -5,7 +5,10 @@
 package SE_project2023.Action.FileAction;
 
 /**
- *
+ * La classe StrategyFactory è l'applicazione di un factory pattern.
+ * StrategyFactory crea e restituisce istanze di diverse FileStrategy
+ * in base all’azione fornita come parametro al metodo getStrategy.
+ * 
  * @author emanu
  */
 public class StrategyFactory {

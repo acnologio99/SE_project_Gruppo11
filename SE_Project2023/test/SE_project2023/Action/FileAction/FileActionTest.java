@@ -36,14 +36,14 @@ public class FileActionTest {
     public static void tearDownClass() {
     }
 
-    @Before
+    @Before//inizializza e crea gli oggetti necessari per i test
     public void setUp() throws IOException {
         a = new FileAction();
         file = new File("data\\doc.txt");
         file.createNewFile();
     }
 
-    @After
+    @After//elimina il file creato per il test
     public void tearDown() {
         file.delete();
     }
@@ -86,6 +86,8 @@ public class FileActionTest {
 
     /**
      * Test of fire method, of class FileAction.
+     * Verifica che le varie strategy impostate per FileAction eseguano correttamente 
+     * l'azione desiderata, o non viene eseguita nel caso null.
      */
     @Test
     public void testFire() {
@@ -115,6 +117,12 @@ public class FileActionTest {
             a.fire();
             file = new File(a.getSourcePath());
             assertFalse(file.exists());
+            
+            //Caso null non fa execute
+            System.out.println("null");
+            a = new FileAction();
+            a.fire();
+            assertFalse(a.isFired());
         });
         try {
             Thread.sleep(5000); //devo aspettare che il metodo viene richiamato sul thread e che abbia il tempo di eseguire il test

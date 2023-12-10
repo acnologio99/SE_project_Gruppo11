@@ -26,6 +26,9 @@ public class ProgramAction implements Action {
         this.programPath = programPath;
         this.commandLineArgs = commandLineArgs;
     }
+    public ProgramAction() {
+       
+    }
 
     @Override
     public boolean isFired() {

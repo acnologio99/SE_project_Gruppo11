@@ -32,14 +32,14 @@ public class CopyStrategyTest {
     public static void tearDownClass() {
     }
     
-    @Before
+    @Before//inizializza e crea gli oggetti necessari per i test
     public void setUp() throws IOException {
         cs = new CopyStrategy();
         file = new File("data\\doc.txt");
         file.createNewFile();
     }
     
-    @After
+    @After//elimina il file creato per il test
     public void tearDown() {
         file.delete();
         file = new File("data\\doc.txt");
@@ -48,6 +48,8 @@ public class CopyStrategyTest {
 
     /**
      * Test of execute method, of class CopyStrategy.
+     * Verifica che il metodo execute crea una copia nel percorso di destinazione
+     * e che il file originale sia ancora presente
      */
     @Test
     public void testExecute() {

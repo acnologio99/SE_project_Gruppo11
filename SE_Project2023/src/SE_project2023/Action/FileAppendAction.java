@@ -69,14 +69,14 @@ public class FileAppendAction implements Action, Serializable {
             bw.write(msg);
             bw.close();
             System.out.println("Append riuscita");
-            isFired=true; //L' azione è stata eseguita.
+            isFired=true;
         } catch (IOException ex) {
             Logger.getLogger(FileAppendAction.class.getName()).log(Level.SEVERE, null, ex);
         }
         
     }
     
-    // I metodi lanciano un'eccezione in quanto presenti nell'interfaccia ma verranno implementati solo nella classe "CompositeAction"
+
     @Override
     public void add() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

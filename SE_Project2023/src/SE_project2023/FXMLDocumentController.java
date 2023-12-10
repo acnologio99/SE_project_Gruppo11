@@ -72,7 +72,7 @@ public class FXMLDocumentController implements Initializable, Observer, Serializ
 
         LoadService load = new LoadService();
         load.start();
-        // inizializzazione Liste, attende che il thread di caricamento finisca per iniziare ad usare Rules. 
+        // inizializzazione Liste, attende che il thread di caricamento finisca per iniziare ad usare Rules.
         list = new ArrayList<>();
         load.setOnSucceeded(e -> {
             for (Rule r : rules) {
@@ -98,7 +98,7 @@ public class FXMLDocumentController implements Initializable, Observer, Serializ
             // booleano dalla classe Rule
             return new SimpleStringProperty(sleep > 0 ? "On" : "Off");
         });
-        
+
         this.colorRow();
         rules.addObserver(this); //Il controller diventa observer di RuleList in modo da aggiornare la tableView anche quando un elemento interno viene aggiornato.
 
@@ -109,10 +109,7 @@ public class FXMLDocumentController implements Initializable, Observer, Serializ
         if (tableView.getSelectionModel().getSelectedItems() == null) {
             return;
         }
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Rimozione");
-        alert.setHeaderText("");
-        alert.setContentText("Sei sicuro di voler rimuovere?");
+        Alert alert = AlertUtil.confirmationAlert("Rimozione", "Sei sicuro di voler rimuovere?");
         Optional<ButtonType> response = alert.showAndWait();
         if (response.isPresent()) {
             ButtonType b = response.get();
@@ -168,10 +165,12 @@ public class FXMLDocumentController implements Initializable, Observer, Serializ
             rootScene.setDisable(false);
 
             if (rules.getLast().ruleIsValid()) {
-                alertShow("Inserimento", "", "Regola correttamente inserita", Alert.AlertType.INFORMATION);
+                Alert alert = AlertUtil.informationAlert("Inserimento","Regola correttamente inserita");
+                alert.showAndWait();
                 ruleList.add(r);
             } else {
-                alertShow("Errore!", "", "Regola non inserita", Alert.AlertType.ERROR);
+                Alert alert = AlertUtil.errorAlert("Errore!", "Regola non inserita");
+                alert.showAndWait();
                 rules.removeLast();
             }
 
@@ -201,7 +200,7 @@ public class FXMLDocumentController implements Initializable, Observer, Serializ
         } else {
         }
     }
-    
+
      private void alertShow(String title, String header, String content, Alert.AlertType type) {
         Alert alert = new Alert(type);
         alert.setTitle(title);

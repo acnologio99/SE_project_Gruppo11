@@ -6,72 +6,71 @@ package SE_project2023;
 
 import SE_project2023.Action.Action;
 import SE_project2023.Action.AudioAction;
-import SE_project2023.Action.MessageBoxAction;
+import SE_project2023.Action.ProgramAction;
+import java.io.File;
+import java.util.ArrayList;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
-import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  *
- * @author chris
+ * @author cauro
  */
-public class AudioHandlerTest {
-
-    private AudioHandler instance;
+public class ProgramHandlerTest {
+    ArrayList<String> commands;
+    File file = new File("nuovo_file.txt");
+    private ProgramHandler instance;
     private Action a;
 
-    public AudioHandlerTest() {
+    public ProgramHandlerTest() {
     }
 
     @Before
     public void setUp() {
-        instance = new AudioHandler(null);
-        a = new AudioAction();
+        instance = new ProgramHandler(null);
+
     }
 
     /**
-     * Test of fireAction method, of class FileHandler.
+     * Test of fireAction method, of class MessageHandler.
      * Viene testato che l'azione viene effettivamente visualizzata, inoltre ritorna true se l'azione è stata eseguita correttamente.
      * Il test è prettamente legato a JavaFx in quanto utlizza la libreria Platform.
-     * Si testa che l'azione AudioHandler venga effettivamente visualizzata con un'allert quando si utilizza JavaFx.
+     * Si testa che l'azione Program venga effettivamente visualizzata con un'allert quando si utilizza JavaFx.
      */
     @Test(expected = ClassCastException.class)
     public void testFireAction() {
         System.out.println("fireAction");
 
-        a = new AudioAction("./data/song01.wav");
+        a = new ProgramAction(file.getPath(),commands);
         JFXPanel jfxPanel = new JFXPanel();
         Platform.runLater(() -> {
-            a.fire();
-            boolean res=instance.fireAction(a); // javafx test, allert che accompagna il suono
-            assertTrue(res); // se l'handler viene eseguito correttamente ritorna true.
+            boolean res = instance.fireAction(a); // javafx test, allert con "test" message
+            assertTrue(res); //se l'handler viene eseguito correttamente ritorna true.
         });
         try {
             Thread.sleep(7000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+       
 
-        a = new MessageBoxAction("Test");
-        instance.fireAction(a); // Azione diversa ma con next = null, ClassCastException expected.
+        a = new AudioAction();
+        instance.fireAction(a); 
+// rule con un'azione diversa che ha next=null, ClassCastException expected
     }
-
-    /**
-     * Test di una regola con una AudioAction all'interno della catena.
-     */
 
     @Test
     public void testFireActionChain() {
         System.out.println("fireActionChain");
 
-        a = new AudioAction("./data/song01.wav");
+        a = new ProgramAction(file.getPath(),commands);
         ActionHandler handler = ActionHandlerFactory.createActionHandler();
         JFXPanel jfxPanel = new JFXPanel();
         Platform.runLater(() -> {
-            a.fire();
-            boolean res = handler.fireAction(a); // testo il funzionamento dell'azione nella catena, visivamente deve mostrare un allert.
+            boolean res = handler.fireAction(a); //Viene testato il comportamento nell chainOfResponsability
             assertTrue(res);
         });
         try {

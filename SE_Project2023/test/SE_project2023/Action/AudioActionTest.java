@@ -28,7 +28,7 @@ public class AudioActionTest {
 
     @Before
     public void setUp() {
-        a = new AudioAction();
+        a = new AudioAction();// Inizializzazione dell'oggetto da testare
     }
 
     @After
@@ -61,6 +61,9 @@ public class AudioActionTest {
 
     /**
      * Test of fire method, of class AudioAction.
+     * 
+     * Questo test verifica che il metodo fire cambi correttamente il valore di isFired
+     * e che l'azione viene attivata.
      */
     @Test
     public void testFire() {
@@ -72,6 +75,7 @@ public class AudioActionTest {
         a.setPath("data/song02.wav");
         a.fire();
         assertTrue(a.isFired());
+        // Attende per un periodo di tempo per permettere all'audio di essere riprodotto
         try {
             Thread.sleep(5000);
         } catch (InterruptedException e) {

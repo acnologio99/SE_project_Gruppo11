@@ -8,7 +8,12 @@ import java.io.File;
 import java.io.Serializable;
 
 /**
- *
+ *La classe RemoveStrategy implementa l’interfaccia FileStrategy e la classe Serializable. 
+ * Questa classe e' usata per le operazioni di rimozione di un file da un percorso sorgente. 
+ * 
+ * Il metodo execute sovrascritto, esegue la rimozione, 
+ * stampando in console il risutato dell'operazione.
+ * 
  * @author emanu
  */
 public class RemoveStrategy implements FileStrategy, Serializable {

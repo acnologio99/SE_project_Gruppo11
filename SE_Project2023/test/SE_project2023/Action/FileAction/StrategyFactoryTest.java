@@ -31,7 +31,7 @@ public class StrategyFactoryTest {
     }
     
     @Before
-    public void setUp() {
+    public void setUp() {//inizializza l'oggetto
         instance = new StrategyFactory();
     }
     
@@ -41,6 +41,8 @@ public class StrategyFactoryTest {
 
     /**
      * Test of getStrategy method, of class StrategyFactory.
+     * Controlla che viene creata l'istanza corretta a seconda della condizione 
+     * oppure lancia l'eccezione.
      */
     @Test(expected = IllegalArgumentException.class)
     public void testGetStrategy() {
