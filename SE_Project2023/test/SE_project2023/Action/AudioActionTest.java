@@ -72,7 +72,7 @@ public class AudioActionTest {
         boolean result = a.isFired();
         assertEquals(expResult, result);
 
-        a.setPath("data/song02.wav");
+        a.setPath("data/song01.wav");
         a.fire();
         assertTrue(a.isFired());
         // Attende per un periodo di tempo per permettere all'audio di essere riprodotto

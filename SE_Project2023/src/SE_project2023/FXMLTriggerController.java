@@ -11,6 +11,7 @@ import java.net.URL;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -28,6 +29,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -67,17 +69,32 @@ public class FXMLTriggerController implements Initializable {
     @FXML
     private Button fileChooserButton;
     @FXML
-    private TextField fileSource;
-    @FXML
     private TextField fileSizeField;
-
+     @FXML
+    private TextField fileSourceDir;
+    @FXML
+    private Button fileChooserButton1;
+    @FXML
+    private AnchorPane fileInADirPane;
+    @FXML
+    private TextField fileSourceSize;
+    @FXML
+    private TextField dirText;
+    @FXML
+    private Button dirChooser;
+    
     private int flagTrigger;
     private LocalTime temp;
     private ObservableList<Trigger> triggerList;
     private RuleList rules;
-    private final Map<String, TriggerCreator> creators = new HashMap<>();
+    private final Map<String, ArrayList<String>> params = new HashMap<>();
     private final HashMap<String, AnchorPane> anchorPanes = new HashMap<>();
     private MenuExecutor menuExec;
+   
+    
+
+    
+    
 
     /**
      * Initializes the controller class.
@@ -88,7 +105,7 @@ public class FXMLTriggerController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
-        populateCreator();
+        
         /* Inizializzazione di un observable list */
         HashSet<Trigger> triggers = new HashSet();
         triggerList = FXCollections.observableArrayList(triggers);
@@ -100,19 +117,29 @@ public class FXMLTriggerController implements Initializable {
         populateComboBox(daysOfMonth, 1, 32);
 
         /* Settiamo il FileSizeField con solo valori numerici */
-        fileSizeField();
+        fileSizeField.setPromptText("KiloBytes Unit");
+        fileSizeField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                // Se il nuovo testo non contiene solo cifre, reimposta il testo con il vecchio
+                // valore
+                fileSizeField.setText(oldValue);
+            }
+        });
 
         /* Aggiungiamo alla ListView dei trigger i nomi dei vari tipi di trigger */
         populateListView();
+
         populatePanes();
 
         /* Popolamento Lista giorni della settimana */
         daysOfWeek.getItems().addAll(Arrays.asList(DayOfWeek.values()));
+
         /*
          * La variabile temp per l'inizializzazione del trigger viene impostata di
          * default all'orario attuale
          */
         temp = LocalTime.of(LocalTime.now().getHour(), LocalTime.now().getMinute());
+
         /* Settiamo i valori delle ComboBox all'orario attuale e Giorno corrente */
         timeComboBox1.setPromptText(Integer.toString(LocalTime.now().getHour()));
         timeComboBox2.setPromptText(Integer.toString(LocalTime.now().getMinute()));
@@ -129,22 +156,28 @@ public class FXMLTriggerController implements Initializable {
          */
         triggerListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
+                fileSizeField.clear();
+                fileSourceSize.clear();
+                dirText.clear();
+                fileSourceDir.clear();
                 handleTriggerSelection(newValue); // Gestisci la selezione dell'opzione
             }
         });
-        //Invoker del command
         menuExec = new MenuExecutor();
     }
     
     //Gestisce lo switch nella selezione dei trigger nell'interfaccia.
+
+
     private void handleTriggerSelection(String selectedTrigger) {
         menuExec.execute(new SwitchCommand(anchorPanes, selectedTrigger));
     }
 
     @FXML
     private void doneTrigger(ActionEvent event) {
-        if (!triggerListView.getSelectionModel().getSelectedItems().isEmpty()) {
-            Trigger t = creators.get(triggerListView.getSelectionModel().getSelectedItem()).create(); //invoco il metodo associato al trigger selezionato.
+        if (!triggerListView.getSelectionModel().getSelectedItems().isEmpty()&& filePickerIsEmpty()) {
+            populateCreator();
+            Trigger t = new TriggerFactory(triggerListView.getSelectionModel().getSelectedItem(), (HashMap) params).create();
             rules.getLast().setTrigger(t);
         }
         Node sourceNode = (Node) event.getSource();
@@ -158,8 +191,9 @@ public class FXMLTriggerController implements Initializable {
         Stage stage = (Stage) sourceNode.getScene().getWindow();
         stage.close();
     }
-    
+
     //inizializzazione della ComboBox
+
     private void populateComboBox(ComboBox<String> comboBox, int start, int pop) {
         while (start < pop) {
             String formattedTime = String.format("%02d", start);
@@ -191,50 +225,62 @@ public class FXMLTriggerController implements Initializable {
         FileChooser fil_chooser = new FileChooser();
         File file = fil_chooser.showOpenDialog(new Stage());
         if (file != null) {
-            fileSource.setText(file.toString());
+            if(event.getTarget().equals(fileChooserButton))
+                fileSourceSize.setText(file.toString());
+            if(event.getTarget().equals(fileChooserButton1)){
+                fileSourceDir.setText(file.getPath());
+                dirText.setText(file.getParent());
+                dirChooser.setDisable(false);
+                
+            }
         }
+        
 
     }
-    
-    private void fileSizeField(){
-        fileSizeField.setPromptText("KiloBytes Unit");
-        fileSizeField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.matches("\\d*")) {
-                // Se il nuovo testo non contiene solo cifre, reimposta il testo con il vecchio
-                // valore
-                fileSizeField.setText(oldValue);
-            }
-        });
+    @FXML
+    private void selectDirectory(ActionEvent event) {
+        DirectoryChooser dir_chooser = new DirectoryChooser();
+        File selectedDirectory = dir_chooser.showDialog(new Stage());
+        if (selectedDirectory != null) {
+            dirText.setText(selectedDirectory.toString());
+        }
     }
-    //Associa ogni trigger al proprio costruttore con una lambda expression che richiama l'interfaccia TriggerCreator con un solo metodo
-    //in modo da passare direttamente i parametri che servono ad ogni trigger
+
+    //Associa ogni azione una lista di parametri che servono per costruirla in modo da poterla passare
+    //al momento della costruzione.
+    
     private void populateCreator() {
-        creators.put("Time Trigger", () -> new TimeTrigger(temp));
-        creators.put("Day of Week Trigger",
-                () -> new DayOfWeekTrigger(daysOfWeek.getSelectionModel().getSelectedItem()));
-        creators.put("Day of Month Trigger", () -> new DayOfMonthTrigger(Integer.parseInt(daysOfMonth.getValue())));
-        creators.put("Day of Year Trigger", () -> new DayOfYearTrigger(datePicker.getValue()));
-        creators.put("File Trigger",
-                () -> new FileSizeTrigger(new File(fileSource.getText()), Integer.parseInt(fileSizeField.getText())));
-        ;
+        params.put("Time Trigger", new ArrayList<>(Arrays.asList(temp.toString())));
+        params.put("Day of Week Trigger",new ArrayList<>(Arrays.asList(daysOfWeek.getSelectionModel().getSelectedItem().toString())));
+        params.put("Day of Month Trigger",new ArrayList<>(Arrays.asList(daysOfMonth.getValue())));
+        params.put("Day of Year Trigger",new ArrayList<>(Arrays.asList(datePicker.getValue().toString())));
+        params.put("File Trigger",new ArrayList<>(Arrays.asList(fileSourceSize.getText(), fileSizeField.getText())));
+        params.put("File in a Dir Trigger",new ArrayList<>(Arrays.asList(fileSourceDir.getText(), dirText.getText())));
+        
     }
-    
-    //Associa ogni trigger al pane di riferimento in modo da poter gestire la visibilità
+
     private void populatePanes() {
         anchorPanes.put("Time Trigger", comboBoxPane);
         anchorPanes.put("Day of Week Trigger", dayOfWeekPane);
         anchorPanes.put("Day of Month Trigger", dayOfMonthPane);
         anchorPanes.put("Day of Year Trigger", dayOfYearPane);
         anchorPanes.put("File Trigger", fileSizePane);
+        anchorPanes.put("File in a Dir Trigger", fileInADirPane);
     }
-    
-    //Menu che appare all'utente per scegliere il trigger, la lista viene inizializzata con tutti i tipi di azione possibili.
+
     private void populateListView() {
         triggerListView.getItems().addAll(
                 "Time Trigger",
                 "Day of Week Trigger",
                 "Day of Month Trigger",
                 "Day of Year Trigger",
-                "File Trigger");
+                "File Trigger",
+                "File in a Dir Trigger");
     }
+
+    private boolean filePickerIsEmpty() {
+        return (fileSourceDir.getText().isEmpty()|| !fileSourceSize.getText().isEmpty() && fileSizeField.getText().isEmpty());
+    }
+
+    
 }

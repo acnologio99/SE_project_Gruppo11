@@ -5,6 +5,7 @@
 package SE_project2023.Trigger;
 
 import java.io.File;
+import java.io.IOException;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -13,30 +14,32 @@ import static org.junit.Assert.*;
  *
  * @author giova
  */
-public class FileSizeTriggerTest {
+public class FileInADirTriggerTest {
+    File file;
     
-    public FileSizeTriggerTest() {
+    public FileInADirTriggerTest() {
     }
     
     @Before
-    public void setUp() {
+    public void setUp() throws IOException {
+        file= new File("./data/testDir.txt");
+        file.createNewFile();
     }
 
     /**
-     * Test of isVerified method, of class FileSizeTrigger.
+     * Test of isVerified method, of class FileInADirTrigger.
      */
     @Test
     public void testIsVerified() {
         System.out.println("isVerified");
-        File file= new File("data/song02.wav");
-        FileSizeTrigger instance = new FileSizeTrigger( file , (int) (file.length()/1024));
+        FileInADirTrigger instance = new FileInADirTrigger(file, file.getParent());
         boolean expResult = true;
         boolean result = instance.isVerified();
         assertEquals(expResult, result);
-        instance = new FileSizeTrigger( file , (int) (file.length()/1024)+1);
+        instance = new FileInADirTrigger(file, "./SE_projecet2023");
         expResult = false;
         result = instance.isVerified();
         assertEquals(expResult, result);
     }
-    
+
 }

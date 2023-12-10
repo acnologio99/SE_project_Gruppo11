@@ -201,14 +201,6 @@ public class FXMLDocumentController implements Initializable, Observer, Serializ
         }
     }
 
-     private void alertShow(String title, String header, String content, Alert.AlertType type) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(header);
-        alert.setContentText(content);
-        alert.show();
-    }
-
      //Essendo Observer, ogni volta che la RuleList si aggiorna, viene aggiornata anche la TableView.
      //Quando invece viene passato anche arg, significa che rule ha eseguito un'azione, di conseguenza crea la catena
      //grazie alla Factory e la fa partire.

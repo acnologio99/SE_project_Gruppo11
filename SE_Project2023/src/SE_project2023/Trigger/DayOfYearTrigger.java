@@ -12,7 +12,7 @@ import java.time.LocalDate;
  */
 public class DayOfYearTrigger implements Trigger {
 
-    LocalDate date;
+    private LocalDate date;
 
     @Override
     public boolean isVerified() {

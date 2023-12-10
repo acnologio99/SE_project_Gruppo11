@@ -5,10 +5,9 @@
 package SE_project2023;
 
 import SE_project2023.Action.*;
-import SE_project2023.Action.FileAction.FileAction;
-import SE_project2023.Action.FileAction.StrategyFactory;
 import java.io.File;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -93,7 +92,7 @@ public class FXMLActionController implements Initializable {
     @FXML
     private TextField sourcePathExe;
 
-    private Map<String, ActionCreator> creators = new HashMap<>();
+    private Map<String, ArrayList<String>> params = new HashMap<>();
     private MenuExecutor menuExec; // invoker for commands
 
     /**
@@ -107,22 +106,24 @@ public class FXMLActionController implements Initializable {
         actionList = FXCollections.observableArrayList(actions);
         rules = RuleList.getRuleList();
 
-        populateCreator();
         populatePanes();
         populateListView();
 
         // Aggiungi un listener per gestire la selezione della ListView
         actionListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
+                textMessage.clear();
+                destPath.clear();
+                sourcePath1.clear();
                 handleSelection(newValue); // Gestisci la selezione dell'opzione
             }
         });
-        
+
         //Richiama l'invoker dei command, il comando di switch è uguale sia per i trigger che per le azioni.
         menuExec = new MenuExecutor();
 
     }
-
+    
     private void handleSelection(String selectedAction) {
         menuExec.execute(new SwitchCommand(anchorPanes, selectedAction));
     }
@@ -130,7 +131,8 @@ public class FXMLActionController implements Initializable {
     @FXML
     private void doneAction(ActionEvent event) {
         if (!actionListView.getSelectionModel().getSelectedItems().isEmpty()) {
-            Action a = creators.get(actionListView.getSelectionModel().getSelectedItem()).create();
+            populateCreator();
+            Action a = new ActionFactory(actionListView.getSelectionModel().getSelectedItem(), (HashMap) params).create();
             rules.getLast().setAction(a);
         }
         cancelAction(event);
@@ -142,8 +144,6 @@ public class FXMLActionController implements Initializable {
         Stage stage = (Stage) sourceNode.getScene().getWindow();
         stage.close();
     }
-
-    
     //Eventi associati ai pulsanti di scelta file, directory e programma.
     @FXML
     private void audioAction(ActionEvent event) {
@@ -180,13 +180,14 @@ public class FXMLActionController implements Initializable {
             destFile.setDisable(false);
         }
     }
-
+    //La scelta dei programmi consente di scegliere ogni tipo di file, se il file non è un programma appare un allert d'errore.
     @FXML
     private void execAction(ActionEvent event) {
         chooser(null, sourcePathExe);
     }
-    
-    //La scelta dei programmi consente di scegliere ogni tipo di file, se il file non è un programma appare un allert d'errore.
+
+    // Un file chooser a cui è possibile passare un estensione in modo filtrare i file selezionabili
+
     private void chooser(FileChooser.ExtensionFilter ef, TextField tf) {
         FileChooser fil_chooser = new FileChooser();
         if (ef != null) {
@@ -197,20 +198,22 @@ public class FXMLActionController implements Initializable {
             tf.setText(file.toString());
         }
     }
-    //Associa ogni azione al proprio costruttore con una lambda expression che richiama l'interfaccia ActionCreator con un solo metodo
-    //in modo da passare direttamente i parametri che servono ad ogni azione.
+
+    //Associa ogni azione una lista di parametri che servono per costruirla in modo da poterla passare
+    //al momento della costruzione.
+
     private void populateCreator() {
-        StrategyFactory sf = new StrategyFactory();
-        creators.put("TextBox Action", () -> new MessageBoxAction(textMessage.getText()));
-        creators.put("Audio Action", () -> new AudioAction(audioText.getText()));
-        creators.put("File Action", () -> new FileAction(sourcePath1.getText(), destPath.getText(),
-                sf.getStrategy(((ToggleButton) fileChoices.getSelectedToggle()).getId().split("Toggle")[0])));
-        creators.put("Append Action", () -> new FileAppendAction(sourcePath.getText(), textMessage2.getText()));
-        creators.put("Program Action",
-                () -> new ProgramAction(sourcePathExe.getText(), Arrays.asList(commandsField.getText())));
+        params.put("TextBox Action",new ArrayList<>(Arrays.asList(textMessage.getText())));
+        params.put("Audio Action", new ArrayList<>(Arrays.asList(audioText.getText())));
+        params.put("File Action", new ArrayList<>(Arrays.asList(sourcePath1.getText(), destPath.getText(),
+                ((ToggleButton) fileChoices.getSelectedToggle()).getId().split("Toggle")[0])));
+        params.put("Append Action", new ArrayList<>(Arrays.asList(sourcePath.getText(), textMessage2.getText())));
+        params.put("Program Action",
+                new ArrayList<>(Arrays.asList(sourcePathExe.getText(), commandsField.getText())));
     }
-    
+
     //Associa ogni azione al pane di riferimento in modo da poter gestire la visibilità
+
     private void populatePanes() {
         anchorPanes.put("TextBox Action", textPane);
         anchorPanes.put("Audio Action", audioPane);
@@ -218,8 +221,9 @@ public class FXMLActionController implements Initializable {
         anchorPanes.put("Append Action", appendPane);
         anchorPanes.put("Program Action", programPane);
     }
-    
+
     //Menu che appare all'utente per scegliere l'azione, la lista viene inizializzata con tutti i tipi di azione possibili.
+
     private void populateListView() {
         actionListView.getItems().addAll(
                 "TextBox Action",

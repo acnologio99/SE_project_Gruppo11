@@ -13,7 +13,7 @@ import java.time.LocalDate;
  */
 public class DayOfWeekTrigger implements Trigger {
 
-    DayOfWeek dOW;
+    private DayOfWeek dOW;
 
     @Override
     public boolean isVerified() {
