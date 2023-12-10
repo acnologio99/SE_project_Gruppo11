@@ -33,20 +33,21 @@ public class RemoveStrategyTest {
     public static void tearDownClass() {
     }
 
-    @Before
+    @Before//inizializza e crea gli oggetti necessari per i test
     public void setUp() throws IOException {
         rs = new RemoveStrategy();
         file = new File("data\\doc.txt");
         file.createNewFile();
     }
 
-    @After
+    @After//elimina il file creato per il test
     public void tearDown() {
         file.delete();
     }
 
     /**
      * Test of execute method, of class RemoveStrategy.
+     * Verifica che il metodo execute rimuove il file
      */
     @Test
     public void testExecute() {

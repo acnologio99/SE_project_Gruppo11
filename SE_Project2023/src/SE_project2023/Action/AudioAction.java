@@ -12,14 +12,18 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
 /**
- *
+ * La classe AudioAction implementa l'interfaccia Action e fornisce la funzionalità
+ * per riprodurre un file audio. 
+ * 
+ * Questa classe è serializzabile per consentirne il salvataggio per un'altra sessione.
+ * 
  * @author emanu
  */
 public class AudioAction implements Action, Serializable {
 
-    private String path;
-    private boolean isFired = false;
-    transient private Clip clip;
+    private String path;//e' il percorso del file audio da riprodurre
+    private boolean isFired = false;//tiene traccia se l'azione è stata attivata
+    transient private Clip clip;//oggetto Clip per la riproduzione dell'audio
 
     public AudioAction(String path) {
         this.path = path;
@@ -46,6 +50,7 @@ public class AudioAction implements Action, Serializable {
         return this.isFired;
     }
 
+    //inizia la riproduzione del file audio, usando 'stopClip' per interrompere la riproduzione
     @Override
     public void fire() {
         AudioInputStream audioStream = null;
@@ -54,16 +59,16 @@ public class AudioAction implements Action, Serializable {
         System.out.println("music!");
 
         try {
-            audioStream = AudioSystem.getAudioInputStream(audioFile);
-            clip = AudioSystem.getClip();
+            audioStream = AudioSystem.getAudioInputStream(audioFile); //si ottiene AudioInputStream dal file audio
+            clip = AudioSystem.getClip();//clip viene inizializzato ed aperto con l'AudioInputStream
             clip.open(audioStream);
             
-            clip.addLineListener(event -> {
+            clip.addLineListener(event -> {//si aggunge LineListener al Clip per gestire eventi come la fine della riproduzione
                 if (event.getType() == LineEvent.Type.STOP) {
                     stopClip();
                 }
             });
-            clip.start();
+            clip.start();//avvia la riproduzione
 
             this.isFired = true;
         } catch (LineUnavailableException exc) {
@@ -85,11 +90,13 @@ public class AudioAction implements Action, Serializable {
         }
     }
     
+    // Il metodo chiamato per interrompere la riproduzione e chiudere Clip.
     public void stopClip(){
         clip.stop();
         clip.close();
     }
 
+    //I metodi 'add', 'remove' e 'getChild' non sono supportati e lanciano UnsupportedOperationException.
     @Override
     public void add() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody

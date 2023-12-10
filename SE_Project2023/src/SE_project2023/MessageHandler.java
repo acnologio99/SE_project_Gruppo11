@@ -30,10 +30,7 @@ public class MessageHandler extends ActionHandler {
         } else {
             MessageBoxAction act = (MessageBoxAction) a;
             Platform.runLater(() -> {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Information Dialog");
-                alert.setHeaderText(null);
-                alert.setContentText(act.getMsg());
+                Alert alert = AlertUtil.informationAlert("Information Dialog", act.getMsg());
                 alert.showAndWait();
             });
         }

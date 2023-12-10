@@ -30,11 +30,7 @@ public class AudioHandler extends ActionHandler {
             AudioAction act = (AudioAction) a;
             Platform.runLater(() -> {
                 
-                Alert alert;
-                alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Reminder");
-                alert.setHeaderText(null);
-                alert.setContentText("Playing choosen audio...");
+                Alert alert = AlertUtil.informationAlert("Reminder", "Playing choosen audio...");
                 
                 Duration duration = Duration.seconds(9);    //L'allert dura 9 secondi dopodichè si chiude automaticamente.
                 PauseTransition transition = new PauseTransition(duration);

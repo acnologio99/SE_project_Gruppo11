@@ -12,7 +12,13 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
 /**
- *
+ * La classe MoveStrategy implementa l’interfaccia FileStrategy e la classe Serializable. 
+ * Questa classe e' usata per le operazioni di spostamento di un file da un percorso 
+ * sorgente a un percorso di destinazione. 
+ * 
+ * Il metodo execute sovrascritto, esegue lo spostamento, 
+ * utilizzando i metodi della classe Files per spostare il file.
+ * 
  * @author emanu
  */
 public class MoveStrategy implements FileStrategy, Serializable {
@@ -28,7 +34,7 @@ public class MoveStrategy implements FileStrategy, Serializable {
                             Paths.get(destinationPath), StandardCopyOption.REPLACE_EXISTING));
             file.delete();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("File non trovato");
         }
     }
 

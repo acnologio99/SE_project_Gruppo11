@@ -126,10 +126,7 @@ public class FXMLDocumentController implements Initializable, Observer, Serializ
         if (tableView.getSelectionModel().getSelectedItems() == null) {
             return;
         }
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Rimozione");
-        alert.setHeaderText("");
-        alert.setContentText("Sei sicuro di voler rimuovere?");
+        Alert alert = AlertUtil.confirmationAlert("Rimozione", "Sei sicuro di voler rimuovere?");
         Optional<ButtonType> response = alert.showAndWait();
         if (response.isPresent()) {
             ButtonType b = response.get();
@@ -140,14 +137,6 @@ public class FXMLDocumentController implements Initializable, Observer, Serializ
             }
         }
 
-    }
-
-    private void alertShow(String title, String header, String content, Alert.AlertType type) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(header);
-        alert.setContentText(content);
-        alert.show();
     }
 
     @FXML
@@ -167,10 +156,12 @@ public class FXMLDocumentController implements Initializable, Observer, Serializ
             rootScene.setDisable(false);
 
             if (rules.getLast().ruleIsValid()) {
-                alertShow("Inserimento", "", "Regola correttamente inserita", Alert.AlertType.INFORMATION);
+                Alert alert = AlertUtil.informationAlert("Inserimento","Regola correttamente inserita");
+                alert.showAndWait();
                 ruleList.add(r);
             } else {
-                alertShow("Errore!", "", "Regola non inserita", Alert.AlertType.ERROR);
+                Alert alert = AlertUtil.errorAlert("Errore!", "Regola non inserita");
+                alert.showAndWait();
                 rules.removeLast();
             }
 
@@ -201,9 +192,9 @@ public class FXMLDocumentController implements Initializable, Observer, Serializ
 
     @Override
     public void update(Observable o, Object arg) {
-        if (arg == null)
+        if (arg == null) {
             tableView.refresh();
-        else {
+        } else {
             tableView.refresh();
             Rule r = (Rule) arg;
             ActionHandlerFactory.createActionHandler().fireAction(r.getAction());

@@ -199,6 +199,14 @@ public class RuleTest {
         
     }
 
-    
 }
 
+class TriggerForTest implements Trigger {
+
+    //class for test the isVerified() rule 
+    
+    @Override
+    public boolean isVerified() {
+        return true;
+    }
+}

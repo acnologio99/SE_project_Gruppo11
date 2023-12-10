@@ -1,10 +1,11 @@
 package SE_project2023.Action.FileAction;
 
 import java.io.File;
-import java.io.Serializable;
 
 /**
- *
+ * Interfaccia implementata da tutte le strategie usate da FileAction,
+ * per l'applicazione dello Strategy pattern.
+ * 
  * @author emanu
  */
 public interface FileStrategy {

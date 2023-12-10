@@ -33,7 +33,7 @@ public class AudioHandlerTest {
 
     /**
      * Test of fireAction method, of class FileHandler.
-     *  iene testato che l'azione viene effettivamente visualizzata, inoltre ritorna true se l'azione è stata eseguita correttamente.
+     * Viene testato che l'azione viene effettivamente visualizzata, inoltre ritorna true se l'azione è stata eseguita correttamente.
      * Il test è prettamente legato a JavaFx in quanto utlizza la libreria Platform.
      * Si testa che l'azione AudioHandler venga effettivamente visualizzata con un'allert quando si utilizza JavaFx.
      */
