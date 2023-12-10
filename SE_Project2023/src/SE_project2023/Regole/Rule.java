@@ -1,6 +1,7 @@
 package SE_project2023.Regole;
 
 import SE_project2023.Action.Action;
+import SE_project2023.Tool.FireMultipleVerified;
 import SE_project2023.Tool.VerifiedTool;
 import SE_project2023.Trigger.Trigger;
 import java.io.Serializable;
@@ -17,13 +18,14 @@ public class Rule extends Observable implements Serializable {
     private Action action;
     private Trigger trigger;
     private boolean status = true; //Indica se è attiva o disattiva
-    private boolean flag = false; //Indica se la regola è valida oppure no
     private long sleep = 0; //Indica se la regola è in sleep e per quanto tempo
     private LocalDateTime wakeUp; // Indica quando dovrà risvegliarsi.
     private VerifiedTool vT; //Ogni volta che la regola viene controllata ha bisogno di un controllo diverso in base al suo stato.
 
     //Costruttori
+    //Il costruttore vuoto è per costruire una regola non valida, senza stato.
     public Rule() {
+        
     }
 
     public Rule(String name, Action action, Trigger trigger) {
@@ -31,6 +33,7 @@ public class Rule extends Observable implements Serializable {
         this.action = action;
         this.trigger = trigger;
         this.status = true;
+        this.vT = new FireMultipleVerified();
     }
 
     //Getter
@@ -54,9 +57,6 @@ public class Rule extends Observable implements Serializable {
         return wakeUp;
     }
     
-    public boolean getFlag() {
-        return flag;
-    }
 
     public long getSleep() {
         return sleep;
@@ -96,12 +96,10 @@ public class Rule extends Observable implements Serializable {
         setWakeUp(LocalDateTime.now().plusMinutes(sleep));
     }
     
-    public void setFlag(boolean flag) {
-        this.flag = flag;
-    }
+   
 
     public boolean ruleIsValid() {
-        return this.getTrigger() != null && this.getAction() != null && this.flag;
+        return this.getTrigger() != null && this.getAction() != null && this.vT!=null;
     }
 
     public void active() {

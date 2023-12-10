@@ -22,12 +22,12 @@ public class CheckRuleThread implements Runnable {
 
     @Override
     public void run() {
-        while (true) {
+        while (!Thread.currentThread().isInterrupted()) {
 
             try {
                 Thread.sleep(10000); // 10 secondi (10000 millisecondi)
             } catch (InterruptedException ex) {
-                Logger.getLogger(CheckRuleThread.class.getName()).log(Level.SEVERE, null, ex);
+                Thread.currentThread().interrupt();
             }
 
             // Codice per controllare la lista

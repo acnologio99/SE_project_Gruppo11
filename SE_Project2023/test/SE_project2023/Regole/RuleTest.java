@@ -5,10 +5,12 @@
 package SE_project2023.Regole;
 
 import SE_project2023.Action.*;
+import SE_project2023.Tool.FireMultipleVerified;
 import SE_project2023.Tool.FireOnceVerified;
 import SE_project2023.Tool.VerifiedTool;
 import SE_project2023.Trigger.TimeTrigger;
 import SE_project2023.Trigger.Trigger;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Observable;
 import java.util.Observer;
@@ -30,6 +32,7 @@ public class RuleTest {
     @Before
     public void setUp() {
         r = new Rule();
+        r.setVerifiedTool(new FireMultipleVerified()); //imposto lo stato
     }
     
     @Test(expected = IllegalArgumentException.class)
@@ -110,7 +113,6 @@ public class RuleTest {
         
         r.setAction(new MessageBoxAction("Test"));
         r.setTrigger(new TimeTrigger(LocalTime.now())); //Action and trigger !=null expected True
-        r.setFlag(true);
         result = r.ruleIsValid();
         assertTrue(result);
     }

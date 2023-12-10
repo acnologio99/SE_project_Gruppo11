@@ -38,9 +38,9 @@ import javafx.stage.Stage;
  */
 public class FXMLActionController implements Initializable {
 
-    ObservableList<Action> actionList;
-    RuleList r;
-    HashMap<String, AnchorPane> anchorPanes = new HashMap<>();
+    private ObservableList<Action> actionList;
+    private RuleList rules;
+    private HashMap<String, AnchorPane> anchorPanes = new HashMap<>();
 
     @FXML
     private ListView<String> actionListView;
@@ -105,7 +105,7 @@ public class FXMLActionController implements Initializable {
         HashSet<Action> actions = new HashSet();
 
         actionList = FXCollections.observableArrayList(actions);
-        r = RuleList.getRuleList();
+        rules = RuleList.getRuleList();
 
         populateCreator();
         populatePanes();
@@ -114,13 +114,11 @@ public class FXMLActionController implements Initializable {
         // Aggiungi un listener per gestire la selezione della ListView
         actionListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
-                textMessage.clear();
-                destPath.clear();
-                sourcePath1.clear();
                 handleSelection(newValue); // Gestisci la selezione dell'opzione
             }
         });
-
+        
+        //Richiama l'invoker dei command, il comando di switch è uguale sia per i trigger che per le azioni.
         menuExec = new MenuExecutor();
 
     }
@@ -133,7 +131,7 @@ public class FXMLActionController implements Initializable {
     private void doneAction(ActionEvent event) {
         if (!actionListView.getSelectionModel().getSelectedItems().isEmpty()) {
             Action a = creators.get(actionListView.getSelectionModel().getSelectedItem()).create();
-            r.getLast().setAction(a);
+            rules.getLast().setAction(a);
         }
         cancelAction(event);
     }
@@ -145,6 +143,8 @@ public class FXMLActionController implements Initializable {
         stage.close();
     }
 
+    
+    //Eventi associati ai pulsanti di scelta file, directory e programma.
     @FXML
     private void audioAction(ActionEvent event) {
         chooser(new FileChooser.ExtensionFilter("Audio Files", "*.wav", "*.aiff", "*.au"),
@@ -185,7 +185,8 @@ public class FXMLActionController implements Initializable {
     private void execAction(ActionEvent event) {
         chooser(null, sourcePathExe);
     }
-
+    
+    //La scelta dei programmi consente di scegliere ogni tipo di file, se il file non è un programma appare un allert d'errore.
     private void chooser(FileChooser.ExtensionFilter ef, TextField tf) {
         FileChooser fil_chooser = new FileChooser();
         if (ef != null) {
@@ -196,7 +197,8 @@ public class FXMLActionController implements Initializable {
             tf.setText(file.toString());
         }
     }
-
+    //Associa ogni azione al proprio costruttore con una lambda expression che richiama l'interfaccia ActionCreator con un solo metodo
+    //in modo da passare direttamente i parametri che servono ad ogni azione.
     private void populateCreator() {
         StrategyFactory sf = new StrategyFactory();
         creators.put("TextBox Action", () -> new MessageBoxAction(textMessage.getText()));
@@ -207,7 +209,8 @@ public class FXMLActionController implements Initializable {
         creators.put("Program Action",
                 () -> new ProgramAction(sourcePathExe.getText(), Arrays.asList(commandsField.getText())));
     }
-
+    
+    //Associa ogni azione al pane di riferimento in modo da poter gestire la visibilità
     private void populatePanes() {
         anchorPanes.put("TextBox Action", textPane);
         anchorPanes.put("Audio Action", audioPane);
@@ -215,7 +218,8 @@ public class FXMLActionController implements Initializable {
         anchorPanes.put("Append Action", appendPane);
         anchorPanes.put("Program Action", programPane);
     }
-
+    
+    //Menu che appare all'utente per scegliere l'azione, la lista viene inizializzata con tutti i tipi di azione possibili.
     private void populateListView() {
         actionListView.getItems().addAll(
                 "TextBox Action",

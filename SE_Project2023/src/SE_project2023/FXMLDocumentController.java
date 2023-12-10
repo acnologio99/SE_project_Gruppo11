@@ -72,13 +72,13 @@ public class FXMLDocumentController implements Initializable, Observer, Serializ
 
         LoadService load = new LoadService();
         load.start();
-        // inizializzazione Liste
+        // inizializzazione Liste, attende che il thread di caricamento finisca per iniziare ad usare Rules. 
         list = new ArrayList<>();
         load.setOnSucceeded(e -> {
             for (Rule r : rules) {
                 list.add(r);
             }
-            ruleList = FXCollections.observableArrayList(list);
+            ruleList = FXCollections.observableArrayList(list); //uso una lista d'appoggio list per far si che la tableView abbia le stesse regole di RuleList.
             tableView.setItems(ruleList);
         });
 
@@ -90,38 +90,21 @@ public class FXMLDocumentController implements Initializable, Observer, Serializ
         triggerCln.setCellValueFactory(new PropertyValueFactory<>("Trigger"));
         statusCln.setCellValueFactory(cellData -> {
             boolean status = cellData.getValue().getStatus(); // Assume che "isStatus()" sia il metodo che restituisce
-                                                              // il booleano dalla classe Rule
+            // il booleano dalla classe Rule
             return new SimpleStringProperty(status ? "On" : "Off");
         });
         sleepCln.setCellValueFactory(cellData -> {
             long sleep = cellData.getValue().getSleep(); // Assume che "isStatus()" sia il metodo che restituisce il
-                                                         // booleano dalla classe Rule
+            // booleano dalla classe Rule
             return new SimpleStringProperty(sleep > 0 ? "On" : "Off");
         });
-        tableView.setRowFactory(row -> new TableRow<Rule>() {
-            @Override
-            protected void updateItem(Rule r, boolean empty) {
-                super.updateItem(r, empty);
-                if (r == null || empty) {
-                    setStyle(""); // Se l'elemento è vuoto o la riga è vuota, non impostare uno stile
-                } else {
-                    // Imposta il colore della riga in base al tipo dell'elemento
-                    if (r.getAction().isFired()) {
-                        setStyle("-fx-background-color: lightgreen;");
-                    } else if (!r.getAction().isFired()) {
-                        setStyle("-fx-background-color: lightblue;");
-                    } else {
-                        setStyle(""); // Altri tipi possono avere uno stile diverso o nessuno
-                    }
-                }
-            }
-        });
-
-        rules.addObserver(this);
+        
+        this.colorRow();
+        rules.addObserver(this); //Il controller diventa observer di RuleList in modo da aggiornare la tableView anche quando un elemento interno viene aggiornato.
 
     }
 
-    @FXML
+    @FXML //Elimina tutti gli elementi selezionati chiedendo esplicitamente conferma
     private void removeRules(ActionEvent event) {
         if (tableView.getSelectionModel().getSelectedItems() == null) {
             return;
@@ -142,18 +125,36 @@ public class FXMLDocumentController implements Initializable, Observer, Serializ
 
     }
 
-    private void alertShow(String title, String header, String content, Alert.AlertType type) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(header);
-        alert.setContentText(content);
-        alert.show();
+
+    //Quando una regola non è stata mai eseguita la riga è di colore blu, altrimenti verde.
+    //Serve come segnalazione per l'utente anzichè usare tanti allert.
+    private void colorRow() {
+
+        tableView.setRowFactory(row -> new TableRow<Rule>() {
+            @Override
+            protected void updateItem(Rule r, boolean empty) {
+                super.updateItem(r, empty);
+                if (r == null || empty) {
+                    setStyle(""); // Se l'elemento è vuoto o la riga è vuota, non impostare uno stile
+                } else {
+                    // Imposta il colore della riga in base al tipo dell'elemento
+                    if (r.getAction().isFired()) {
+                        setStyle("-fx-background-color: lightgreen;");
+                    } else if (!r.getAction().isFired()) {
+                        setStyle("-fx-background-color: lightblue;");
+                    } else {
+                        setStyle(""); // Altri tipi possono avere uno stile diverso o nessuno
+                    }
+                }
+            }
+        });
+
     }
 
     @FXML
     private void addRule(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("FXMLRule.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("FXMLRule.fxml")); //apre il nuovo controller per permettere di inserire la regola.
 
             Parent root = loader.load();
             Rule r = new Rule();
@@ -180,6 +181,8 @@ public class FXMLDocumentController implements Initializable, Observer, Serializ
 
     }
 
+
+    //Metodi per attivare e disattivare una regola dal menu.
     @FXML
     private void setOnRule(ActionEvent event) {
         Rule r = tableView.getSelectionModel().getSelectedItem();
@@ -198,12 +201,23 @@ public class FXMLDocumentController implements Initializable, Observer, Serializ
         } else {
         }
     }
+    
+     private void alertShow(String title, String header, String content, Alert.AlertType type) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+        alert.show();
+    }
 
+     //Essendo Observer, ogni volta che la RuleList si aggiorna, viene aggiornata anche la TableView.
+     //Quando invece viene passato anche arg, significa che rule ha eseguito un'azione, di conseguenza crea la catena
+     //grazie alla Factory e la fa partire.
     @Override
     public void update(Observable o, Object arg) {
-        if (arg == null)
+        if (arg == null) {
             tableView.refresh();
-        else {
+        } else {
             tableView.refresh();
             Rule r = (Rule) arg;
             ActionHandlerFactory.createActionHandler().fireAction(r.getAction());

@@ -32,6 +32,8 @@ public class SE_project2023 extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        
+        
         Thread check = new Thread(new CheckRuleThread()); 
         check.setDaemon(true);
         check.start();

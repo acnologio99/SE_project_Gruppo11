@@ -74,7 +74,7 @@ public class FXMLTriggerController implements Initializable {
     private int flagTrigger;
     private LocalTime temp;
     private ObservableList<Trigger> triggerList;
-    private RuleList r;
+    private RuleList rules;
     private final Map<String, TriggerCreator> creators = new HashMap<>();
     private final HashMap<String, AnchorPane> anchorPanes = new HashMap<>();
     private MenuExecutor menuExec;
@@ -92,8 +92,7 @@ public class FXMLTriggerController implements Initializable {
         /* Inizializzazione di un observable list */
         HashSet<Trigger> triggers = new HashSet();
         triggerList = FXCollections.observableArrayList(triggers);
-        /* Prendiamo una regola temporanea a cui aggiungere il trigger */
-        r = RuleList.getRuleList();
+        rules = RuleList.getRuleList();
 
         /* Popola le timebox con i valori delle ore e dei minuti */
         populateComboBox(timeComboBox1, 0, 24);
@@ -101,29 +100,19 @@ public class FXMLTriggerController implements Initializable {
         populateComboBox(daysOfMonth, 1, 32);
 
         /* Settiamo il FileSizeField con solo valori numerici */
-        fileSizeField.setPromptText("KiloBytes Unit");
-        fileSizeField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.matches("\\d*")) {
-                // Se il nuovo testo non contiene solo cifre, reimposta il testo con il vecchio
-                // valore
-                fileSizeField.setText(oldValue);
-            }
-        });
+        fileSizeField();
 
         /* Aggiungiamo alla ListView dei trigger i nomi dei vari tipi di trigger */
         populateListView();
-
         populatePanes();
 
         /* Popolamento Lista giorni della settimana */
         daysOfWeek.getItems().addAll(Arrays.asList(DayOfWeek.values()));
-
         /*
          * La variabile temp per l'inizializzazione del trigger viene impostata di
          * default all'orario attuale
          */
         temp = LocalTime.of(LocalTime.now().getHour(), LocalTime.now().getMinute());
-
         /* Settiamo i valori delle ComboBox all'orario attuale e Giorno corrente */
         timeComboBox1.setPromptText(Integer.toString(LocalTime.now().getHour()));
         timeComboBox2.setPromptText(Integer.toString(LocalTime.now().getMinute()));
@@ -143,9 +132,11 @@ public class FXMLTriggerController implements Initializable {
                 handleTriggerSelection(newValue); // Gestisci la selezione dell'opzione
             }
         });
+        //Invoker del command
         menuExec = new MenuExecutor();
     }
-
+    
+    //Gestisce lo switch nella selezione dei trigger nell'interfaccia.
     private void handleTriggerSelection(String selectedTrigger) {
         menuExec.execute(new SwitchCommand(anchorPanes, selectedTrigger));
     }
@@ -153,8 +144,8 @@ public class FXMLTriggerController implements Initializable {
     @FXML
     private void doneTrigger(ActionEvent event) {
         if (!triggerListView.getSelectionModel().getSelectedItems().isEmpty()) {
-            Trigger t = creators.get(triggerListView.getSelectionModel().getSelectedItem()).create();
-            r.getLast().setTrigger(t);
+            Trigger t = creators.get(triggerListView.getSelectionModel().getSelectedItem()).create(); //invoco il metodo associato al trigger selezionato.
+            rules.getLast().setTrigger(t);
         }
         Node sourceNode = (Node) event.getSource();
         Stage stage = (Stage) sourceNode.getScene().getWindow();
@@ -167,7 +158,8 @@ public class FXMLTriggerController implements Initializable {
         Stage stage = (Stage) sourceNode.getScene().getWindow();
         stage.close();
     }
-
+    
+    //inizializzazione della ComboBox
     private void populateComboBox(ComboBox<String> comboBox, int start, int pop) {
         while (start < pop) {
             String formattedTime = String.format("%02d", start);
@@ -204,6 +196,18 @@ public class FXMLTriggerController implements Initializable {
 
     }
     
+    private void fileSizeField(){
+        fileSizeField.setPromptText("KiloBytes Unit");
+        fileSizeField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                // Se il nuovo testo non contiene solo cifre, reimposta il testo con il vecchio
+                // valore
+                fileSizeField.setText(oldValue);
+            }
+        });
+    }
+    //Associa ogni trigger al proprio costruttore con una lambda expression che richiama l'interfaccia TriggerCreator con un solo metodo
+    //in modo da passare direttamente i parametri che servono ad ogni trigger
     private void populateCreator() {
         creators.put("Time Trigger", () -> new TimeTrigger(temp));
         creators.put("Day of Week Trigger",
@@ -214,7 +218,8 @@ public class FXMLTriggerController implements Initializable {
                 () -> new FileSizeTrigger(new File(fileSource.getText()), Integer.parseInt(fileSizeField.getText())));
         ;
     }
-
+    
+    //Associa ogni trigger al pane di riferimento in modo da poter gestire la visibilità
     private void populatePanes() {
         anchorPanes.put("Time Trigger", comboBoxPane);
         anchorPanes.put("Day of Week Trigger", dayOfWeekPane);
@@ -222,7 +227,8 @@ public class FXMLTriggerController implements Initializable {
         anchorPanes.put("Day of Year Trigger", dayOfYearPane);
         anchorPanes.put("File Trigger", fileSizePane);
     }
-
+    
+    //Menu che appare all'utente per scegliere il trigger, la lista viene inizializzata con tutti i tipi di azione possibili.
     private void populateListView() {
         triggerListView.getItems().addAll(
                 "Time Trigger",
