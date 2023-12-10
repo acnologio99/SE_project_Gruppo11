@@ -2,20 +2,15 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package SE_project2023.Tool;
+package SE_project2023.RuleTool;
 
 import SE_project2023.Regole.Rule;
+import java.io.Serializable;
 
 /**
- *
+ * Questa interfaccia rappresenta i possibili stati che puo' avere una regola.
  * @author giova
  */
-public class FireMultipleVerified implements VerifiedTool {
-
-    public FireMultipleVerified() {
-    }
-    @Override
-    public boolean verified(Rule r){
-        return true;
-    }
+public interface VerifiedTool extends Serializable{
+       public boolean verified(Rule r);
 }

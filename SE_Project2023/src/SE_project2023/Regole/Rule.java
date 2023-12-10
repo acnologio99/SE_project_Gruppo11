@@ -1,8 +1,8 @@
 package SE_project2023.Regole;
 
 import SE_project2023.Action.Action;
-import SE_project2023.Tool.FireMultipleVerified;
-import SE_project2023.Tool.VerifiedTool;
+import SE_project2023.RuleTool.FireMultipleVerified;
+import SE_project2023.RuleTool.VerifiedTool;
 import SE_project2023.Trigger.Trigger;
 import java.io.Serializable;
 import java.time.LocalDateTime;

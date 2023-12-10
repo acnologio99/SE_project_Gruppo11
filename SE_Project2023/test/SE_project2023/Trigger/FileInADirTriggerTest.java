@@ -36,7 +36,7 @@ public class FileInADirTriggerTest {
         boolean expResult = true;
         boolean result = instance.isVerified();
         assertEquals(expResult, result);
-        instance = new FileInADirTrigger(file, "./SE_projecet2023");
+        instance = new FileInADirTrigger(file, "./SE_project2023");
         expResult = false;
         result = instance.isVerified();
         assertEquals(expResult, result);

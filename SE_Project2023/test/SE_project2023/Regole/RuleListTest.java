@@ -2,8 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/UnitTests/JUnit4TestClass.java to edit this template
  */
-package SE_project2023;
+package SE_project2023.Regole;
 
+import SE_project2023.Regole.RuleList;
 import SE_project2023.Regole.Rule;
 import java.io.File;
 import java.io.IOException;

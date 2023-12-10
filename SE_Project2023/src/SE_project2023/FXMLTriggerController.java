@@ -4,7 +4,7 @@
  */
 package SE_project2023;
 
-import SE_project2023.Trigger.TriggerCreator;
+import SE_project2023.Regole.RuleList;
 import SE_project2023.Trigger.*;
 import java.io.File;
 import java.net.URL;
@@ -128,6 +128,7 @@ public class FXMLTriggerController implements Initializable {
 
         /* Aggiungiamo alla ListView dei trigger i nomi dei vari tipi di trigger */
         populateListView();
+
         populatePanes();
 
         /* Popolamento Lista giorni della settimana */
@@ -181,9 +182,7 @@ public class FXMLTriggerController implements Initializable {
             Trigger t = new TriggerFactory(triggerListView.getSelectionModel().getSelectedItem(), (HashMap) params).create();
             rules.getLast().setTrigger(t);
         }
-        Node sourceNode = (Node) event.getSource();
-        Stage stage = (Stage) sourceNode.getScene().getWindow();
-        stage.close();// Chiudi la finestra corrente
+        cancelTrigger(event);
     }
 
     @FXML

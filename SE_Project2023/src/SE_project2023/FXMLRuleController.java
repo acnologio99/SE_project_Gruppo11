@@ -4,9 +4,10 @@
  */
 package SE_project2023;
 
-import SE_project2023.Tool.FireMultipleVerified;
-import SE_project2023.Tool.FireOnceVerified;
-import SE_project2023.Tool.SleepVerified;
+import SE_project2023.Regole.RuleList;
+import SE_project2023.RuleTool.FireMultipleVerified;
+import SE_project2023.RuleTool.FireOnceVerified;
+import SE_project2023.RuleTool.SleepVerified;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -94,7 +95,7 @@ public class FXMLRuleController implements Initializable {
                 @Override
                 public void handle(WindowEvent event) {
                     if (rules.getLast().getAction() != null) {
-                        actionTxt.setText("Azione inserita");
+                        actionTxt.setText("Action inserted");
                     }
                 }
             });
@@ -123,7 +124,7 @@ public class FXMLRuleController implements Initializable {
                 @Override
                 public void handle(WindowEvent event) {
                     if (rules.getLast().getTrigger() != null) {
-                        triggerTxt.setText("Trigger inserito");
+                        triggerTxt.setText("Trigger inserted");
                     }
                 }
             });

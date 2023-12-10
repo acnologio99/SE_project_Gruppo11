@@ -4,6 +4,8 @@ package SE_project2023;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXML2.java to edit this template
  */
+import SE_project2023.Handlers.ActionHandlerFactory;
+import SE_project2023.Regole.RuleList;
 import SE_project2023.Action.Action;
 import SE_project2023.Regole.Rule;
 import SE_project2023.Trigger.Trigger;

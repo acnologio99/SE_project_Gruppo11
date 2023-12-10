@@ -5,9 +5,9 @@
 package SE_project2023.Regole;
 
 import SE_project2023.Action.*;
-import SE_project2023.Tool.FireMultipleVerified;
-import SE_project2023.Tool.FireOnceVerified;
-import SE_project2023.Tool.VerifiedTool;
+import SE_project2023.RuleTool.FireMultipleVerified;
+import SE_project2023.RuleTool.FireOnceVerified;
+import SE_project2023.RuleTool.VerifiedTool;
 import SE_project2023.Trigger.TimeTrigger;
 import SE_project2023.Trigger.Trigger;
 import java.time.LocalDate;

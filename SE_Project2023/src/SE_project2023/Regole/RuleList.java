@@ -1,4 +1,4 @@
-package SE_project2023;
+package SE_project2023.Regole;
 
 import SE_project2023.Regole.Rule;
 import java.io.BufferedInputStream;

@@ -2,8 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/UnitTests/JUnit4TestClass.java to edit this template
  */
-package SE_project2023.Tool;
+package SE_project2023.RuleTool;
 
+import SE_project2023.RuleTool.FireOnceVerified;
 import SE_project2023.Action.Action;
 import SE_project2023.Action.MessageBoxAction;
 import SE_project2023.Regole.Rule;

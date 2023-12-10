@@ -4,6 +4,8 @@
  */
 package SE_project2023;
 
+import SE_project2023.Regole.SaveThread;
+import SE_project2023.Regole.CheckRuleThread;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

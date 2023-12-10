@@ -2,8 +2,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/UnitTests/JUnit4TestClass.java to edit this template
  */
-package SE_project2023;
+package SE_project2023.Handlers;
 
+import SE_project2023.Handlers.AudioHandler;
+import SE_project2023.Handlers.ActionHandler;
+import SE_project2023.Handlers.ActionHandlerFactory;
 import SE_project2023.Action.Action;
 import SE_project2023.Action.AudioAction;
 import SE_project2023.Action.MessageBoxAction;

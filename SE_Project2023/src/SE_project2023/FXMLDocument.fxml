@@ -25,7 +25,7 @@
             <TableColumn fx:id="sleepCln" prefWidth="118.0" text="Sleep" />
 </columns>
          <contextMenu>
-            <ContextMenu autoHide="false">
+            <ContextMenu>
               <items>
                   <MenuItem mnemonicParsing="false" onAction="#setOnRule" text="Set on rule" />
                 <MenuItem mnemonicParsing="false" onAction="#set" text="Set off rule" />

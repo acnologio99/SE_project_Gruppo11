@@ -2,35 +2,35 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package SE_project2023;
+package SE_project2023.Handlers;
 
 import SE_project2023.Action.Action;
-import SE_project2023.Action.MessageBoxAction;
+import SE_project2023.Action.ProgramAction;
+import SE_project2023.AlertUtil;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 
 /**
- * Handler della catena che gestisce MessageBoxAction mostrano un'allert con il messaggio contenuto nell'azione.
- * @author chris
+ *
+ * @author cauro
  */
-public class MessageHandler extends ActionHandler {
+public class ProgramHandler extends ActionHandler {
 
-    public MessageHandler(ActionHandler next) {
+    public ProgramHandler(ActionHandler next) {
         super(next);
-
     }
 
     @Override
     public boolean fireAction(Action a) {
-        System.out.println(a instanceof MessageBoxAction);
-        if (!(a instanceof MessageBoxAction) && next != null) {
+        if (!(a instanceof ProgramAction) && next != null) {
 
+            System.out.println("dentro");
             next.fireAction(a);
 
         } else {
-            MessageBoxAction act = (MessageBoxAction) a;
+            ProgramAction act = (ProgramAction) a;
             Platform.runLater(() -> {
-                Alert alert = AlertUtil.informationAlert("Information Dialog", act.getMsg());
+                Alert alert = AlertUtil.informationAlert("Information Dialog", act.getOutput());
                 alert.showAndWait();
             });
         }

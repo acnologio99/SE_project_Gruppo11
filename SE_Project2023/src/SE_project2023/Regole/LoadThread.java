@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package SE_project2023;
+package SE_project2023.Regole;
 
 /**
  * Thread di caricamento delle regole in RuleList, chiama la funzione loadRule nella classe RuleList.

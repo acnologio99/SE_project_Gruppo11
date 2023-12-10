@@ -2,11 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package SE_project2023;
+package SE_project2023.Regole;
 
 import SE_project2023.Regole.Rule;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Thread utilizzato per effetturare il controllo periodico sulle regole.

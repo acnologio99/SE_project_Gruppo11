@@ -4,6 +4,7 @@
  */
 package SE_project2023;
 
+import SE_project2023.Regole.SaveThread;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 
